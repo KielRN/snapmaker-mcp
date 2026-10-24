@@ -51,7 +51,8 @@ The editable install makes the working directory immaterial. No endpoint or file
 path can be supplied in tool arguments.
 
 The local Codex entry `snapmaker_u1` was added. Its exact configured command/env
-were used for successful MCP initialize/list/calls. Reload MCP or start a new
+were used for successful MCP initialize/list/calls. A subsequently discovered
+`u1_capabilities` tool also succeeded in the active chat. Reload MCP or start a new
 client session if the running chat has not discovered the new tools. Remove the
 entry in Codex MCP settings when no longer wanted. Stop its clients before
 removing this checkout's `.venv`; no printer cleanup/configuration is needed.
@@ -114,9 +115,15 @@ repeat the read. There are no automatic retries or printer mutations.
 
 REA 6.7.0/Node 24.22.1 are isolated under ignored tooling. The tested installer is
 `powershell -File tools/setup_rea.ps1`; it changes neither global Node nor agent
-registrations. Camera/lifecycle excerpts parsed, but full REA doctor readiness
-and native decompilation remain unavailable. The [camera report](docs/research/2026-10-24-camera.md)
-separates static findings from live evidence and identifies missing contracts.
+registrations. The follow-up used checksum-verified, isolated Rizin 0.9.1 through
+REA to inspect seven native functions and additional GUI excerpts. Static evidence
+traces the native WCP camera branch to TLS MQTT and identifies a dropped camera
+`clientid` and a 300-second GUI renewal/close policy. Installed camera behavior,
+server expiry/ownership, decryption/freshness and safe cleanup remain unverified.
+No camera session was opened or closed. Full REA doctor/Ghidra readiness is not
+claimed. The [camera report](docs/research/2026-10-24-camera.md) records artifact
+identities, exact native/source anchors, tooling limits and the smallest passive
+validation probe. Camera tools remain unimplemented.
 
 Future controls must retain per-plate authorization and fresh human confirmation
 of an installed, clear bed. Slicing stays in the separate OrcaSlicer integration.

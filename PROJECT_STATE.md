@@ -21,8 +21,8 @@ not complete the full bridge.
 - Local Codex entry `snapmaker_u1` was registered. Its configured command/env were
   exercised by the official MCP client: initialize, exactly three tools listed,
   all three calls `ok`, empty stderr, **2026-10-24 17:34:05 UTC**. Discovery in
-  this already-running chat is unobserved; reload/new-session discovery remains
-  a client check.
+  this chat was subsequently confirmed by a discovered `u1_capabilities` call at
+  **2026-10-24 17:54:59.822526 UTC**, returning `ok` and the same firmware.
 - Live reads reported firmware `2.0.0.205_20260914173503`, Moonraker `2.0.0`,
   Klipper ready while printing, active virtual SD, and selected physical tool 2
   (`extruder1` / T1). Exceptions were empty in that snapshot.
@@ -32,10 +32,15 @@ not complete the full bridge.
   or a continuing loading guarantee.
 - All live checks were reads. No upload/control, motion, camera start/stop,
   firmware/configuration, or calibration action was issued.
-- REA 6.7.0 and checksum-verified Node 24.22.1 are isolated. CLI/MCP worked and
-  focused camera/lifecycle excerpts parsed. Full-bundle analysis hit its heap
-  limit; full doctor readiness and native analysis remain unavailable. See the
-  [camera report](docs/research/2026-10-24-camera.md).
+- Isolated REA 6.7.0/Node 24.22.1 and checksum-verified Rizin 0.9.1 now support
+  focused native inspection. Seven DLL functions (34,540 bytes) and seven more
+  GUI excerpts were inspected without executing target code. The native WCP
+  camera branch reaches JSON-RPC over TLS MQTT; pinned Orca 2.4.0 source describes
+  certificate bootstrap and response correlation. This is static evidence, not
+  an installed-printer camera transaction. Full doctor/Ghidra readiness is not claimed.
+- The native camera branch drops the GUI's optional `clientid`. A 300-second GUI
+  renewal/close timer is established; server expiry and ownership are not. See
+  the [camera report](docs/research/2026-10-24-camera.md) for anchors and limits.
 
 Raw replies, local config, receipts, app excerpts, and REA artifacts are ignored.
 Tracked fixtures are synthetic. [Read evidence](docs/research/2026-10-24-read-contracts.md)
@@ -43,11 +48,13 @@ records pinned public source and installed-contract limits.
 
 ## Remaining gaps and next actions
 
-1. Confirm client host discovery after reload. Broader firmware versions, real
-   outages, and active exceptions have simulated/source evidence, not hardware
-   acceptance.
-2. Resolve the native camera messaging boundary and actual wire/authentication
-   contract, ownership, expiry, freshness and safe cleanup before camera tools.
+1. Broader firmware versions, real outages, and active exceptions have
+   simulated/source evidence, not hardware acceptance.
+2. Validate the native camera branch against installed firmware with one bounded,
+   redacted passive trace of an ordinary operator-authorized transaction. No
+   camera opening/closing is authorized by this investigation. Server ownership,
+   expiry, credential provisioning, freshness and safe cleanup remain prerequisites
+   for camera tools; the trace alone will not resolve them all.
 3. Implement file/per-tool-consumption/path validation, upload/download hash
    verification, persistent receipts, serialized controls and uncertain-outcome
    reconciliation in later milestones.

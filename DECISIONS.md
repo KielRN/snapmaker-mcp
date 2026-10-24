@@ -84,11 +84,13 @@ Inspect JavaScript and relevant native components as evidence directs. Keep
 REA and any required Node/Ghidra runtime isolated from product environments.
 The finished bridge should not require REA or the Snapmaker GUI to run.
 
-REA 6.7.0 and checksum-verified Node 24.22.1 are now isolated under ignored
-tooling. CLI/MCP and focused static excerpt analysis worked; full doctor/native
-readiness did not pass. Static camera strings and inferred request shapes still
-require validation before becoming live protocol claims. See the
-[camera report](docs/research/2026-10-24-camera.md).
+REA 6.7.0 and checksum-verified Node 24.22.1 are isolated under ignored tooling.
+The follow-up adds checksum-verified Rizin 0.9.1 through REA's child-scoped
+`REA_RIZIN_COMMAND`, without changing product dependencies or global tools.
+Focused GUI and native inspection worked; full doctor/Ghidra readiness is not
+claimed. Native byte/call evidence and pinned source establish the selected WCP
+camera transport statically, while installed camera compatibility remains
+unverified. See the [camera report](docs/research/2026-10-24-camera.md).
 
 ## D008 — Verify effects and reconcile uncertain outcomes
 
@@ -131,6 +133,25 @@ Date: 2026-10-24 · Status: Confirmed operating scope for this session
 
 The owner's request requires read-only live checks. No camera start/stop or
 printer mutation was issued. Inspect the pinned GUI artifact and isolated REA
-results without executing target code. Keep camera transport/authentication and
-session ownership unresolved until demonstrated through the ordinary supported
-flow; static findings alone do not authorize or validate a session implementation.
+results without executing target code. Keep installed-printer camera transport/
+authentication compatibility and session ownership unresolved until demonstrated
+through the ordinary supported flow; static findings alone do not authorize or
+validate a session implementation.
+This constraint continues through the focused native follow-up: its only fresh
+printer interaction was the read-only capability tool.
+
+## D012 — Separate native camera evidence from session guarantees
+
+Date: 2026-10-24 · Status: Confirmed investigation boundary; implementation deferred
+
+The selected native WCP branch publishes camera JSON-RPC through TLS MQTT. Its
+camera handlers rebuild parameters without the GUI's optional `clientid`.
+Preserve that branch-specific finding rather than substituting generic WebSocket
+assumptions or treating a GUI client ID as proof of camera ownership.
+
+Keep the GUI's 300-second monitoring policy, MQTT keepalive, native callback
+timeouts, certificate lifetime, and server camera expiry distinct. None of the
+first three establishes the latter two. Require installed-firmware evidence for
+credential provisioning, ownership, expiry and noninterfering cleanup before
+camera tools. A bounded passive trace is the next validation probe; it does not
+authorize creating/closing a session or prove the remaining lifecycle contracts.

@@ -19,6 +19,10 @@ Implemented changes only. No published release exists.
   regression coverage for compressed-body amplification and SDK validation logs.
 - Tested setup/check/build commands, local Codex registration with verified launch,
   isolated pinned REA/Node installer, camera research and read-contract evidence.
+- Focused camera follow-up: isolated Rizin 0.9.1 via REA, pinned Orca 2.4.0 source
+  comparison and native call/table evidence for the WCP TLS MQTT path. Documented
+  separate authentication layers, omitted camera `clientid`, client timer policy,
+  unresolved server contracts, and a bounded passive next probe. No camera tools added.
 
 ### Verification
 
@@ -26,11 +30,16 @@ Implemented changes only. No published release exists.
   and wheel/source builds passed. Independent review returned no remaining findings.
 - Registered MCP command initialized, listed/called all three tools against the
   installed U1, returning `ok` with empty stderr. All live checks were read-only.
-- REA CLI/MCP worked and camera/lifecycle excerpts parsed. Whole-bundle analysis
-  exhausted its heap; full doctor/native-provider readiness did not pass.
+- REA CLI/MCP and camera/lifecycle excerpts worked. Follow-up REA/Rizin inspected
+  seven selected DLL functions (34,540 bytes) and seven additional GUI excerpts.
+  Whole-bundle heap exhaustion is historical; full doctor/Ghidra readiness is
+  not claimed. A fresh discovered capability tool returned `ok` on the same firmware.
+- Follow-up checks passed: 59 tests on Python 3.13.12, Ruff check/format, wheel/
+  source builds, documentation links and original-byte/source-provenance audits.
 
 ### Remaining scope
 
-No upload, print-control, receipt or camera tools are shipped. Camera wire
-transport/authentication/ownership/freshness and authorized physical acceptance
-remain unresolved. Simulated tests and live reads do not prove those capabilities.
+No upload, print-control, receipt or camera tools are shipped. Installed camera
+wire/authentication compatibility, server expiry/ownership, image freshness and
+authorized physical acceptance remain unresolved. Static native/source evidence,
+simulated tests and live reads do not prove those capabilities.

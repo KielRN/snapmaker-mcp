@@ -75,3 +75,27 @@ def replies(objects):
         "/printer/objects/query": {"result": {"eventtime": 123.5, "status": objects}},
         "/server/webcams/list": {"result": {"webcams": []}},
     }
+
+
+@pytest.fixture
+def setup_upload(tmp_path, replies):
+    from test_gcode import VALID
+    from test_uploads import Printer
+
+    from snapmaker_u1_mcp.config import Settings
+
+    replies["/printer/objects/query"]["result"]["status"]["print_stats"].update(
+        state="standby", filename="previous.gcode"
+    )
+    replies["/printer/objects/query"]["result"]["status"]["virtual_sdcard"]["is_active"] = False
+    file = tmp_path / "plate.gcode"
+    file.write_bytes(VALID)
+    settings = Settings(
+        printer_url="http://printer.invalid",
+        allowed_roots=(tmp_path,),
+        receipt_db=tmp_path / "receipts.sqlite3",
+        enable_uploads=True,
+        nozzle_diameters=(0.4,) * 4,
+    )
+    printer = Printer(replies)
+    return settings, printer, file

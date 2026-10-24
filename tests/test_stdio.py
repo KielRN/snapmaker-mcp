@@ -57,10 +57,16 @@ async def test_real_mcp_discovery_calls_errors_and_argument_rejection(replies, t
                         "u1_capabilities",
                         "u1_status",
                         "u1_materials",
+                        "u1_prepare_print",
+                        "u1_upload_print",
                     }
                     for tool in discovered:
                         assert tool.inputSchema["additionalProperties"] is False
-                        assert tool.annotations.readOnlyHint is True
+                        assert tool.annotations.readOnlyHint is (tool.name != "u1_upload_print")
+                        if tool.name in {"u1_prepare_print", "u1_upload_print"}:
+                            response = await session.call_tool(tool.name, {})
+                            assert response.isError
+                            continue
                         response = await session.call_tool(tool.name, {})
                         assert response.isError is False
                         assert response.structuredContent["outcome"] == "ok"

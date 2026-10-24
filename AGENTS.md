@@ -9,7 +9,8 @@ Open only the relevant parts of the
 [design draft](docs/superpowers/specs/2026-10-24-snapmaker-u1-mcp-design.md)
 when planning or changing a tool contract.
 
-The bridge implements only the first read-only milestone. Do not invent passing
+The bridge implements the first read tools plus restricted G-code preparation
+and simulator-verified uploads (disabled by default). Do not invent passing
 tests, supported camera protocols, or live-control results. Distinguish confirmed
 scope, proposed future architecture, software verification, and observed hardware
 behavior. Use the tested setup commands in README for the implemented tools.

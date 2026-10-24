@@ -3,10 +3,11 @@
 A local Python/stdio MCP bridge for a Snapmaker U1. Repository:
 [KielRN/snapmaker-mcp](https://github.com/KielRN/snapmaker-mcp).
 
-The first milestone implements `u1_capabilities`, `u1_status`, and `u1_materials`.
-All three were called through a real MCP subprocess against the installed U1.
-This is unreleased development software, `0.1.0.dev0`. Upload, print controls,
-and camera tools are not implemented.
+The bridge implements three read tools plus `u1_prepare_print` and
+`u1_upload_print` for restricted plain G-code. Reads have installed-U1 evidence;
+preparation and uploads have local simulator/real-MCP verification only. Uploads
+are disabled by default. This is unreleased development software, `0.1.0.dev0`.
+Print controls and camera tools remain unimplemented.
 
 ## Setup
 
@@ -30,9 +31,10 @@ $env:U1_CONFIG_FILE = (Resolve-Path .local/config.json).Path
 uv run --locked --extra dev python tools/check_connection.py
 ```
 
-This launches the actual stdio server, initializes MCP, checks its exact tool
-inventory, calls all three read tools, and prints normalized JSON. It never starts
-a print or camera session. A raw launch is:
+This launches the actual stdio server, initializes MCP, checks its five-tool
+inventory, calls only the three read tools, and prints normalized JSON. It makes
+no printer changes. The updated checker was exercised against the simulator;
+prior three-tool live evidence remains historical. A raw launch is:
 
 ```powershell
 uv run --locked python -m snapmaker_u1_mcp
@@ -47,8 +49,9 @@ error codes and guidance.
 
 Configure stdio with this checkout's absolute `.venv` Python executable, arguments
 `-m snapmaker_u1_mcp`, and `U1_CONFIG_FILE` pointing to the absolute ignored JSON.
-The editable install makes the working directory immaterial. No endpoint or file
-path can be supplied in tool arguments.
+The editable install makes the working directory immaterial. Tool arguments
+cannot substitute an endpoint. Preparation accepts an absolute local file path
+only under configured allowed roots.
 
 The local Codex entry `snapmaker_u1` was added. Its exact configured command/env
 were used for successful MCP initialize/list/calls. A subsequently discovered
@@ -59,13 +62,15 @@ removing this checkout's `.venv`; no printer cleanup/configuration is needed.
 
 ## Tools and interpretation
 
-Call each tool with `{}`. Discovery includes typed output schemas.
+Call the three read tools with `{}`. Discovery includes typed input/output schemas.
 
 | Tool | Result |
 | --- | --- |
 | `u1_capabilities` | Observed firmware/Moonraker identity, HTTP/object inventory, implemented/future tools, unresolved camera support. |
 | `u1_status` | Klipper/print state, virtual SD, progress fraction (0–1), layers/duration, selected physical tool, four nozzle/bed temperatures in °C, numeric exceptions. |
 | `u1_materials` | Four physical tools, T0–T3/API names, 32 logical mapping slots, job-use flags, RFID identity/color, feed/toolhead sensor evidence, loaded state. |
+| `u1_prepare_print` | Read-only inspection of one allowed file/plate and fresh mapping/material/feed evidence; expiring durable receipt. |
+| `u1_upload_print` | No-start/no-queue upload of a prepared hash, exact returned-path check and remote download SHA256 verification; simulator-verified only. |
 
 Results include the observation window, source event time when available,
 outcome, errors, and data. `ok` means reported read fields were understood, not
@@ -90,6 +95,54 @@ toolhead sensor gives `not_loaded`; missing, disabled, contradictory, or
 transitional evidence gives `unknown`. RFID describes identity only. Sensor
 reports do not establish physical inspection or suitability for a future job.
 
+## File preparation and uploads
+
+Keep slicing in the separate OrcaSlicer integration. Only a restricted plain
+`.gcode` dialect is accepted. Stock U1 profiles contain unresolved machine macros
+and are currently rejected. Do not strip their setup/safety commands to make a
+file pass. See the [upload contract and evidence](docs/research/2026-10-24-uploads.md)
+for the supported commands, required metadata, fixed safety envelope and limits.
+
+For preparation, edit the ignored configuration: set `allowed_roots` to existing
+absolute directories, add `receipt_db` as an absolute SQLite path in an existing
+private directory (normally `.local/`), and set `nozzle_diameters` to four
+operator-verified physical nozzle sizes in millimeters. Nozzle sizes are local
+attestations, not sensor readings. The example leaves file access unconfigured
+and `enable_uploads=false`. Do not enable hardware uploads until separately
+authorized acceptance; no live upload was performed for this milestone.
+
+`u1_prepare_print` requires `operation_id` (canonical UUID4), `local_path`, `plate`
+(1–1000), and `logical_to_physical` (one to four one-based physical tools, one per
+declared logical filament entry). The mapping must match the current printer.
+Plate labels this exported file; it does not extract a plate from 3MF. Every mm/g
+consumption entry and nonzero E move participates in requirements, even when the
+first entry is zero. Used tools need matching material and completed feed/sensor
+evidence. Preparation also requires idle state and known prior job identity.
+
+`u1_upload_print` requires a **new** UUID4 `operation_id` and the returned
+`preparation_id`. When enabled, it rereads the file hash and current printer
+evidence, checks expiry, uploads with `print=false`, validates root/path/flags,
+then downloads and hashes the bytes. No job parameters, start or queue commands
+are sent. Each preparation permits at most one upload claim. Neither tool grants
+print authorization; there is no start tool.
+
+Defaults: 32 MiB file cap, 500,000 lines, 8,192 raw bytes per line, 30 seconds per
+file request and 600-second receipt life. `max_gcode_bytes` can be 1 KiB–128 MiB,
+`upload_timeout_seconds` can be >0–120, and `receipt_ttl_seconds` can be 1–600.
+All coordinators for one printer must share one journal/lock. Keep them private
+and persistent across restarts; moving/deleting them defeats local idempotency.
+Path-handle checks support Windows and Linux `/proc/self/fd`; other platforms
+refuse file access until an equivalent verifier is implemented.
+
+Repeat an upload with the **same arguments and operation ID** after an uncertain
+outcome. It reconciles only by reads, never another POST. A missing remote file
+stays unknown because a late write is possible. Matching bytes can reconcile a
+lost reply; `response_flags_confirmed=false` records that its acknowledgment was
+not observed. `verified` establishes observed bytes, not hardware acceptance or
+print suitability. Terminal results retain their original observation and expiry;
+repetition is historical, not a fresh check. Bad acknowledgments/hash mismatches
+stay terminal. Use the supported app to investigate; no automatic delete occurs.
+
 ## Verification and recovery
 
 ```powershell
@@ -102,14 +155,18 @@ uv build
 The suite exercises the actual stdio process and a local HTTP simulator, including
 mapping/feed failures, partial objects, HTTP-200 errors, authentication,
 timeouts/disconnects, no stale success, malformed MCP input, redaction, redirects,
-and oversized/compressed responses. Tests need neither a printer nor credentials.
-No hardware-control tests have run.
+and oversized/compressed responses. File tests cover canonical paths/junctions,
+all-tool consumption, actual heater/move commands, mapping/material changes,
+SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serialization,
+cancellation and restart reconciliation. Tests need no printer or credentials.
+No hardware upload/control tests have run.
 
 Reads use fixed routes/objects, disable environment proxies/redirects, request
 uncompressed data, reject other encodings, and cap raw bytes and total request
 duration. Defaults are 256 KiB and five seconds per request. On failure, check
 local config, normal authentication, printer availability and firmware, then
-repeat the read. There are no automatic retries or printer mutations.
+repeat the read. Reads have no automatic retries; file transactions follow the
+durable recovery rules above and uploads require explicit local enablement.
 
 ## Camera and remaining scope
 
@@ -143,3 +200,5 @@ dependence, or automatic product-order dispatch.
 | [Milestone plan](docs/superpowers/plans/2026-10-24-read-milestone.md) | Implementation record. |
 | [Read evidence](docs/research/2026-10-24-read-contracts.md) | Live observations, pinned source, software checks. |
 | [Camera report](docs/research/2026-10-24-camera.md) | Tooling, artifact identity, findings and gaps. |
+| [Upload evidence](docs/research/2026-10-24-uploads.md) | Restricted dialect, source identity, receipt/recovery semantics and hardware gaps. |
+| [Upload plan](docs/superpowers/plans/2026-10-24-verified-uploads.md) | Focused implementation and verification record. |

@@ -4,15 +4,28 @@ Last updated: 2026-10-24
 
 ## Current stage
 
-The first read-only Python/stdio milestone is implemented as unreleased
-`0.1.0.dev0`: `u1_capabilities`, `u1_status`, and `u1_materials`. The owner directed
-this design's implementation and subsequently requested a push to `main`.
-Future print transactions and camera implementation remain proposed; this does
-not complete the full bridge.
+Unreleased `0.1.0.dev0` now exposes five Python/stdio tools: three installed-U1
+read tools plus restricted `u1_prepare_print` / `u1_upload_print`. File transactions
+are verified against local simulation and actual MCP subprocesses; uploads remain
+disabled by default and unaccepted on hardware. Print controls, broad stock-U1
+G-code support and camera implementation remain incomplete. The owner requested
+this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
-- 59 tests passed on Python 3.11.14 and 3.13.12. Ruff checks/formatting and wheel/
+- Current upload milestone: **123 tests passed on Python 3.11.14 and 3.13.12**.
+  Ruff checks/formatting and wheel/source builds passed. Real MCP subprocesses
+  exercised five-tool discovery, preparation, HTTP multipart uploads, corruption,
+  material/mapping/path failures, HTTP-200 errors and restart reconciliation.
+  Additional tests cover expiry, late writes, cancellation, duplicate IDs/claims,
+  state races and a second process holding the journal lock.
+- Independent upload review reproduced G91/M82 and tool-change E-origin bypasses;
+  both are regression-tested and fixed. Cold retraction is also accounted for.
+  A resource concern was resolved with bounded lazy parsing and worker threads.
+  The narrow source contracts and limitations are recorded in
+  [upload evidence](docs/research/2026-10-24-uploads.md). No hardware interaction
+  occurred during this milestone; no upload enablement or live settings changed.
+- Historical read baseline: 59 tests passed on Python 3.11.14 and 3.13.12. Ruff checks/formatting and wheel/
   source-distribution builds passed. Tests exercise actual stdio MCP plus local
   HTTP simulation, without hardware or credentials.
 - Independent review reproduced compression memory amplification and SDK logging
@@ -55,10 +68,14 @@ records pinned public source and installed-contract limits.
    camera opening/closing is authorized by this investigation. Server ownership,
    expiry, credential provisioning, freshness and safe cleanup remain prerequisites
    for camera tools; the trace alone will not resolve them all.
-3. Implement file/per-tool-consumption/path validation, upload/download hash
-   verification, persistent receipts, serialized controls and uncertain-outcome
-   reconciliation in later milestones.
-4. Obtain specific-job authorization and fresh clear-bed confirmation before any
+3. Obtain separately authorized hardware acceptance of multipart upload/download,
+   exact path/flag envelope, no-start/no-queue behavior, authentication and recovery.
+   Resolve firmware-matched stock-U1 macro/transform effects before accepting
+   normal Orca U1 profiles. Current restricted files and journals are described in
+   the [upload evidence](docs/research/2026-10-24-uploads.md).
+4. Implement future print job-parameter/start/controls after their contracts are
+   resolved. The preparation/upload implementation applies no job parameters.
+5. Obtain specific-job authorization and fresh clear-bed confirmation before any
    start/control hardware acceptance. Print completion/quality checks remain.
 
 The [roadmap](ROADMAP.md) owns milestone status. This milestone is neither a

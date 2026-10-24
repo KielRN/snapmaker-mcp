@@ -18,7 +18,7 @@ async def check() -> None:
             tools = (await session.list_tools()).tools
             names = [t.name for t in tools]
             expected = ["u1_capabilities", "u1_status", "u1_materials"]
-            if sorted(names) != sorted(expected):
+            if sorted(names) != sorted(expected + ["u1_prepare_print", "u1_upload_print"]):
                 raise RuntimeError("Unexpected MCP tool inventory")
             results = {}
             for name in expected:

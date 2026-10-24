@@ -23,9 +23,23 @@ Implemented changes only. No published release exists.
   comparison and native call/table evidence for the WCP TLS MQTT path. Documented
   separate authentication layers, omitted camera `clientid`, client timer policy,
   unresolved server contracts, and a bounded passive next probe. No camera tools added.
+- Restricted `u1_prepare_print` and optional `u1_upload_print`: canonical roots
+  and opened-handle escape checks, all-entry consumption and executable heater/
+  movement inspection, fresh mapping/material/feed binding, exact no-start upload
+  envelope and downloaded SHA256 verification. Uploads default disabled.
+- SQLite preparation/operation receipts, ten-minute default expiry, atomic upload
+  claims, process/async serialization and read-only uncertain/restart reconciliation
+  without replaying a POST. Historical and missing-ack evidence are explicit.
+- Focused pinned file-transfer/G-code source evidence and real MCP/HTTP simulator
+  tests. Stock U1 macros remain rejected; hardware compatibility is not claimed.
 
 ### Verification
 
+- Upload milestone: 123 tests passed on Python 3.11.14/3.13.12, Ruff check/format
+  and wheel/source builds. Real stdio/HTTP simulation covers prepare/upload and
+  restart reconciliation. Independent review's E-state bypasses were fixed and
+  regression-tested; parser memory amplification was also addressed. No hardware
+  interaction, live upload enablement or local printer configuration change.
 - Full suite passed on Windows/Python 3.11.14 and 3.13.12; Ruff checks/formatting
   and wheel/source builds passed. Independent review returned no remaining findings.
 - Registered MCP command initialized, listed/called all three tools against the
@@ -39,7 +53,9 @@ Implemented changes only. No published release exists.
 
 ### Remaining scope
 
-No upload, print-control, receipt or camera tools are shipped. Installed camera
-wire/authentication compatibility, server expiry/ownership, image freshness and
-authorized physical acceptance remain unresolved. Static native/source evidence,
-simulated tests and live reads do not prove those capabilities.
+No release exists. File tools/receipts are implemented with simulated upload
+acceptance only. Stock-profile macros, installed upload behavior and authorized
+physical acceptance remain pending. Print-control and camera tools are absent.
+Installed camera wire/authentication compatibility, server expiry/ownership and
+image freshness remain unresolved. Static source evidence and simulation do not
+prove these hardware capabilities.

@@ -1,5 +1,11 @@
 {
   "printer_url": "http://printer.invalid:7125",
   "timeout_seconds": 5,
-  "max_bytes": 262144
+  "max_bytes": 262144,
+  "allowed_roots": [],
+  "enable_uploads": false,
+  "nozzle_diameters": [],
+  "max_gcode_bytes": 33554432,
+  "upload_timeout_seconds": 30,
+  "receipt_ttl_seconds": 600
 }

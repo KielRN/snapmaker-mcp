@@ -1,4 +1,4 @@
-"""Exactly three parameterless read tools over the official MCP stdio transport."""
+"""Typed reads, preparation and no-start uploads over official MCP stdio."""
 
 import asyncio
 import json
@@ -8,14 +8,17 @@ import sys
 from mcp import types
 from mcp.server.lowlevel import Server
 from mcp.server.stdio import stdio_server
+from pydantic import ValidationError
 
 from .adapter import U1Reader, now
 from .config import Settings
 from .models import Capabilities, Issue, Materials, Observation, Status
 from .transport import Moonraker
+from .uploads import Coordinator, PrepareInput, Transaction, UploadInput
+from .uploads import result as transaction_result
 
 
-def create_server(reader: U1Reader) -> Server:
+def create_server(reader: U1Reader, coordinator: Coordinator) -> Server:
     server = Server("snapmaker-u1", version="0.1.0.dev0")
     definitions = {
         "u1_capabilities": (
@@ -34,6 +37,21 @@ def create_server(reader: U1Reader) -> Server:
             "Read four physical tools, logical mapping, RFID identity and feed evidence.",
         ),
     }
+    inputs = {"u1_prepare_print": PrepareInput, "u1_upload_print": UploadInput}
+    definitions.update(
+        {
+            "u1_prepare_print": (
+                coordinator.prepare,
+                Transaction,
+                "Validate allowed-root G-code and fresh tool evidence; no printer changes.",
+            ),
+            "u1_upload_print": (
+                coordinator.upload,
+                Transaction,
+                "Upload without start/queue and verify SHA256; repeat ID reconciles only.",
+            ),
+        }
+    )
 
     @server.list_tools()
     async def list_tools() -> list[types.Tool]:
@@ -41,10 +59,18 @@ def create_server(reader: U1Reader) -> Server:
             types.Tool(
                 name=name,
                 description=description,
-                inputSchema={"type": "object", "properties": {}, "additionalProperties": False},
-                outputSchema=Observation[schema].model_json_schema(),
+                inputSchema=(
+                    inputs[name].model_json_schema()
+                    if name in inputs
+                    else {"type": "object", "properties": {}, "additionalProperties": False}
+                ),
+                outputSchema=(
+                    schema.model_json_schema()
+                    if name in inputs
+                    else Observation[schema].model_json_schema()
+                ),
                 annotations=types.ToolAnnotations(
-                    readOnlyHint=True,
+                    readOnlyHint=name != "u1_upload_print",
                     destructiveHint=False,
                     idempotentHint=True,
                     openWorldHint=True,
@@ -57,21 +83,38 @@ def create_server(reader: U1Reader) -> Server:
     # using a fixed message to keep machine data and credentials out of MCP results.
     @server.call_tool(validate_input=False)
     async def call_tool(name: str, arguments: dict) -> types.CallToolResult:
-        if name not in definitions or arguments:
+        invalid = name not in definitions or (name not in inputs and bool(arguments))
+        parsed = None
+        if name in inputs:
+            try:
+                parsed = inputs[name].model_validate(arguments)
+            except (ValidationError, ValueError, TypeError):
+                invalid = True
+        if invalid:
             return types.CallToolResult(
                 isError=True,
                 content=[
                     types.TextContent(
                         type="text",
-                        text="Only the three listed read tools with empty arguments are accepted.",
+                        text="Use the exact typed arguments; file operations require UUID4 IDs.",
                     )
                 ],
             )
         started = now()
         try:
-            result = await definitions[name][0]()
+            result = await definitions[name][0](parsed) if parsed else await definitions[name][0]()
         except Exception:
             # Untrusted peer shapes must never turn a traceback into an MCP response.
+            if parsed:
+                result = transaction_result(
+                    parsed.operation_id, started, outcome="unknown", code="transaction_unavailable"
+                )
+                data = result.model_dump(mode="json")
+                return types.CallToolResult(
+                    isError=True,
+                    structuredContent=data,
+                    content=[types.TextContent(type="text", text=json.dumps(data))],
+                )
             result = Observation(
                 outcome="unknown",
                 observation_started_at=started,
@@ -95,9 +138,10 @@ def create_server(reader: U1Reader) -> Server:
 
 async def run(settings: Settings) -> None:
     async with Moonraker(settings) as client:
-        server = create_server(U1Reader(client))
-        async with stdio_server() as (read, write):
-            await server.run(read, write, server.create_initialization_options())
+        with Coordinator(client) as coordinator:
+            server = create_server(U1Reader(client), coordinator)
+            async with stdio_server() as (read, write):
+                await server.run(read, write, server.create_initialization_options())
 
 
 def main() -> None:

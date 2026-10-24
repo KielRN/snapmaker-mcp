@@ -56,7 +56,7 @@ decision rather than silently changing the architecture.
 
 ## D005 — Keep slicing outside the connection bridge
 
-Date: 2026-10-24 · Status: Proposed
+Date: 2026-10-24 · Status: Confirmed by focused upload implementation request
 
 Use the existing OrcaSlicer integration for slicing. The new bridge validates
 exported G-code, checks physical tool/material requirements, uploads it, and
@@ -94,7 +94,7 @@ unverified. See the [camera report](docs/research/2026-10-24-camera.md).
 
 ## D008 — Verify effects and reconcile uncertain outcomes
 
-Date: 2026-10-24 · Status: Proposed implementation contract
+Date: 2026-10-24 · Status: Implemented for preparation/uploads; controls remain proposed
 
 Hash the selected file, download and verify uploaded bytes, bind preparation to
 the selected mapping/materials, and check the actual printer outcome. Preserve
@@ -104,6 +104,13 @@ state before retrying; never blindly replay a start.
 Represent accepted, rejected, unavailable, and unknown outcomes distinctly.
 Print acceptance, first-layer success, print completion, and physical quality
 are separate claims requiring separate evidence.
+
+The upload implementation persists an atomic claim/inflight record before POST,
+uses one receipt database/OS lock per printer, and never repeats a dispatched
+POST. Reconciliation after expiry can establish byte transfer without renewing
+preparation or authorizing start. Lost-reply reconciliation explicitly marks
+response flags unconfirmed. Bad acknowledgment/hash results are terminal. See
+the [upload contract](docs/research/2026-10-24-uploads.md) for exact limits.
 
 ## D009 — Traffic-light roadmap and honest project state
 
@@ -155,3 +162,27 @@ first three establishes the latter two. Require installed-firmware evidence for
 credential provisioning, ownership, expiry and noninterfering cleanup before
 camera tools. A bounded passive trace is the next validation probe; it does not
 authorize creating/closing a session or prove the remaining lifecycle contracts.
+
+## D013 — Restricted preparation and simulator-only upload acceptance
+
+Date: 2026-10-24 · Status: Implemented engineering choices within owner scope
+
+Add two typed file tools while leaving print controls/camera absent. Preparation
+has no printer effects; uploads require local enablement, default false. The
+owner limited all hardware checks in this chat to reads, so source contracts
+and simulated success do not establish installed upload compatibility.
+
+Fail closed on unresolved macros, transforms, commands and job requirements.
+Inspect every consumption entry and executable heater/move command. Use an
+opened-file-handle check on Windows/Linux to reject symlink/junction escapes,
+bounded streaming passes and worker-thread inspection. Enforce the documented
+conservative envelope; do not claim those limits were measured on the printer.
+Operator-configured nozzles are explicitly attested, not sensor evidence.
+
+The pinned upload code supplies a narrow `print=false` no-start/no-queue contract
+and raw HTTP-201 JSON envelope; no further REA/native work was needed for this
+contract. Ordinary Orca U1 macros remain unresolved and rejected, rather than
+inferred safe from names. Hardware upload acceptance and firmware-matched macro
+analysis are required before broad profile support. Do not remove safety/setup
+commands to bypass validation. This supersedes D010's exactly-three-tool
+inventory only; its read behavior, redaction and data boundaries remain.

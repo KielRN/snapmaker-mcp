@@ -20,10 +20,9 @@ from .models import (
 from .transport import EXTRUDERS, OBJECTS, SENSORS, Moonraker, ReadError
 
 READ_TOOLS = ["u1_capabilities", "u1_status", "u1_materials"]
+FILE_TOOLS = ["u1_prepare_print", "u1_upload_print"]
 FUTURE_TOOLS = [
     "u1_list_files",
-    "u1_prepare_print",
-    "u1_upload_print",
     "u1_start_print",
     "u1_pause_print",
     "u1_resume_print",
@@ -346,13 +345,15 @@ class U1Reader:
                 results.get("/server/info", {}).get("moonraker_version")
             ),
             transports=["moonraker_http"],
-            implemented_tools=READ_TOOLS,
+            implemented_tools=READ_TOOLS + FILE_TOOLS,
             unimplemented_tools=FUTURE_TOOLS,
             observed_objects=[x for x in OBJECTS if x in inventory],
             missing_objects=[x for x in OBJECTS if x not in inventory],
             camera=CameraCapability(
                 configured_webcams=len(webcams) if isinstance(webcams, list) else None
             ),
+            file_preparation_configured=bool(self.client.settings.allowed_roots),
+            uploads_enabled=self.client.settings.enable_uploads,
         )
         return Observation[Capabilities](
             outcome="partial" if errors or data.missing_objects else "ok",

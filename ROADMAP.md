@@ -4,7 +4,8 @@ Last updated: 2026-10-24
 
 **Legend:** 🟢 Complete with evidence · 🟡 Partial/in progress · 🔴 Not implemented.
 The full intended scope remains status, materials, verified file handoff, print
-controls, and camera access. This session implements the first read tools.
+controls, and camera access. File transactions now have simulator verification;
+hardware acceptance and broad U1 profile compatibility remain pending.
 
 | Milestone | Status | Evidence / remaining work |
 | --- | --- | --- |
@@ -14,11 +15,11 @@ controls, and camera access. This session implements the first read tools.
 | Targeted REA investigation | 🟡 Partial | Isolated CLI/MCP, focused GUI excerpts and seven native functions inspected through Rizin. Camera server ownership/expiry and firmware compatibility remain unresolved; no whole-app reconstruction. |
 | MCP runtime/local configuration | 🟢 Read milestone complete | Real stdio tests pass; registered command called all three tools on hardware. A discovered capability tool subsequently succeeded in this chat. |
 | Status/progress/errors/material tools | 🟢 Read milestone complete | Typed four-tool/mapping/feed/temperature/progress reads, simulated failures, live three-tool calls. Active hardware fault semantics need observation. |
-| G-code validation/verified uploads | 🔴 Not implemented | Consumption/path/hash mismatch checks and verified handoff are later work. |
-| Print start/controls | 🔴 Not implemented | Authorization, state checks, receipts, serialization and uncertain/repeated/restart reconciliation remain. |
+| G-code validation/verified uploads | 🟡 Software implemented | Restricted dialect, opened-handle path checks, every-tool consumption, fresh evidence, durable expiring receipts and download SHA256 verified in simulation/real MCP. Disabled by default; stock U1 macros and hardware acceptance remain. |
+| Print start/controls | 🔴 Not implemented | No job-parameter/start/control tools. Upload receipt/serialization/recovery infrastructure exists; control-specific contracts and physical authorization checks remain. |
 | Camera snapshots/live sessions | 🟡 Investigation only | Native TLS MQTT, authentication layers, dropped camera `clientid` and 300-second GUI policy documented. Server expiry/ownership, image freshness and safe close unverified; no camera tools. |
-| Automated/hardware verification | 🟡 Read milestone verified | 59 tests on Python 3.11/3.13, lint/build/review, actual live MCP reads. Future transaction/camera tests and physical acceptance remain. |
-| Full release/operator handoff | 🔴 Not released | `0.1.0.dev0` is read-only development software; full scope remains. |
+| Automated/hardware verification | 🟡 Software verified, hardware partial | 123 tests on Python 3.11/3.13, lint/build/review and real MCP/HTTP simulation. Historical live reads only; upload/profile/control/camera hardware acceptance remains. |
+| Full release/operator handoff | 🔴 Not released | `0.1.0.dev0` is development software with optional simulated-only uploads; full scope remains. |
 
 See [state](PROJECT_STATE.md) for blockers, [decisions](DECISIONS.md) for durable
 choices and [design](docs/superpowers/specs/2026-10-24-snapmaker-u1-mcp-design.md)

@@ -107,4 +107,8 @@ class Capabilities(BaseModel):
     observed_objects: list[str]
     missing_objects: list[str]
     camera: CameraCapability
-    compatibility: str = "Read observations only; mutations and camera sessions remain unverified."
+    file_preparation_configured: bool = False
+    uploads_enabled: bool = False
+    compatibility: str = (
+        "Reads observed on hardware; uploads simulated only; controls/camera unverified."
+    )

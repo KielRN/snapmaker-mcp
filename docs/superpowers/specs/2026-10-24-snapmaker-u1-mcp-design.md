@@ -5,7 +5,10 @@ Date: 2026-10-24
 Status: Python/stdio read milestone implemented at owner direction on 2026-10-24.
 `u1_capabilities`, `u1_status`, and `u1_materials` are verified through actual MCP
 stdio on the installed printer. REA is isolated and focused analysis was run.
-The remaining print/camera design is proposed and unimplemented. See
+Restricted preparation and verified uploads were subsequently implemented under
+the owner's focused request, with simulator/stdio verification only and uploads
+disabled by default. Stock U1 macros, print controls and camera tools remain
+unimplemented. See the [upload contract](../../research/2026-10-24-uploads.md),
 [current state](../../../PROJECT_STATE.md),
 [read evidence](../../research/2026-10-24-read-contracts.md), and
 [camera findings](../../research/2026-10-24-camera.md) for subsequent evidence.
@@ -102,7 +105,8 @@ constructed from validated typed values using the verified U1 contract.
 
 ## Tool contract
 
-The first three names are implemented; other names remain proposals. Each result includes observation time, operation ID where
+The first three and the prepare/upload names are implemented; upload hardware
+acceptance is pending. Other names remain proposals. Each result includes observation time, operation ID where
 applicable, outcome, and actionable errors. Distinguish unavailable capability,
 stale data, a printer rejection, and an unknown outcome.
 
@@ -233,11 +237,12 @@ scope change; remaining hardware checks must not be described as passed.
 
 ## Implementation sequence and current scope
 
-The owner directed the Python/stdio read milestone and isolated REA investigation.
-Steps 1 and 3 are implemented for the three read tools. Step 2 has partial
-evidence, including unresolved camera/native contracts; later tools remain
-unimplemented. Local Codex registration and its configured launch were verified
-for the read tools; existing-chat host reload discovery is unobserved.
+The owner directed the read milestone, focused camera research and now restricted
+file preparation/uploads. Steps 1 and 3 are implemented; step 4 is partial with
+simulated verified uploads, no controls or hardware acceptance. Step 2 has partial
+evidence with unresolved camera lifecycle contracts. Local Codex registration
+and discovery were verified for the earlier three read tools; this chat tests
+five-tool discovery using local MCP subprocesses, not a live registered reload.
 
 1. Add repository operating guidance, ignores, Python packaging, isolated REA
    tooling instructions, and sanitized configuration examples.

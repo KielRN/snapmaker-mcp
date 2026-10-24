@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "snapmaker-u1-mcp"
 version = "0.1.0.dev0"
-description = "Read-only local Snapmaker U1 MCP bridge"
+description = "Local Snapmaker U1 MCP reads, G-code validation and verified no-start uploads"
 requires-python = ">=3.11"
 dependencies = ["mcp==1.30.0", "httpx==0.28.1", "pydantic>=2.11,<3"]
 

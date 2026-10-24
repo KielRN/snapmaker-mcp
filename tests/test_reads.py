@@ -147,7 +147,13 @@ async def test_capabilities_separate_observed_reads_from_unimplemented_operation
     data = (await reader.capabilities()).data
     assert data.firmware_version == "2.0.0.205_20260914173503"
     assert data.transports == ["moonraker_http"]
-    assert data.implemented_tools == ["u1_capabilities", "u1_status", "u1_materials"]
+    assert data.implemented_tools == [
+        "u1_capabilities",
+        "u1_status",
+        "u1_materials",
+        "u1_prepare_print",
+        "u1_upload_print",
+    ]
     assert data.camera.availability == "unknown"
     assert data.camera.configured_webcams == 0
     assert "u1_start_print" in data.unimplemented_tools

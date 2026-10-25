@@ -45,7 +45,7 @@ def test_every_consumption_entry_and_executable_moves_are_inspected():
         (b"X30 E10", b"X271 E10", "movement_bounds"),
         (b"X30 E10", b"X-1 E10", "movement_bounds"),
         (b"G1 X30 E10", b"G91\nG1 X261 E10", "movement_bounds"),
-        (b"G1 X30 E10", b"G2 X30 I10 E10", "unsupported_command"),
+        (b"G1 X30 E10", b"G2 X30 R10 E10", "unsupported_parameters"),
         (b"G1 X30 E10", b"SAVE_CONFIG", "unsupported_command"),
         (b"G1 X30 E10", b"START_PRINT", "unsupported_command"),
         (b"G1 X30 E10", b"G92 X0\nG1 X30 E10", "unsupported_parameters"),
@@ -149,3 +149,141 @@ def test_canonical_paths_reject_sibling_prefix_and_symlink_escape(tmp_path):
 def test_file_inputs_are_absolute_host_paths_only(path):
     with pytest.raises(gcode.ValidationError):
         gcode.read_file(path, (Path.cwd(),), 4096)
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        b"M73 P50 R10",
+        b"M73 P100",
+        b"M106 P2 S178",
+        b"M107 P2",
+        b"M204 S10000",
+        b"SET_VELOCITY_LIMIT ACCEL=5000 ACCEL_TO_DECEL=2500",
+        b"SET_VELOCITY_LIMIT ACCEL=500",
+    ],
+)
+def test_firmware_matched_numeric_forms_preserve_inspection(command):
+    assert gcode.inspect(VALID + command + b"\n") == gcode.inspect(VALID)
+
+
+@pytest.mark.parametrize("command", [b"G2", b"G3"])
+def test_xy_arcs_bound_the_supporting_circle_and_helical_endpoint(command):
+    data = VALID.replace(b"G1 X30 E10", b"G17\n" + command + b" X30 Y20 I10 J0 Z1 E10")
+    result = gcode.inspect(data)
+    assert result.bounds_min == [10, 10, 0.2]
+    assert result.bounds_max == [30, 30, 1]
+    assert result.used_tools == [1]
+    assert result.filament_mm == [0, 10, 0, 0]
+
+
+def test_full_circle_and_absolute_e_arc_consumption():
+    data = VALID.replace(b"M83", b"M82\nG92 E0").replace(
+        b"G1 X30 E10", b"G17\nG92 E0\nG2 I10 J0 E10"
+    )
+    result = gcode.inspect(data)
+    assert result.bounds_max == [30, 30, 0.2]
+    assert result.bounds_min == [10, 10, 0.2]
+
+
+def test_each_file_must_establish_xy_plane_before_arcs():
+    # Firmware plane survives other clients/jobs; inherited G18 could move Z<0.
+    with pytest.raises(gcode.ValidationError, match="position_unknown"):
+        gcode.inspect(VALID.replace(b"G1 X30 E10", b"G2 I10 J0 E10"))
+
+
+@pytest.mark.parametrize("command", [b"M106 P2.0 S178", b"M107 P2.", b"M106 P2.00000000000001 S0"])
+def test_fan_selector_uses_firmware_integer_syntax(command):
+    with pytest.raises(gcode.ValidationError, match="job_requirements"):
+        gcode.inspect(VALID + command + b"\n")
+
+
+@pytest.mark.parametrize(
+    "command,code",
+    [
+        (b"G2 X30 I0 J0 E10", "unsupported_parameters"),
+        (b"G2 X30 R10 E10", "unsupported_parameters"),
+        (b"G2 X30 I10 K1 E10", "unsupported_parameters"),
+        (b"G18\nG2 X30 I10 E10", "unsupported_command"),
+        (b"G19\nG3 X30 J10 E10", "unsupported_command"),
+        (b"G91\nG2 X30 I10 E10", "position_unknown"),
+        (b"G28\nG2 X30 I10 E10", "position_unknown"),
+        (b"G2 X30 I-10 E10", "movement_bounds"),
+        (b"G3 X271 I10 E10", "movement_bounds"),
+        (b"G2 X30 I10 Z271 E10", "movement_bounds"),
+        (b"G2 X30 I10 E11", "consumption_understated"),
+        (b"M104 S0\nG2 X30 I10 E10", "cold_extrusion"),
+        (b"G2 X30 I10 E-1", "consumption_understated"),
+        (b"G2 X30 I10 E10 F60001", "job_requirements"),
+        (b"M73 P101 R0", "job_requirements"),
+        (b"M73 R10", "job_requirements"),
+        (b"M73 P0 R-1", "job_requirements"),
+        (b"M73 P0 S10", "unsupported_parameters"),
+        (b"M106 P0 S100", "job_requirements"),
+        (b"M106 P2.1 S100", "job_requirements"),
+        (b"M106 P2 S256", "job_requirements"),
+        (b"M107 P3", "job_requirements"),
+        (b"M204 S10001", "job_requirements"),
+        (b"M204 S0", "job_requirements"),
+        (b"M204 P500 T500", "unsupported_parameters"),
+        (b"SET_VELOCITY_LIMIT ACCEL=10001", "job_requirements"),
+        (b"SET_VELOCITY_LIMIT ACCEL=0", "job_requirements"),
+        (b"SET_VELOCITY_LIMIT ACCEL=500 ACCEL_TO_DECEL=501", "job_requirements"),
+        (b"SET_VELOCITY_LIMIT ACCEL_TO_DECEL=500", "job_requirements"),
+        (b"SET_VELOCITY_LIMIT VELOCITY=500", "unsupported_parameters"),
+        (b"SET_VELOCITY_LIMIT ACCEL=500 ACCEL=600", "invalid_gcode"),
+        (b"SET_VELOCITY_LIMIT ACCEL=nan", "invalid_gcode"),
+        (b"SET_VELOCITY_LIMIT ACCEL=500 M104 S999", "invalid_gcode"),
+        (b"SET_VELOCITY_LIMIT ACCEL=500\x00", "invalid_gcode"),
+    ],
+)
+def test_extended_forms_fail_closed(command, code):
+    data = VALID.replace(b"G1 X30 E10", b"G17\n" + command)
+    if b"E-1" in command:
+        data = data.replace(b"M104 S0\nM140", b"G1 E12\nM104 S0\nM140")
+    with pytest.raises(gcode.ValidationError) as error:
+        gcode.inspect(data)
+    assert error.value.code == code
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        b"PRINT_START",
+        b"PRINT_END",
+        b"TIMELAPSE_START",
+        b"TIMELAPSE_STOP",
+        b"TIMELAPSE_TAKE_FRAME",
+        b"DEFECT_DETECTION_START",
+        b"DEFECT_DETECTION_DETECT",
+        b"DEFECT_DETECTION_DETECT_BED",
+        b"DEFECT_DETECT_NOODLE_FIRST",
+        b"SM_PRINT_CHECK_SWITCH_EXTRUDER",
+        b"SM_PRINT_EXTRUDER_PREHEAT EXTRUDER=1",
+        b"SM_PRINT_AUTO_FEED EXTRUDER=1",
+        b"SM_PRINT_FLOW_CALIBRATE EXTRUDER=1",
+        b"SM_PRINT_PREEXTRUDE_FILAMENT INDEX=1",
+        b"MOVE_TO_DISCARD_FILAMENT_POSITION",
+        b"MOVE_TO_XY_IDLE_POSITION_EXTRUDER",
+        b"ROUGHLY_CLEAN_NOZZLE_WITH_DISCARD",
+        b"ROUGHLY_CLEAN_NOZZLE",
+        b"FINELY_CLEAN_NOZZLE_STAGE_1",
+        b"FINELY_CLEAN_NOZZLE_STAGE_2",
+        b"DETECT_BED_PLATE",
+        b"BED_MESH_CALIBRATE",
+        b"SET_PRINT_STATS_INFO TOTAL_LAYER=1 CURRENT_LAYER=0",
+        b"SET_PRINT_AUTO_BED_LEVELING ENABLE=1",
+        b"SET_TIME_LAPSE_CAMERA ENABLE=1",
+        b"SET_PRESSURE_ADVANCE ADVANCE=0.026",
+        b"SET_PURIFIER_MODE MODE=3",
+        b"WAIT_CHAMBER_TEMP",
+        b"EXCLUDE_OBJECT_DEFINE NAME=synthetic",
+        b"EXCLUDE_OBJECT_START NAME=synthetic",
+        b"EXCLUDE_OBJECT_END NAME=synthetic",
+        b"SET_GCODE_OFFSET X=1",
+        b"SAVE_CONFIG",
+    ],
+)
+def test_stock_macro_effects_are_never_ignored(command):
+    with pytest.raises(gcode.ValidationError, match="unsupported_command"):
+        gcode.inspect(VALID + command + b"\n")

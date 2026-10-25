@@ -98,10 +98,17 @@ reports do not establish physical inspection or suitability for a future job.
 ## File preparation and uploads
 
 Keep slicing in the separate OrcaSlicer integration. Only a restricted plain
-`.gcode` dialect is accepted. Stock U1 profiles contain unresolved machine macros
-and are currently rejected. Do not strip their setup/safety commands to make a
+`.gcode` dialect is accepted, including bounded absolute XY arcs after explicit
+G17, M73 progress, P2 auxiliary cooling and acceleration forms. Stock U1 profiles
+contain unresolved machine macros and remain rejected. All eight inspected normal
+exports still fail validation; no full stock pattern is newly supported.
+Do not strip their setup/safety commands to make a
 file pass. See the [upload contract and evidence](docs/research/2026-10-24-uploads.md)
-for the supported commands, required metadata, fixed safety envelope and limits.
+and [firmware-matched G-code report](docs/research/2026-10-25-orca-u1-gcode.md)
+for supported forms, artifact identities, exact blockers and remaining acceptance.
+Arc bounds include the entire supporting circle and can reject a partial sweep
+near a boundary. Acceleration is capped at 10,000 mm/s²; arbitrary named settings,
+other planes, R arcs, partial homing and coordinate transforms remain rejected.
 
 For preparation, edit the ignored configuration: set `allowed_roots` to existing
 absolute directories, add `receipt_db` as an absolute SQLite path in an existing
@@ -161,6 +168,10 @@ SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serializati
 cancellation and restart reconciliation. Tests need no printer or credentials.
 No hardware upload/control tests have run.
 
+Validator policy 2 invalidates old preparations for new uploads. Old inflight
+receipts with a policy mismatch remain unknown and never resend a POST; retain
+the journal and investigate with read-only checks in the supported app.
+
 Reads use fixed routes/objects, disable environment proxies/redirects, request
 uncompressed data, reject other encodings, and cap raw bytes and total request
 duration. Defaults are 256 KiB and five seconds per request. On failure, check
@@ -202,3 +213,5 @@ dependence, or automatic product-order dispatch.
 | [Camera report](docs/research/2026-10-24-camera.md) | Tooling, artifact identity, findings and gaps. |
 | [Upload evidence](docs/research/2026-10-24-uploads.md) | Restricted dialect, source identity, receipt/recovery semantics and hardware gaps. |
 | [Upload plan](docs/superpowers/plans/2026-10-24-verified-uploads.md) | Focused implementation and verification record. |
+| [Orca U1 G-code report](docs/research/2026-10-25-orca-u1-gcode.md) | Version-matched firmware evidence, bounded numeric additions and stock-profile blockers. |
+| [Orca validation plan](docs/superpowers/plans/2026-10-25-orca-u1-validation.md) | Focused follow-up execution and acceptance limits. |

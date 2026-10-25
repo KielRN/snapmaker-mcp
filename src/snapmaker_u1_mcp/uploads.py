@@ -151,7 +151,7 @@ class Coordinator:
                 "roots": [str(p) for p in self.settings.allowed_roots],
                 "nozzles": self.settings.nozzle_diameters,
                 "maximum": self.settings.max_gcode_bytes,
-                "validator": 1,
+                "validator": 2,
             }
         )
 

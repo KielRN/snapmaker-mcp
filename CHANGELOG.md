@@ -4,6 +4,17 @@ Implemented changes only. No published release exists.
 
 ## Unreleased — 0.1.0.dev0
 
+### Added — 2026-10-25
+
+- Version-matched vendor firmware/source/configuration investigation and exact
+  command/parameter inventory from eight private normal Orca U1 exports.
+- Bounded M73 progress, auxiliary fan P2, M204 S, acceleration-only
+  SET_VELOCITY_LIMIT and explicit-G17 absolute XY IJ arcs. Circle interiors,
+  endpoints, helical Z, E consumption and heat are inspected conservatively.
+- Validator policy 2, old-policy restart/receipt rejection tests, synthetic
+  stock-shaped refusal fixtures and actual MCP tests for numeric forms and
+  unsafe inputs. No normal full export is newly supported; no live mutation.
+
 ### Added — 2026-10-24
 
 - Dedicated repository, operating guide, state/roadmap/decisions, design and
@@ -34,6 +45,12 @@ Implemented changes only. No published release exists.
   tests. Stock U1 macros remain rejected; hardware compatibility is not claimed.
 
 ### Verification
+
+- G-code follow-up: 215 tests passed on Python 3.11.14/3.13.12, Ruff check/format
+  and wheel/source builds. Actual MCP simulation covers accepted numeric forms,
+  unsafe arc interiors/endpoints, missing plane, decimal fan IDs, consumption,
+  temperature and stock macros. Independent review findings were reproduced and
+  fixed; its recheck found no remaining material issue. Live work was GET-only.
 
 - Upload milestone: 123 tests passed on Python 3.11.14/3.13.12, Ruff check/format
   and wheel/source builds. Real stdio/HTTP simulation covers prepare/upload and

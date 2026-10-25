@@ -1,6 +1,6 @@
 # Decisions
 
-Last updated: 2026-10-24
+Last updated: 2026-10-25
 
 Record durable choices with their date, status, and reason. **Confirmed** means
 directly established by owner direction or carried-forward printer operating
@@ -186,3 +186,25 @@ inferred safe from names. Hardware upload acceptance and firmware-matched macro
 analysis are required before broad profile support. Do not remove safety/setup
 commands to bypass validation. This supersedes D010's exactly-three-tool
 inventory only; its read behavior, redaction and data boundaries remain.
+
+## D014 — Match the release artifact before extending the U1 dialect
+
+Date: 2026-10-25 · Status: Implemented engineering choice within owner scope
+
+The vendor artifact for observed firmware `2.0.0.205_20260914173503` matches
+pinned release source, rather than public main, for the inspected contracts.
+Live macro/configuration reads agree with relevant executable definitions; they
+are not live-code attestation. Record identities and limits in the
+[Orca U1 report](docs/research/2026-10-25-orca-u1-gcode.md).
+
+Accept bounded M73, auxiliary fan P2, M204 S, acceleration-only named settings,
+and absolute XY IJ arcs only after explicit in-file G17. Bound the full circle
+and endpoint without allocating segments; retain every-tool consumption/thermal
+checks and conservative limits. Policy 2 prevents old preparations/inflight
+receipts from being promoted under new validation; no uncertain POST is replayed.
+
+Complete normal profiles remain blocked by state-dependent startup, cleaning,
+toolchange offsets, flow/bed calibration, object transforms, camera side effects
+and metadata ambiguity. Do not whitelist macros as no-ops, strip them or infer
+hardware safety from the source match. This follow-up authorizes only live reads;
+hardware upload/start/camera acceptance still needs separate authorization.

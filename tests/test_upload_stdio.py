@@ -4,6 +4,7 @@ import sys
 import threading
 from contextlib import asynccontextmanager, contextmanager
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from uuid import uuid4
 
 import httpx
@@ -11,6 +12,8 @@ import pytest
 from jsonschema import validate
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
+
+FIXTURES = Path(__file__).parent / "fixtures"
 
 
 @contextmanager
@@ -205,3 +208,87 @@ async def test_documented_connection_checker_calls_only_reads(setup_upload, tmp_
         assert stderr == b""
         assert set(json.loads(stdout)) == {"u1_status", "u1_materials", "u1_capabilities"}
         assert printer.posts == 0
+
+
+@pytest.mark.parametrize(
+    "pattern,expected",
+    [
+        ("numeric", None),
+        ("stock", "unsupported_command"),
+        ("arc_bounds", "movement_bounds"),
+        ("arc_endpoint", "movement_bounds"),
+        ("arc_cold", "cold_extrusion"),
+        ("arc_consumption", "consumption_understated"),
+        ("missing_plane", "position_unknown"),
+        ("fan_syntax", "job_requirements"),
+        ("later_tool", "consumption_missing"),
+    ],
+)
+async def test_orca_forms_over_real_mcp_preserve_bytes_and_rejections(
+    setup_upload, tmp_path, pattern, expected
+):
+    settings, printer, file = setup_upload
+    data = (FIXTURES / "orca_u1_numeric.gcode").read_bytes()
+    if pattern == "stock":
+        data = (FIXTURES / "orca_u1_stock_shape.gcode").read_bytes()
+    elif pattern == "arc_bounds":
+        data = data.replace(b"I10 J0 Z1 E5", b"I-10 J0 Z1 E5")
+    elif pattern == "arc_endpoint":
+        data = data.replace(b"G2 X30", b"G2 X271")
+    elif pattern == "arc_cold":
+        data = data.replace(b"G17", b"M104 S0\nG17")
+    elif pattern == "arc_consumption":
+        data = data.replace(b"Z1 E5", b"Z1 E11")
+    elif pattern == "missing_plane":
+        data = data.replace(b"G17", b"; no plane established")
+    elif pattern == "fan_syntax":
+        data = data.replace(b"P2 S178", b"P2.0 S178")
+    elif pattern == "later_tool":
+        data += b"T2\nM109 S210\nG1 E1\n"
+    file.write_bytes(data)
+    with file_printer(printer) as url:
+        config = tmp_path / "config.json"
+        config.write_text(
+            json.dumps(
+                {
+                    "printer_url": url,
+                    "allowed_roots": [str(tmp_path)],
+                    "receipt_db": str(settings.receipt_db),
+                    "enable_uploads": True,
+                    "nozzle_diameters": [0.4] * 4,
+                }
+            )
+        )
+        async with connected(config, tmp_path / "stderr.txt") as session:
+            args = {
+                "operation_id": str(uuid4()),
+                "local_path": str(file),
+                "plate": 1,
+                "logical_to_physical": [2, 1, 4, 3],
+            }
+            prep = await session.call_tool("u1_prepare_print", args)
+            assert printer.posts == 0
+            if expected:
+                assert prep.isError
+                assert prep.structuredContent["outcome"] == "rejected"
+                assert prep.structuredContent["errors"][0]["code"] == expected
+                return
+            assert not prep.isError
+            inspection = prep.structuredContent["data"]["inspection"]
+            assert inspection["used_tools"] == [1]
+            assert inspection["bounds_max"] == [30, 30, 1]
+            upload = await session.call_tool(
+                "u1_upload_print",
+                {
+                    "operation_id": str(uuid4()),
+                    "preparation_id": prep.structuredContent["data"]["preparation_id"],
+                },
+            )
+            assert not upload.isError
+            result = upload.structuredContent["data"]
+            assert result["state"] == "verified"
+            assert result["authorizes_start"] is False
+            assert result["hardware_accepted"] is False
+            assert result["remote_sha256"] == prep.structuredContent["data"]["sha256"]
+            assert printer.files[result["remote_path"]] == data
+            assert printer.posts == 1

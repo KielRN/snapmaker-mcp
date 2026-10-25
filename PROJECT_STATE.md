@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-10-24
+Last updated: 2026-10-25
 
 ## Current stage
 
@@ -13,7 +13,27 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
-- Current upload milestone: **123 tests passed on Python 3.11.14 and 3.13.12**.
+- Firmware-matched G-code follow-up: eight representative local exports inspected;
+  36 previously unsupported command names plus unsupported parameter forms found.
+  **No complete normal export is newly accepted.** Bounded progress/fan/acceleration
+  forms and explicit-G17 absolute XY arcs now work in supported synthetic programs.
+  Macro/offset/calibration/camera effects remain blocking; three exports also have
+  ambiguous one-entry filament/four-entry nozzle metadata. See the
+  [version-matched report](docs/research/2026-10-25-orca-u1-gcode.md).
+- Fresh read-only capability/configuration evidence confirms firmware
+  `2.0.0.205_20260914173503`. Its downloaded vendor artifact matches 14 selected
+  Python source files and two configs from pinned release head `bc271fb351f8c3ad84300e652e46fd93c53b9de1`.
+  All 87 compared macro executable bodies agree (86 normalized texts match; two
+  inline comments account for the other). This is static/version/configuration
+  evidence, not attestation of live code or hardware upload/print acceptance.
+- Independent follow-up review reproduced inherited arc-plane and decimal fan-ID
+  syntax issues. Both were regression-tested and fixed. Policy identity 2 blocks
+  old-receipt dispatch/promotion while retaining unknown-outcome no-replay rules.
+- Follow-up verification: **215 tests passed on Python 3.11.14 and 3.13.12**,
+  including actual MCP numeric-form success and stock/unsafe-form refusal.
+  Ruff check/format and wheel/source builds passed. Independent recheck found
+  no remaining material issue in the reviewed scope. Only live GETs were issued.
+- Previous upload milestone: **123 tests passed on Python 3.11.14 and 3.13.12**.
   Ruff checks/formatting and wheel/source builds passed. Real MCP subprocesses
   exercised five-tool discovery, preparation, HTTP multipart uploads, corruption,
   material/mapping/path failures, HTTP-200 errors and restart reconciliation.

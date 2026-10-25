@@ -122,6 +122,43 @@ async def test_prepare_and_verified_upload_are_bound_and_idempotent(setup_upload
             assert str(file) not in result.model_dump_json()
 
 
+@pytest.mark.parametrize("dispatched", [False, True])
+async def test_old_validator_receipts_cannot_dispatch_or_reconcile(
+    setup_upload, monkeypatch, dispatched
+):
+    settings, printer, file = setup_upload
+    old_policy = uploads.digest(
+        {
+            "origin": settings.printer_url.rstrip("/"),
+            "roots": [str(p) for p in settings.allowed_roots],
+            "nozzles": settings.nozzle_diameters,
+            "maximum": settings.max_gcode_bytes,
+            "validator": 1,
+        }
+    )
+    async with Moonraker(settings, transport=httpx.MockTransport(printer.serve)) as client:
+        with uploads.Coordinator(client) as coordinator:
+            with monkeypatch.context() as patch:
+                patch.setattr(coordinator, "_policy", lambda: old_policy)
+                p = await prepared(coordinator, file)
+                assert p.outcome == "ok"
+                request = uploads.UploadInput(
+                    operation_id=str(uuid4()), preparation_id=p.data.preparation_id
+                )
+                if dispatched:
+                    printer.failure = "lost_without_write"
+                    result = await coordinator.upload(request)
+                    assert result.outcome == "unknown"
+                    printer.files[result.data.remote_path] = file.read_bytes()
+            printer.failure = None
+        # Restart against the durable old-policy receipt with the current validator.
+        with uploads.Coordinator(client) as coordinator:
+            result = await coordinator.upload(request)
+            assert result.outcome == ("unknown" if dispatched else "rejected")
+            assert result.errors[0].code == "evidence_changed"
+            assert printer.posts == int(dispatched)
+
+
 @pytest.mark.parametrize(
     "change,code",
     [

@@ -1,5 +1,12 @@
 # Snapmaker U1 MCP bridge design
 
+The [2026-10-25 validation follow-up](../../research/2026-10-25-orca-u1-gcode.md)
+adds version-matched bounded numeric forms and explicit-G17 XY arcs. Complete
+stock profiles remain rejected. Source matching does not establish a bounded
+model of conditional setup, toolchanger/mesh offsets, hidden consumption or camera
+effects; those are prerequisites for accepting normal U1 exports. Upload and
+hardware authorization boundaries below continue to apply.
+
 Date: 2026-10-24
 
 Status: Python/stdio read milestone implemented at owner direction on 2026-10-24.

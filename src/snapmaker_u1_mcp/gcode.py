@@ -181,6 +181,7 @@ def inspect(
     low = [math.inf] * 3
     high = [-math.inf] * 3
     absolute = None
+    xy_plane = False
     e_absolute = None
     e_position = None
     net_extrusion = [0.0] * count
@@ -196,12 +197,35 @@ def inspect(
         code = line.split(";", 1)[0].strip()
         if not code:
             continue
+        # This one extended command has a verified, narrow numeric contract.
+        # Never pass other macros or arbitrary key/value parameters through.
+        parts = code.split()
+        if parts[0] == "SET_VELOCITY_LIMIT":
+            named = {}
+            for part in parts[1:]:
+                item = re.fullmatch(rf"([A-Z_]+)=({NUMBER})", part)
+                if not item or item[1] in named:
+                    raise ValidationError("invalid_gcode")
+                value = float(item[2])
+                if not math.isfinite(value) or abs(value) > 1e9:
+                    raise ValidationError("invalid_gcode")
+                named[item[1]] = value
+            if set(named) - {"ACCEL", "ACCEL_TO_DECEL"}:
+                raise ValidationError("unsupported_parameters")
+            if (
+                "ACCEL" not in named
+                or not 0 < named["ACCEL"] <= 10000
+                or not 0 < named.get("ACCEL_TO_DECEL", named["ACCEL"]) <= named["ACCEL"]
+            ):
+                raise ValidationError("job_requirements")
+            continue
         match = re.match(r"([GMT]\d+)(?=\s|[A-Z]|$)", code)
         if not match:
             raise ValidationError("unsupported_command")
         command = match[1]
         tail = code[match.end() :].replace(" ", "").replace("\t", "")
         params = {}
+        parameter_text = {}
         offset = 0
         for p in PARAMETER.finditer(tail):
             if p.start() != offset or p[1] in params:
@@ -210,6 +234,7 @@ def inspect(
             if not math.isfinite(value) or abs(value) > 1e9:
                 raise ValidationError("invalid_gcode")
             params[p[1]] = value
+            parameter_text[p[1]] = p[2]
             offset = p.end()
         if offset != len(tail):
             raise ValidationError("invalid_gcode")
@@ -218,7 +243,10 @@ def inspect(
         allowed = {
             "G0": "XYZEF",
             "G1": "XYZEF",
+            "G2": "XYZEFIJ",
+            "G3": "XYZEFIJ",
             "G4": "PS",
+            "G17": "",
             "G21": "",
             "G28": "",
             "G90": "",
@@ -230,8 +258,10 @@ def inspect(
             "M109": "ST",
             "M140": "S",
             "M190": "S",
-            "M106": "S",
-            "M107": "",
+            "M106": "SP",
+            "M107": "P",
+            "M73": "PR",
+            "M204": "S",
             "M400": "",
         }
         if command.startswith("T"):
@@ -246,6 +276,10 @@ def inspect(
             raise ValidationError("unsupported_parameters")
         if command in {"G90", "G91"}:
             absolute = command == "G90"
+        elif command == "G17":
+            # Firmware plane is persistent across files/clients. Establish it
+            # here rather than assuming the module's startup default is active.
+            xy_plane = True
         elif command in {"M82", "M83"}:
             e_absolute = command == "M82"
         elif command == "G28":
@@ -272,9 +306,27 @@ def inspect(
                 temps[selected] = value
                 waited[selected] = command == "M109" and value >= 170
                 nozzle_max[selected] = max(nozzle_max[selected], value)
-        elif command in {"G0", "G1"}:
+        elif command in {"G0", "G1", "G2", "G3"}:
             if absolute is None or ("E" in params and e_absolute is None):
                 raise ValidationError("position_unknown")
+            if command in {"G2", "G3"}:
+                if not xy_plane or not absolute or not homed or any(x is None for x in xyz):
+                    raise ValidationError("position_unknown")
+                offset_x, offset_y = params.get("I", 0), params.get("J", 0)
+                if not (offset_x or offset_y):
+                    raise ValidationError("unsupported_parameters")
+                # Matched gcode_arcs.py generates XY points on this circle,
+                # then appends the exact endpoint (even for unequal radii).
+                # Bound the whole circle in O(1), plus the endpoint below.
+                # This deliberately overbounds partial sweeps and is independent
+                # of firmware segmentation/resolution. Z interpolates linearly.
+                radius = math.hypot(offset_x, offset_y)
+                for i, center in enumerate((xyz[0] + offset_x, xyz[1] + offset_y)):
+                    minimum, maximum = center - radius, center + radius
+                    if not 0 <= minimum <= maximum <= volume[i]:
+                        raise ValidationError("movement_bounds")
+                    low[i] = min(low[i], minimum)
+                    high[i] = max(high[i], maximum)
             for i, axis in enumerate("XYZ"):
                 if axis in params:
                     if not homed or (not absolute and xyz[i] is None):
@@ -310,7 +362,19 @@ def inspect(
                     extruding.add(tool)
                     if not waited[tool] or temps[tool] < 170:
                         raise ValidationError("cold_extrusion")
-        elif command == "M106" and (set(params) != {"S"} or not 0 <= params["S"] <= 255):
+        elif command in {"M106", "M107"}:
+            if (
+                "P" in params
+                and (params["P"] != 2 or not re.fullmatch(r"[+-]?\d+", parameter_text["P"]))
+            ) or (command == "M106" and ("S" not in params or not 0 <= params["S"] <= 255)):
+                raise ValidationError("job_requirements")
+        elif command == "M73" and (
+            "P" not in params
+            or not 0 <= params["P"] <= 100
+            or not 0 <= params.get("R", 0) <= 1000000
+        ):
+            raise ValidationError("job_requirements")
+        elif command == "M204" and (set(params) != {"S"} or not 0 < params["S"] <= 10000):
             raise ValidationError("job_requirements")
         elif command == "G4" and (not params or any(not 0 <= x <= 60000 for x in params.values())):
             raise ValidationError("job_requirements")

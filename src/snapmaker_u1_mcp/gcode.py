@@ -265,10 +265,15 @@ def inspect(
             "M400": "",
         }
         if command.startswith("T"):
-            if params or not 0 <= int(command[1:]) < count:
+            if command not in {"T0", "T1", "T2", "T3"} or params or int(command[1:]) >= count:
                 raise ValidationError("unsupported_tool")
             tool = int(command[1:])
             e_position = None
+            # Matched U1 selection can park/pick and apply XYZ offsets without
+            # restoring the old carriage position. Even same-tool early return
+            # depends on live grip/park state. Reestablish G-code XYZ explicitly;
+            # this does not certify the firmware-owned toolchanger path.
+            xyz = [None, None, None]
             continue
         if command not in allowed:
             raise ValidationError("unsupported_command")
@@ -286,6 +291,9 @@ def inspect(
             # Homing is firmware-owned. Do not invent its final coordinates.
             homed = True
             xyz = [None, None, None]
+            # U1 Z-probe preprocessing may reselect from physical grip state.
+            tool = None
+            e_position = None
         elif command == "G92":
             if set(params) != {"E"}:
                 raise ValidationError("unsupported_parameters")
@@ -300,9 +308,18 @@ def inspect(
                 bed_max = max(bed_max, value)
             else:
                 selected = params.get("T", tool)
-                if selected is None or selected != int(selected) or not 0 <= selected < count:
+                if (
+                    selected is None
+                    or selected != int(selected)
+                    or not 0 <= selected < count
+                    or ("T" in params and not re.fullmatch(r"[+-]?\d+", parameter_text["T"]))
+                ):
                     raise ValidationError("unsupported_tool")
                 selected = int(selected)
+                if value > 0:
+                    # A heated head needs declared requirements and fresh
+                    # material/feed evidence even when it never executes E.
+                    used.add(selected)
                 temps[selected] = value
                 waited[selected] = command == "M109" and value >= 170
                 nozzle_max[selected] = max(nozzle_max[selected], value)

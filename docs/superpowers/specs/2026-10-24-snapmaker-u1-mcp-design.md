@@ -140,6 +140,15 @@ strings alone.
 
 The normal path is prepare -> upload and verify -> start -> observe.
 
+The current restricted inspector uses policy 3. Every T invalidates XYZ, full
+G28 invalidates active-tool/E knowledge, positive nozzle targets participate in
+requirements and requested physical mappings must be injective. Reestablishing
+explicit coordinates does not bound firmware-owned selection/homing or calibrated
+offset/mesh motion. Stock macro support remains blocked pending the
+[traced runtime-evidence contract](../../research/2026-10-25-startup-toolchange.md).
+These implementation limits do not establish hardware acceptance or change the
+future start authorization contract.
+
 - A preparation receipt binds the file hash, selected plate, mapping, material
   requirements, process values, printer identity, and an expiry. Default expiry
   is ten minutes. Revalidate before the first mutation and immediately before

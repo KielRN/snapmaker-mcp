@@ -110,6 +110,17 @@ Arc bounds include the entire supporting circle and can reject a partial sweep
 near a boundary. Acceleration is capped at 10,000 mm/s²; arbitrary named settings,
 other planes, R arcs, partial homing and coordinate transforms remain rejected.
 
+Tool selection forgets XYZ and requires explicit absolute X/Y/Z before further
+motion; absolute E still needs a reset. Full G28 forgets active tool/E because
+the U1 override can reselect a physical head. Positive heater targets require
+declared consumption and material/feed evidence even without E. Requested
+physical mappings must be unique; aliases return `mapping_ambiguous`. T0–T3
+command names must be canonical and heater T selectors must use integer syntax.
+These checks bound G-code-space inspection, not calibrated machine-space or
+firmware-owned homing/toolchanger motion. The
+[startup/toolchange report](docs/research/2026-10-25-startup-toolchange.md)
+traces hidden effects and the runtime evidence needed before broader acceptance.
+
 For preparation, edit the ignored configuration: set `allowed_roots` to existing
 absolute directories, add `receipt_db` as an absolute SQLite path in an existing
 private directory (normally `.local/`), and set `nozzle_diameters` to four
@@ -168,7 +179,7 @@ SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serializati
 cancellation and restart reconciliation. Tests need no printer or credentials.
 No hardware upload/control tests have run.
 
-Validator policy 2 invalidates old preparations for new uploads. Old inflight
+Validator policy 3 invalidates policy-1/2 preparations for new uploads. Old inflight
 receipts with a policy mismatch remain unknown and never resend a POST; retain
 the journal and investigate with read-only checks in the supported app.
 
@@ -215,3 +226,5 @@ dependence, or automatic product-order dispatch.
 | [Upload plan](docs/superpowers/plans/2026-10-24-verified-uploads.md) | Focused implementation and verification record. |
 | [Orca U1 G-code report](docs/research/2026-10-25-orca-u1-gcode.md) | Version-matched firmware evidence, bounded numeric additions and stock-profile blockers. |
 | [Orca validation plan](docs/superpowers/plans/2026-10-25-orca-u1-validation.md) | Focused follow-up execution and acceptance limits. |
+| [Startup/toolchange report](docs/research/2026-10-25-startup-toolchange.md) | Transitive source effects, validation hardening and missing runtime evidence. |
+| [Startup/toolchange plan](docs/superpowers/plans/2026-10-25-startup-toolchange-validation.md) | Focused hardening, review and verification record. |

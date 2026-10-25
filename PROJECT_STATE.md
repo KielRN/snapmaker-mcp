@@ -13,6 +13,21 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Startup/toolchange follow-up traces physical selection/retries, calibrated
+  XYZ/E origins, saved flow K, hidden feed/calibration/purge, homing/mesh and
+  pause/object/end/camera branches. Restricted validation now forgets XYZ after
+  T and active tool/E after G28, binds positive heater targets to requirements,
+  refuses physical heater aliases and enforces firmware selector syntax.
+  Policy 3 prevents policy-1/2 dispatch/promotion without replay. All eight
+  unchanged normal exports remain rejected; uploads remain disabled. See the
+  [focused chain/evidence report](docs/research/2026-10-25-startup-toolchange.md).
+- Startup/toolchange verification: **246 tests passed on Python 3.11.14 and
+  3.13.12**, including actual MCP/loopback HTTP and policy-2 restart refusal.
+  Ruff check/format and wheel/source builds passed. The complete 43-file scope,
+  64 local document links, both archives and nine ignore samples passed the
+  privacy/artifact audit. Independent final review found no actionable issues;
+  it separately passed 187 relevant tests and rechecked the source identities.
+  This follow-up issued no live printer request.
 - Firmware-matched G-code follow-up: eight representative local exports inspected;
   36 previously unsupported command names plus unsupported parameter forms found.
   **No complete normal export is newly accepted.** Bounded progress/fan/acceleration
@@ -26,10 +41,11 @@ this focused implementation and commit/push on `main`, with no live mutations.
   All 87 compared macro executable bodies agree (86 normalized texts match; two
   inline comments account for the other). This is static/version/configuration
   evidence, not attestation of live code or hardware upload/print acceptance.
-- Independent follow-up review reproduced inherited arc-plane and decimal fan-ID
+- Previous independent follow-up review reproduced inherited arc-plane and decimal fan-ID
   syntax issues. Both were regression-tested and fixed. Policy identity 2 blocks
   old-receipt dispatch/promotion while retaining unknown-outcome no-replay rules.
-- Follow-up verification: **215 tests passed on Python 3.11.14 and 3.13.12**,
+  This is superseded by policy 3's stricter validation.
+- Previous follow-up verification: **215 tests passed on Python 3.11.14 and 3.13.12**,
   including actual MCP numeric-form success and stock/unsafe-form refusal.
   Ruff check/format and wheel/source builds passed. Independent recheck found
   no remaining material issue in the reviewed scope. Only live GETs were issued.
@@ -90,8 +106,10 @@ records pinned public source and installed-contract limits.
    for camera tools; the trace alone will not resolve them all.
 3. Obtain separately authorized hardware acceptance of multipart upload/download,
    exact path/flag envelope, no-start/no-queue behavior, authentication and recovery.
-   Resolve firmware-matched stock-U1 macro/transform effects before accepting
-   normal Orca U1 profiles. Current restricted files and journals are described in
+   Bind the traced stock-U1 macro/offset/mesh, per-head thermal/consumption and
+   conditional runtime dependencies before accepting normal Orca U1 profiles.
+   The focused report specifies the next bounded read-only evidence contract;
+   current read tools do not establish it. Current restricted files and journals are described in
    the [upload evidence](docs/research/2026-10-24-uploads.md).
 4. Implement future print job-parameter/start/controls after their contracts are
    resolved. The preparation/upload implementation applies no job parameters.

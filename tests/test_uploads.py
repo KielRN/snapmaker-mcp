@@ -123,8 +123,9 @@ async def test_prepare_and_verified_upload_are_bound_and_idempotent(setup_upload
 
 
 @pytest.mark.parametrize("dispatched", [False, True])
+@pytest.mark.parametrize("validator", [1, 2])
 async def test_old_validator_receipts_cannot_dispatch_or_reconcile(
-    setup_upload, monkeypatch, dispatched
+    setup_upload, monkeypatch, dispatched, validator
 ):
     settings, printer, file = setup_upload
     old_policy = uploads.digest(
@@ -133,7 +134,7 @@ async def test_old_validator_receipts_cannot_dispatch_or_reconcile(
             "roots": [str(p) for p in settings.allowed_roots],
             "nozzles": settings.nozzle_diameters,
             "maximum": settings.max_gcode_bytes,
-            "validator": 1,
+            "validator": validator,
         }
     )
     async with Moonraker(settings, transport=httpx.MockTransport(printer.serve)) as client:
@@ -157,6 +158,30 @@ async def test_old_validator_receipts_cannot_dispatch_or_reconcile(
             assert result.outcome == ("unknown" if dispatched else "rejected")
             assert result.errors[0].code == "evidence_changed"
             assert printer.posts == int(dispatched)
+
+
+async def test_aliased_physical_heaters_are_rejected_before_receipt_or_upload(setup_upload):
+    settings, printer, file = setup_upload
+    # Both logical T0 and T1 address physical heater 1: T1's S0 defeats T0's wait.
+    data = VALID.replace(b"T1\nM104 S210\nM109 S210", b"T1\nM109 T1 S210\nM104 T0 S0")
+    file.write_bytes(data)
+    objects = printer.replies["/printer/objects/query"]["result"]["status"]
+    objects["print_task_config"]["extruder_map_table"][:4] = [0, 0, 3, 2]
+    async with Moonraker(settings, transport=httpx.MockTransport(printer.serve)) as client:
+        with uploads.Coordinator(client) as coordinator:
+            operation = str(uuid4())
+            response = await coordinator.prepare(
+                uploads.PrepareInput(
+                    operation_id=operation,
+                    local_path=str(file),
+                    plate=1,
+                    logical_to_physical=[1, 1, 4, 3],
+                )
+            )
+            assert response.outcome == "rejected"
+            assert response.errors[0].code == "mapping_ambiguous"
+            assert coordinator.store.get(operation) is None
+            assert printer.posts == 0
 
 
 @pytest.mark.parametrize(

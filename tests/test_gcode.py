@@ -88,7 +88,7 @@ def test_moves_cannot_hide_unknown_coordinates_after_homing():
 
 def test_g91_makes_extrusion_relative_even_after_m82():
     with pytest.raises(gcode.ValidationError, match="cold_extrusion"):
-        gcode.inspect(VALID.replace(b"M400", b"M82\nG91\nT0\nG1 E1\nM400"))
+        gcode.inspect(VALID.replace(b"M400", b"T0\nG1 X30 Y20 Z0.2\nM82\nG91\nG1 E1\nM400"))
 
 
 def test_absolute_extrusion_requires_reset_after_tool_selection():
@@ -96,9 +96,55 @@ def test_absolute_extrusion_requires_reset_after_tool_selection():
         gcode.inspect(VALID.replace(b"M83", b"M82"))
 
 
+@pytest.mark.parametrize("selection", [b"T1", b"T0"])
+@pytest.mark.parametrize("move", [b"G91\nG1 X1", b"G1 X40", b"G17\nG2 I10 J0"])
+def test_tool_selection_invalidates_all_inherited_xyz(selection, move):
+    # A same-tool shortcut depends on park/grip state; it cannot be assumed.
+    data = VALID.replace(b"M400", selection + b"\n" + move + b"\nM400")
+    with pytest.raises(gcode.ValidationError, match="position_unknown"):
+        gcode.inspect(data)
+
+
+def test_explicit_xyz_after_selection_reestablishes_only_gcode_space():
+    data = VALID.replace(b"G1 X30 E10", b"T1\nG1 X10 Y20 Z0.2\nG1 X30 E10")
+    result = gcode.inspect(data)
+    assert result.bounds_max == [30, 20, 0.2]
+    assert result.used_tools == [1]
+
+
+@pytest.mark.parametrize("command", [b"M104 T0 S140", b"M109 T2 S210"])
+def test_positive_heater_targets_cannot_hide_undeclared_material_requirements(command):
+    with pytest.raises(gcode.ValidationError, match="consumption_missing"):
+        gcode.inspect(VALID + command + b"\n")
+
+
+def test_heater_off_alone_does_not_demand_consumption():
+    assert gcode.inspect(VALID + b"M104 T0 S0\n").used_tools == [1]
+
+
+@pytest.mark.parametrize("command", [b"M104 T1.0 S0", b"M109 T1. S210"])
+def test_heater_selector_requires_firmware_integer_syntax(command):
+    with pytest.raises(gcode.ValidationError, match="unsupported_tool"):
+        gcode.inspect(VALID + command + b"\n")
+
+
+@pytest.mark.parametrize("command", [b"T01", b"T0001"])
+def test_tool_selection_requires_registered_firmware_command(command):
+    with pytest.raises(gcode.ValidationError, match="unsupported_tool"):
+        gcode.inspect(VALID.replace(b"T1", command))
+
+
 def test_retraction_on_an_unused_cold_tool_also_requires_feed_and_heat():
     with pytest.raises(gcode.ValidationError, match="cold_extrusion"):
-        gcode.inspect(VALID.replace(b"M400", b"T0\nG1 E-1\nM400"))
+        gcode.inspect(VALID.replace(b"M400", b"T0\nG1 X30 Y20 Z0.2\nG1 E-1\nM400"))
+
+
+@pytest.mark.parametrize("command", [b"M104 S210", b"G1 E1"])
+def test_full_homing_cannot_preserve_assumed_active_tool(command):
+    # Matched G28 may reselect a physical head from grip/park state.
+    data = VALID.replace(b"M104 S0", b"G28\nG1 X30 Y20 Z0.2\n" + command)
+    with pytest.raises(gcode.ValidationError, match="unsupported_tool"):
+        gcode.inspect(data)
 
 
 def test_total_line_limit_bounds_many_short_comments_and_commands():

@@ -6,6 +6,13 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-25
 
+- Startup/toolchange chain investigation using the already matched firmware
+  artifact. Restricted validation now invalidates XYZ after T and active tool/E
+  after G28, accounts for positive heater targets, rejects physical heater aliases
+  and enforces canonical tool/integer heater-selector syntax. Validator policy 3
+  blocks policy-1/2 receipt dispatch/promotion without replay. Synthetic and actual
+  MCP regressions cover these cases; no stock macro or intact export is newly
+  accepted. No live printer request or configuration change occurred.
 - Version-matched vendor firmware/source/configuration investigation and exact
   command/parameter inventory from eight private normal Orca U1 exports.
 - Bounded M73 progress, auxiliary fan P2, M204 S, acceleration-only
@@ -45,6 +52,12 @@ Implemented changes only. No published release exists.
   tests. Stock U1 macros remain rejected; hardware compatibility is not claimed.
 
 ### Verification
+
+- Startup/toolchange follow-up: 246 tests passed on Python 3.11.14/3.13.12,
+  including real MCP/loopback HTTP and policy-2 restart rejection. Ruff
+  check/format and wheel/source builds passed. Complete source/doc/archive
+  privacy and generated-artifact audit passed. Independent final review found no
+  actionable issues and separately passed 187 relevant tests. No live printer request.
 
 - G-code follow-up: 215 tests passed on Python 3.11.14/3.13.12, Ruff check/format
   and wheel/source builds. Actual MCP simulation covers accepted numeric forms,

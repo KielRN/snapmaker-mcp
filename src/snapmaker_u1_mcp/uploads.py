@@ -151,11 +151,16 @@ class Coordinator:
                 "roots": [str(p) for p in self.settings.allowed_roots],
                 "nozzles": self.settings.nozzle_diameters,
                 "maximum": self.settings.max_gcode_bytes,
-                "validator": 2,
+                "validator": 3,
             }
         )
 
     async def _evidence(self, inspection: Inspection, mapping: list[int]) -> str:
+        # Inspection tracks heaters/E by logical index. Aliasing those indices
+        # could hide cooling or incompatible requirements on one physical head.
+        # Refuse aliases until physical-state tracking is implemented.
+        if len(set(mapping)) != len(mapping):
+            raise ValidationError("mapping_ambiguous")
         info = await self.client.get("/printer/info")
         status = await self.reader.status()
         if status.data is None and status.errors:

@@ -2,6 +2,11 @@
 
 ## Result and scope
 
+The [startup/toolchange follow-up](2026-10-25-startup-toolchange.md) traces the
+conditional chains in detail and hardens restricted validation under policy 3.
+The numeric policy-2 milestone below is historical; all eight exports remain
+rejected and no macro is newly accepted.
+
 Normal, intact Orca U1 exports **remain blocked**. This follow-up establishes
 version-matched source identities and adds only bounded numeric forms: M73
 progress, auxiliary cooling P2, M204 S, acceleration-only SET_VELOCITY_LIMIT,

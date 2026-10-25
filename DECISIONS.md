@@ -208,3 +208,26 @@ toolchange offsets, flow/bed calibration, object transforms, camera side effects
 and metadata ambiguity. Do not whitelist macros as no-ops, strip them or infer
 hardware safety from the source match. This follow-up authorizes only live reads;
 hardware upload/start/camera acceptance still needs separate authorization.
+
+## D015 — Preserve unknown state across firmware-owned setup
+
+Date: 2026-10-25 · Status: Implemented engineering choice within owner scope
+
+Matched-source tracing establishes that selection can move the carriage and
+replace XYZ offsets; even a same-head shortcut depends on hardware state. Forget
+XYZ after every T and active tool/E after full G28, which can reselect a physical
+head. Require canonical tool names and integer heater selectors. Explicit XYZ
+only reestablishes G-code-space inspection, not machine-space safety.
+
+Positive heater targets participate in declared material/feed requirements.
+Reject aliases in the requested physical mapping until physical heater/E tracking
+can support them; per-logical tracking must not certify a heater cooled through
+another logical index. Policy 3 invalidates old-policy undispatched preparations
+and uncertain-result promotion without replaying a POST.
+
+No macro is newly accepted. Saved flow, physical feed/calibration demand,
+homing/mesh, pause/object/end and camera effects require a bound runtime-evidence
+contract before broader acceptance. The
+[focused report](docs/research/2026-10-25-startup-toolchange.md) records the
+transitive paths and limits. No live request, camera action, configuration change
+or hardware acceptance occurred in this follow-up; full milestones remain partial.

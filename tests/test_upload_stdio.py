@@ -214,6 +214,7 @@ async def test_documented_connection_checker_calls_only_reads(setup_upload, tmp_
     "pattern,expected",
     [
         ("numeric", None),
+        ("tool_xyz", None),
         ("stock", "unsupported_command"),
         ("arc_bounds", "movement_bounds"),
         ("arc_endpoint", "movement_bounds"),
@@ -222,6 +223,15 @@ async def test_documented_connection_checker_calls_only_reads(setup_upload, tmp_
         ("missing_plane", "position_unknown"),
         ("fan_syntax", "job_requirements"),
         ("later_tool", "consumption_missing"),
+        ("tool_relative", "position_unknown"),
+        ("tool_partial", "position_unknown"),
+        ("tool_arc", "position_unknown"),
+        ("heater_unused", "consumption_missing"),
+        ("heater_syntax", "unsupported_tool"),
+        ("heater_alias", "mapping_ambiguous"),
+        ("homing_tool", "unsupported_tool"),
+        ("heated_feed", "material_not_loaded"),
+        ("tool_syntax", "unsupported_tool"),
     ],
 )
 async def test_orca_forms_over_real_mcp_preserve_bytes_and_rejections(
@@ -229,6 +239,7 @@ async def test_orca_forms_over_real_mcp_preserve_bytes_and_rejections(
 ):
     settings, printer, file = setup_upload
     data = (FIXTURES / "orca_u1_numeric.gcode").read_bytes()
+    mapping = [2, 1, 4, 3]
     if pattern == "stock":
         data = (FIXTURES / "orca_u1_stock_shape.gcode").read_bytes()
     elif pattern == "arc_bounds":
@@ -244,7 +255,37 @@ async def test_orca_forms_over_real_mcp_preserve_bytes_and_rejections(
     elif pattern == "fan_syntax":
         data = data.replace(b"P2 S178", b"P2.0 S178")
     elif pattern == "later_tool":
-        data += b"T2\nM109 S210\nG1 E1\n"
+        data += b"T2\nM109 S210\nG1 X10 Y20 Z1\nG1 E1\n"
+    elif pattern == "tool_xyz":
+        data = data.replace(b"G17", b"T1\nG1 X10 Y20 Z0.2\nG17")
+    elif pattern == "tool_relative":
+        data += b"T1\nG91\nG1 X1\n"
+    elif pattern == "tool_partial":
+        data += b"T1\nG1 X20\n"
+    elif pattern == "tool_arc":
+        data += b"T1\nG2 I10 J0\n"
+    elif pattern == "heater_unused":
+        data += b"M104 T2 S140\n"
+    elif pattern == "heater_syntax":
+        data += b"M104 T1.0 S0\n"
+    elif pattern == "heater_alias":
+        mapping = [1, 1, 4, 3]
+        printer.replies["/printer/objects/query"]["result"]["status"]["print_task_config"][
+            "extruder_map_table"
+        ][:4] = [0, 0, 3, 2]
+        data = data.replace(b"M109 S210", b"M109 T1 S210\nM104 T0 S0")
+    elif pattern == "homing_tool":
+        data += b"G28\nM104 S210\n"
+    elif pattern == "heated_feed":
+        data = data.replace(b"0, 10, 0, 0", b"0, 10, 1, 0").replace(
+            b"0, 0.03, 0, 0", b"0, 0.03, 0.01, 0"
+        )
+        data += b"M109 T2 S210\n"
+        printer.replies["/printer/objects/query"]["result"]["status"][
+            "filament_motion_sensor e3_filament"
+        ]["filament_detected"] = False
+    elif pattern == "tool_syntax":
+        data = data.replace(b"T1\n", b"T01\n")
     file.write_bytes(data)
     with file_printer(printer) as url:
         config = tmp_path / "config.json"
@@ -264,7 +305,7 @@ async def test_orca_forms_over_real_mcp_preserve_bytes_and_rejections(
                 "operation_id": str(uuid4()),
                 "local_path": str(file),
                 "plate": 1,
-                "logical_to_physical": [2, 1, 4, 3],
+                "logical_to_physical": mapping,
             }
             prep = await session.call_tool("u1_prepare_print", args)
             assert printer.posts == 0
@@ -292,3 +333,63 @@ async def test_orca_forms_over_real_mcp_preserve_bytes_and_rejections(
             assert result["remote_sha256"] == prep.structuredContent["data"]["sha256"]
             assert printer.files[result["remote_path"]] == data
             assert printer.posts == 1
+
+
+@pytest.mark.parametrize("dispatched", [False, True])
+async def test_policy_two_receipts_cannot_promote_over_real_mcp(
+    setup_upload, tmp_path, monkeypatch, dispatched
+):
+    from dataclasses import replace
+
+    from test_uploads import prepared
+
+    from snapmaker_u1_mcp import uploads
+    from snapmaker_u1_mcp.transport import Moonraker
+
+    settings, printer, file = setup_upload
+    with file_printer(printer) as url:
+        settings = replace(settings, printer_url=url)
+        async with Moonraker(settings) as client:
+            with uploads.Coordinator(client) as coordinator:
+                old_policy = uploads.digest(
+                    {
+                        "origin": url,
+                        "roots": [str(p) for p in settings.allowed_roots],
+                        "nozzles": settings.nozzle_diameters,
+                        "maximum": settings.max_gcode_bytes,
+                        "validator": 2,
+                    }
+                )
+                with monkeypatch.context() as patch:
+                    patch.setattr(coordinator, "_policy", lambda: old_policy)
+                    prep = await prepared(coordinator, file)
+                    assert prep.outcome == "ok"
+                    request = uploads.UploadInput(
+                        operation_id=str(uuid4()), preparation_id=prep.data.preparation_id
+                    )
+                    if dispatched:
+                        printer.failure = "lost_without_write"
+                        uncertain = await coordinator.upload(request)
+                        assert uncertain.outcome == "unknown"
+                        printer.files[uncertain.data.remote_path] = file.read_bytes()
+        printer.failure = None
+        config = tmp_path / "config.json"
+        config.write_text(
+            json.dumps(
+                {
+                    "printer_url": url,
+                    "allowed_roots": [str(p) for p in settings.allowed_roots],
+                    "receipt_db": str(settings.receipt_db),
+                    "enable_uploads": True,
+                    "nozzle_diameters": list(settings.nozzle_diameters),
+                }
+            )
+        )
+        async with connected(config, tmp_path / "stderr.txt") as session:
+            response = await session.call_tool("u1_upload_print", request.model_dump())
+            assert response.isError
+            assert response.structuredContent["outcome"] == (
+                "unknown" if dispatched else "rejected"
+            )
+            assert response.structuredContent["errors"][0]["code"] == "evidence_changed"
+            assert printer.posts == int(dispatched)

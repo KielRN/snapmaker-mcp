@@ -336,7 +336,7 @@ async def test_orca_forms_over_real_mcp_preserve_bytes_and_rejections(
 
 
 @pytest.mark.parametrize("dispatched", [False, True])
-@pytest.mark.parametrize("validator", [2, 3])
+@pytest.mark.parametrize("validator", [2, 3, 4])
 async def test_old_policy_receipts_cannot_promote_over_real_mcp(
     setup_upload, tmp_path, monkeypatch, dispatched, validator
 ):

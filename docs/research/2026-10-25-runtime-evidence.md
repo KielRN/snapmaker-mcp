@@ -1,5 +1,9 @@
 # Bounded runtime coordinate evidence — 2026-10-25
 
+The subsequent [transform follow-up](2026-10-25-transform-evidence.md) adds a
+focused exclusion read/binding under policy 5 and traces lifecycle limitations.
+Policy-4 and seven-object-only statements below describe this earlier milestone.
+
 ## Established result
 
 One bounded live **GET** for `toolhead`, `gcode_move`, `extruder`, `extruder1`,

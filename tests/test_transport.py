@@ -83,6 +83,9 @@ async def test_no_arbitrary_route_or_query_can_be_fetched():
                 await client.get(path)
         with pytest.raises(ValueError):
             await client.get("/printer/objects/query", {"configfile": ""})
+        for fields in ["", "objects", "next_transform", "excluded_objects"]:
+            with pytest.raises(ValueError):
+                await client.get("/printer/objects/query", {"exclude_object": fields})
 
 
 async def test_compressed_responses_are_refused_before_decompression():

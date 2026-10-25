@@ -243,3 +243,90 @@ async def test_contradictory_runtime_reports_block_preparation(setup_upload, cha
             assert response.outcome == "rejected"
             assert response.errors[0].code == "runtime_evidence_inconsistent"
             assert printer.posts == 0
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("excluded_objects", ["PRIVATE OBJECT"]),
+        ("current_object", "PRIVATE OBJECT"),
+        ("in_excluded_region", True),
+    ],
+)
+@pytest.mark.parametrize("phase", ["prepare", "preflight", "hash", "restart"])
+async def test_exclusion_changes_block_dispatch_or_promotion(setup_upload, field, value, phase):
+    settings, printer, file = setup_upload
+    objects = printer.replies["/printer/objects/query"]["result"]["status"]
+    runtime_reads = 0
+    queries = []
+
+    async def serve(request):
+        nonlocal runtime_reads
+        if request.url.path == "/printer/objects/query" and "gcode_move" in request.url.params:
+            runtime_reads += 1
+            queries.append(request.url.params.get("exclude_object"))
+            if phase == "prepare" and runtime_reads == 2:
+                objects["exclude_object"][field] = value
+        if request.url.path.startswith("/server/files/gcodes/"):
+            if phase == "preflight" or (phase == "hash" and printer.posts):
+                objects["exclude_object"][field] = value
+        return await printer.serve(request)
+
+    async with Moonraker(settings, transport=httpx.MockTransport(serve)) as client:
+        with Coordinator(client) as coordinator:
+            prep = await prepared(coordinator, file)
+            if phase == "prepare":
+                assert prep.outcome == "rejected"
+                assert prep.errors[0].code == "runtime_evidence_changed"
+            else:
+                assert prep.outcome == "ok"
+                assert prep.data.runtime_evidence.data.exclusion.current_object_present is False
+                request = UploadInput(
+                    operation_id=str(uuid4()), preparation_id=prep.data.preparation_id
+                )
+                if phase == "restart":
+                    printer.failure = "lost_without_write"
+                response = await coordinator.upload(request)
+                assert response.outcome == ("rejected" if phase == "preflight" else "unknown")
+                if phase != "restart":
+                    assert response.errors[0].code == "evidence_changed"
+                else:
+                    objects["exclude_object"][field] = value
+                    printer.files[response.data.remote_path] = file.read_bytes()
+                    printer.failure = None
+        if phase == "restart":
+            with Coordinator(client) as coordinator:
+                response = await coordinator.upload(request)
+                assert response.outcome == "unknown"
+                assert response.errors[0].code == "evidence_changed"
+        assert printer.posts == int(phase in {"hash", "restart"})
+        assert queries and set(queries) == {"excluded_objects,current_object,in_excluded_region"}
+
+
+@pytest.mark.parametrize("field", ["excluded_objects", "current_object", "in_excluded_region"])
+async def test_missing_exclusion_blocks_preparation(setup_upload, field):
+    settings, printer, file = setup_upload
+    del printer.replies["/printer/objects/query"]["result"]["status"]["exclude_object"][field]
+    async with Moonraker(settings, transport=httpx.MockTransport(printer.serve)) as client:
+        with Coordinator(client) as coordinator:
+            response = await prepared(coordinator, file)
+            assert response.outcome == "rejected"
+            assert response.errors[0].code == "runtime_evidence_missing"
+            assert printer.posts == 0
+
+
+async def test_same_size_excluded_set_change_invalidates_receipt(setup_upload):
+    settings, printer, file = setup_upload
+    exclusion = printer.replies["/printer/objects/query"]["result"]["status"]["exclude_object"]
+    exclusion["excluded_objects"] = ["FIRST PRIVATE OBJECT"]
+    async with Moonraker(settings, transport=httpx.MockTransport(printer.serve)) as client:
+        with Coordinator(client) as coordinator:
+            prep = await prepared(coordinator, file)
+            assert prep.outcome == "ok"
+            exclusion["excluded_objects"] = ["SECOND PRIVATE OBJECT"]
+            response = await coordinator.upload(
+                UploadInput(operation_id=str(uuid4()), preparation_id=prep.data.preparation_id)
+            )
+            assert response.outcome == "rejected"
+            assert response.errors[0].code == "evidence_changed"
+            assert printer.posts == 0

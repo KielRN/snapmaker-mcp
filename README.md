@@ -67,7 +67,7 @@ Call the three read tools with `{}`. Discovery includes typed input/output schem
 | Tool | Result |
 | --- | --- |
 | `u1_capabilities` | Observed firmware/Moonraker identity, HTTP/object inventory, implemented/future tools, unresolved camera support. |
-| `u1_status` | Klipper/print state, virtual SD, progress, temperatures, exceptions and bounded reported coordinate/selection/offset/mesh evidence. |
+| `u1_status` | Klipper/print state, virtual SD, progress, temperatures, exceptions and bounded reported coordinate/selection/offset/mesh/exclusion evidence. |
 | `u1_materials` | Four physical tools, T0–T3/API names, 32 logical mapping slots, job-use flags, RFID identity/color, feed/toolhead sensor evidence, loaded state. |
 | `u1_prepare_print` | Read-only inspection of one allowed file/plate and fresh mapping/material/feed evidence; expiring durable receipt. |
 | `u1_upload_print` | No-start/no-queue upload of a prepared hash, exact returned-path check and remote download SHA256 verification; simulator-verified only. |
@@ -94,9 +94,14 @@ per-head reported offsets from the global homing origin, and toolhead/G-code
 positions from one another. Mesh profile/matrices are represented by digests
 and dimensions. Missing/malformed fields stay unknown; a populated mesh and
 zero offsets do not establish an applied transform or calibrated safety.
-Unexposed base positions, per-head origins, fade/tool offset, calibration
-provenance and complete transform chain remain unestablished. See the
-[runtime evidence report](docs/research/2026-10-25-runtime-evidence.md).
+The fixed exclusion projection adds private label hashes/counts, current-object
+presence and reported region state. Explicit null current object is known absence;
+missing/malformed fields remain unknown. Empty exclusions do not prove transform
+removal; region state can lag a marker. Installation stays null. Unexposed base
+positions, per-head origins, effective fade/lookup/ZFADE, calibration provenance
+and complete transform chain remain unestablished. See the
+[runtime evidence report](docs/research/2026-10-25-runtime-evidence.md) and
+[transform lifecycle report](docs/research/2026-10-25-transform-evidence.md).
 
 `loaded` requires an enabled positive toolhead sensor plus present/positive feed
 module reporting completed loading without a feed error. An enabled negative
@@ -193,12 +198,14 @@ SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serializati
 cancellation and restart reconciliation. Tests need no printer or credentials.
 No hardware upload/control tests have run.
 
-Validator policy 4 invalidates policy-1/2/3 preparations for new uploads. Old inflight
+Receipt policy 5 invalidates policy-1/2/3/4 preparations for new uploads. Old inflight
 receipts with a policy mismatch remain unknown and never resend a POST; retain
 the journal and investigate with read-only checks in the supported app.
 Runtime evidence is rechecked before dispatch and around remote byte verification;
 changes or backwards source times block dispatch/promotion. Repeated equal HTTP
 reads cannot exclude intervening changes, stale peer data or other-client races.
+Exclusion reports participate in the binding; known reports do not establish
+the running transform chain. The restricted G-code dialect is unchanged.
 
 Reads use fixed routes/objects, disable environment proxies/redirects, request
 uncompressed data, reject other encodings, and cap raw bytes and total request
@@ -247,3 +254,5 @@ dependence, or automatic product-order dispatch.
 | [Startup/toolchange plan](docs/superpowers/plans/2026-10-25-startup-toolchange-validation.md) | Focused hardening, review and verification record. |
 | [Runtime evidence](docs/research/2026-10-25-runtime-evidence.md) | Observed coordinate/selection/mesh fields, policy-4 binding and remaining provenance/transform gaps. |
 | [Runtime evidence plan](docs/superpowers/plans/2026-10-25-runtime-evidence.md) | Focused collection, normalization and receipt verification ledger. |
+| [Transform lifecycle report](docs/research/2026-10-25-transform-evidence.md) | Exclusion field evidence, policy-5 binding and unsupported lifecycle/provenance claims. |
+| [Transform evidence plan](docs/superpowers/plans/2026-10-25-transform-evidence.md) | Focused continuation, review and verification ledger. |

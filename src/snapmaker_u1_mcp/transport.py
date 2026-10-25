@@ -19,6 +19,7 @@ OBJECTS = (
     "toolhead",
     "gcode_move",
     "bed_mesh",
+    "exclude_object",
     "heater_bed",
     "exception_manager",
     "print_task_config",
@@ -26,6 +27,14 @@ OBJECTS = (
     "filament_feed left",
     "filament_feed right",
 )
+OBJECT_FIELDS = {"exclude_object": "excluded_objects,current_object,in_excluded_region"}
+
+
+def object_query(names):
+    """Only fixed projections; exclusion geometry/extra metadata is not requested."""
+    return {name: OBJECT_FIELDS.get(name, "") for name in names}
+
+
 ROUTES = {
     "/printer/info",
     "/server/info",
@@ -100,7 +109,7 @@ class Moonraker:
             and (
                 path != "/printer/objects/query"
                 or set(params) - set(OBJECTS)
-                or any(v != "" for v in params.values())
+                or any(v != OBJECT_FIELDS.get(k, "") for k, v in params.items())
             )
         ):
             raise ValueError("Only fixed read endpoints and known status objects are allowed")

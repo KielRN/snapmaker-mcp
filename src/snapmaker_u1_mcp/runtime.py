@@ -4,10 +4,10 @@ import hashlib
 import json
 import math
 
-from .models import HeadEvidence, MatrixEvidence, MeshEvidence, RuntimeEvidence
+from .models import ExclusionEvidence, HeadEvidence, MatrixEvidence, MeshEvidence, RuntimeEvidence
 from .transport import EXTRUDERS
 
-RUNTIME_OBJECTS = ("toolhead", "gcode_move", *EXTRUDERS, "bed_mesh")
+RUNTIME_OBJECTS = ("toolhead", "gcode_move", *EXTRUDERS, "bed_mesh", "exclude_object")
 
 
 def signed_number(value):
@@ -76,6 +76,36 @@ def normalize_runtime(snapshot: dict) -> RuntimeEvidence:
         return (
             v if isinstance(v, str) and v in {"", "x", "y", "z", "xy", "xz", "yz", "xyz"} else None
         )
+
+    def label(v):
+        return isinstance(v, str) and len(v) <= 256
+
+    def excluded(v):
+        if (
+            isinstance(v, list)
+            and len(v) <= 1024
+            and all(label(name) for name in v)
+            and len(set(v)) == len(v)
+        ):
+            return sorted(v)
+        return None
+
+    names = field("exclude_object", "excluded_objects", excluded)
+    current = raw("exclude_object").get("current_object")
+    current_known = "current_object" in raw("exclude_object") and (
+        current is None or label(current)
+    )
+    if not current_known:
+        missing.append("exclude_object.current_object")
+    exclusion = ExclusionEvidence(
+        excluded_count=len(names) if names is not None else None,
+        excluded_sha256=hashed(names) if names is not None else None,
+        current_object_present=(current is not None) if current_known else None,
+        current_object_sha256=hashed(current) if current_known and current is not None else None,
+        in_excluded_region=field("exclude_object", "in_excluded_region", boolean),
+    )
+    # Region state is updated by moves and can lag START/END/RESET. Neither it
+    # nor an empty exclusion list establishes transform installation/removal.
 
     heads = []
     for i, name in enumerate(EXTRUDERS):
@@ -180,5 +210,10 @@ def normalize_runtime(snapshot: dict) -> RuntimeEvidence:
         extrude_factor=field("gcode_move", "extrude_factor", positive),
     )
     return RuntimeEvidence(
-        **data, tools=heads, mesh=mesh, missing_fields=missing, inconsistencies=inconsistent
+        **data,
+        tools=heads,
+        mesh=mesh,
+        exclusion=exclusion,
+        missing_fields=missing,
+        inconsistencies=inconsistent,
     )

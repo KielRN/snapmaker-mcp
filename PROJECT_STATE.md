@@ -13,6 +13,24 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Focused transform continuation: one three-field exclusion GET at **2026-10-25
+  15:23:02 UTC** confirmed empty excluded list, explicit null current object and
+  false region flag. Status and policy-5 receipts now bind bounded private label
+  hashes/counts/presence and region reports. Policies 1–4 cannot dispatch/promote
+  uncertain uploads. Matched source establishes that empty reports cannot prove
+  transform removal and that region flags can lag markers. Effective mesh fade,
+  lookup/ZFADE, chain installation/order and calibration provenance remain unknown
+  through inspected supported reads. No command/export newly accepted; no live
+  mutation/preparation. See [transform evidence](docs/research/2026-10-25-transform-evidence.md).
+- Transform continuation verification: **342 tests passed on Python 3.11.14 and
+  3.13.12**, including actual MCP/loopback HTTP, all three exclusion-field races,
+  same-size label changes, missing reports and policy-4 restart refusal. Ruff
+  check/format and wheel/source builds passed. Independent fresh-context review
+  found no actionable issues, separately passed all 342 tests on Python 3.13.12,
+  and verified source identities/claims and historical-model defaults. Audit:
+  51 source/doc files, 89 local links, both archives and 11 ignore samples; no
+  configured private literal or generated runtime artifact found in the audited
+  source/package scope. One new three-field GET only; no hardware acceptance.
 - Bounded runtime-evidence follow-up: one seven-object GET at **2026-10-25
   13:59:41 UTC** confirmed reported per-head offsets, global homing origin,
   coordinate/mode fields and populated mesh matrices. Selected head 2 coexisted
@@ -128,8 +146,10 @@ records pinned public source and installed-contract limits.
    Bind the traced stock-U1 macro/offset/mesh, per-head thermal/consumption and
    conditional runtime dependencies before accepting normal Orca U1 profiles.
    The reported coordinate/mesh subset is now collected and bound; next resolve
-   active transform lifecycle, exclusion and mesh fade/tool-offset/provenance
-   through focused source and supported reads. This does not bound the remaining
+   a vendor-supported passive diagnostic for chain installation/order, effective
+   mesh fade/lookup/ZFADE and calibration provenance: inspected status/dump fields
+   do not expose them. Exclusion reports are now bound but do not prove lifecycle.
+   Preserve unknowns rather than repeating matrix/config reads. This does not bound the remaining
    macro chains. Current restricted files and journals are described in
    the [upload evidence](docs/research/2026-10-24-uploads.md).
 4. Implement future print job-parameter/start/controls after their contracts are

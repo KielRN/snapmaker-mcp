@@ -140,7 +140,7 @@ strings alone.
 
 The normal path is prepare -> upload and verify -> start -> observe.
 
-The current receipt policy is 4. The restricted inspector retains policy-3
+The current receipt policy is 5. The restricted inspector retains policy-3
 command semantics. Every T invalidates XYZ, full
 G28 invalidates active-tool/E knowledge, positive nozzle targets participate in
 requirements and requested physical mappings must be injective. Reestablishing
@@ -155,7 +155,13 @@ adds reported coordinate, selection/park, per-head offset and current mesh
 evidence to the existing status tool. Preparations bind that normalized subset
 and its repeated-read observation window; uploads recheck it around dispatch
 preflight and remote hash reads. Missing/inconsistent/drifting or backwards-time
-evidence blocks dispatch/promotion, and policies 1–3 cannot bypass the new checks.
+evidence blocks dispatch/promotion. The
+[transform follow-up](../../research/2026-10-25-transform-evidence.md) adds fixed
+exclusion reports (private label hashes/counts, current-object presence and region
+state) to the same repeated binding. Policies 1–4 cannot bypass current checks.
+Empty exclusions do not prove transform removal, and region flags can lag markers;
+installation stays null. Effective mesh lookup offsets/ZFADE and calibration
+provenance remain unknown alongside fade and chain order.
 Unexposed base positions, per-head origins, calibration provenance, mesh fade/tool
 offset and the complete transform chain remain unestablished. Reported values
 and equal HTTP snapshots do not establish calibrated safety or atomicity.

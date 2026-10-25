@@ -16,7 +16,7 @@ from .gcode import Inspection, ValidationError, inspect, read_file
 from .models import Issue, Observation, RuntimeBinding
 from .receipts import Store
 from .runtime import RUNTIME_OBJECTS, normalize_runtime
-from .transport import Moonraker, ReadError
+from .transport import Moonraker, ReadError, object_query
 
 
 def digest(value) -> str:
@@ -154,7 +154,7 @@ class Coordinator:
                 "roots": [str(p) for p in self.settings.allowed_roots],
                 "nozzles": self.settings.nozzle_diameters,
                 "maximum": self.settings.max_gcode_bytes,
-                "validator": 4,
+                "validator": 5,
             }
         )
 
@@ -211,7 +211,7 @@ class Coordinator:
         # Bind previous job identity privately; the public status deliberately omits filenames.
         raw = await self.client.get(
             "/printer/objects/query",
-            dict.fromkeys((*RUNTIME_OBJECTS, "print_stats", "virtual_sdcard"), ""),
+            object_query((*RUNTIME_OBJECTS, "print_stats", "virtual_sdcard")),
         )
         snapshot = obj(raw.get("status"))
         job = obj(snapshot.get("print_stats"))

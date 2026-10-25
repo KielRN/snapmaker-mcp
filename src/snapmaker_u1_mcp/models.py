@@ -66,6 +66,17 @@ class HeadEvidence(BaseModel):
     activation_status: int | None = None
 
 
+class ExclusionEvidence(BaseModel):
+    excluded_count: int | None = None
+    excluded_sha256: str | None = None
+    # False means explicit upstream null; None means missing or malformed.
+    current_object_present: bool | None = None
+    current_object_sha256: str | None = None
+    in_excluded_region: bool | None = None
+    # No supported status field exposes next_transform or the running chain.
+    move_transform_installed: Literal[None] = None
+
+
 class RuntimeEvidence(BaseModel):
     homed_axes: str | None = None
     selected_physical_tool: int | None = None
@@ -82,6 +93,8 @@ class RuntimeEvidence(BaseModel):
     extrude_factor: float | None = None
     tools: list[HeadEvidence]
     mesh: MeshEvidence
+    # Default permits historical receipt deserialization; policy prevents reuse.
+    exclusion: ExclusionEvidence = Field(default_factory=ExclusionEvidence)
     missing_fields: list[str]
     inconsistencies: list[str]
     atomic: Literal[False] = False
@@ -93,6 +106,9 @@ class RuntimeEvidence(BaseModel):
             "per_head_homing_origin",
             "offset_calibration_provenance",
             "mesh_fade_and_tool_offset",
+            "mesh_lookup_offsets",
+            "mesh_calibration_provenance",
+            "exclusion_transform_lifecycle",
             "transform_chain",
             "toolchanger_motion_envelope",
         ]

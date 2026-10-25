@@ -6,6 +6,13 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-25
 
+- Fixed exclusion status projection with private label hashes/counts,
+  current-object presence and reported region flag, bound into policy-5 runtime
+  receipts. A single three-field live GET confirmed forms. Policy-1–4 receipts
+  cannot dispatch/promote uncertain results; no upload replay. Matched-source
+  lifecycle/coordinate analysis documents why installation, effective mesh
+  fade/lookup/ZFADE and provenance remain unknown. No new command/stock export
+  acceptance or live mutation; five tools and disabled uploads remain.
 - Bounded reported runtime evidence in `u1_status`: coordinate frames/modes,
   global origin, per-head offsets/park/activation reports and current mesh/profile
   digests. One read-only seven-object hardware query confirmed availability;
@@ -63,6 +70,10 @@ Implemented changes only. No published release exists.
 
 ### Verification
 
+- Transform continuation: 342 tests passed on Python 3.11.14/3.13.12; Ruff,
+  wheel/source builds and full privacy/artifact/link audit passed. Independent
+  fresh-context review separately passed all 342 tests, verified source identities
+  and found no actionable issue. One focused live exclusion GET only.
 - Runtime-evidence follow-up: 300 tests passed on Python 3.11.14/3.13.12;
   Ruff check/format and wheel/source builds passed. Independent review ran the
   pre-fix 295-test suite and found two P2 report-consistency gaps; failing

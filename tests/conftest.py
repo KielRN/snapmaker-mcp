@@ -37,6 +37,12 @@ def objects():
             "probed_matrix": [[0.1, -0.2], [0.0, 0.2]],
             "mesh_matrix": [[0.1, 0.0, -0.2], [0.0, 0.1, 0.0], [0.0, 0.1, 0.2]],
         },
+        "exclude_object": {
+            "objects": [{"name": "SYNTHETIC PRIVATE OBJECT", "polygon": [[10, 20]]}],
+            "excluded_objects": [],
+            "current_object": None,
+            "in_excluded_region": False,
+        },
         "heater_bed": {"temperature": 60.2, "target": 60},
         "exception_manager": {"exceptions": []},
         "print_task_config": {

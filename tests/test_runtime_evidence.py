@@ -179,3 +179,111 @@ async def test_missing_objects_and_private_extra_fields_do_not_invent_evidence(
     assert response.data.runtime_evidence.homing_origin is None
     assert "gcode_move" in response.data.missing_objects
     assert "SECRET" not in response.model_dump_json()
+
+
+async def test_known_empty_exclusion_does_not_attest_transform_removal(runtime_reader):
+    response = await runtime_reader.status()
+    exclusion = response.data.runtime_evidence.exclusion
+    assert response.outcome == "ok"
+    assert exclusion.excluded_count == 0
+    assert exclusion.excluded_sha256 == (
+        "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    )
+    assert exclusion.current_object_present is False
+    assert exclusion.current_object_sha256 is None
+    assert exclusion.in_excluded_region is False
+    assert exclusion.move_transform_installed is None
+
+
+async def test_exclusion_labels_are_private_and_region_may_lag_marker(runtime_reader, objects):
+    objects["exclude_object"].update(
+        excluded_objects=["SYNTHETIC PRIVATE OBJECT"],
+        current_object=None,
+        in_excluded_region=True,
+        next_transform="SECRET",
+    )
+    response = await runtime_reader.status()
+    exclusion = response.data.runtime_evidence.exclusion
+    assert response.outcome == "ok"
+    assert exclusion.excluded_count == 1
+    assert len(exclusion.excluded_sha256) == 64
+    assert exclusion.current_object_present is False
+    assert exclusion.in_excluded_region is True
+    assert exclusion.move_transform_installed is None
+    assert "PRIVATE" not in response.model_dump_json()
+    assert "SECRET" not in response.model_dump_json()
+    # Source can retain the region flag after END or resetting exclusions.
+    objects["exclude_object"]["excluded_objects"] = []
+    assert (await runtime_reader.status()).outcome == "ok"
+
+
+async def test_current_object_hash_changes_without_publishing_label(runtime_reader, objects):
+    objects["exclude_object"]["current_object"] = "SYNTHETIC PRIVATE OBJECT"
+    first = await runtime_reader.status()
+    assert first.data.runtime_evidence.exclusion.current_object_present is True
+    assert len(first.data.runtime_evidence.exclusion.current_object_sha256) == 64
+    objects["exclude_object"]["current_object"] = "ANOTHER PRIVATE OBJECT"
+    second = await runtime_reader.status()
+    assert first.data.runtime_evidence.exclusion != second.data.runtime_evidence.exclusion
+    assert "PRIVATE" not in first.model_dump_json() + second.model_dump_json()
+
+
+@pytest.mark.parametrize("key", ["excluded_objects", "current_object", "in_excluded_region"])
+async def test_missing_exclusion_fields_stay_unknown(runtime_reader, objects, key):
+    del objects["exclude_object"][key]
+    response = await runtime_reader.status()
+    assert response.outcome == "partial"
+    assert f"exclude_object.{key}" in response.data.runtime_evidence.missing_fields
+    if key == "current_object":
+        assert response.data.runtime_evidence.exclusion.current_object_present is None
+
+
+@pytest.mark.parametrize(
+    "key,bad",
+    [
+        ("excluded_objects", None),
+        ("excluded_objects", "SECRET"),
+        ("excluded_objects", [True]),
+        ("excluded_objects", ["X" * 257]),
+        ("excluded_objects", [str(i) for i in range(1025)]),
+        ("excluded_objects", ["DUPLICATE", "DUPLICATE"]),
+        ("current_object", False),
+        ("current_object", {}),
+        ("current_object", "X" * 257),
+        ("in_excluded_region", 0),
+        ("in_excluded_region", "false"),
+    ],
+)
+async def test_malformed_or_oversized_exclusion_is_unknown(runtime_reader, objects, key, bad):
+    objects["exclude_object"][key] = bad
+    response = await runtime_reader.status()
+    assert response.outcome == "partial"
+    assert f"exclude_object.{key}" in response.data.runtime_evidence.missing_fields
+    assert "SECRET" not in response.model_dump_json()
+
+
+async def test_missing_exclusion_object_is_partial(runtime_reader, replies, objects):
+    objects.pop("exclude_object")
+    replies["/printer/objects/list"]["result"]["objects"] = list(objects)
+    response = await runtime_reader.status()
+    assert response.outcome == "partial"
+    assert "exclude_object" in response.data.missing_objects
+
+
+async def test_status_uses_only_fixed_exclusion_fields(replies):
+    queries = []
+
+    def serve(request):
+        if request.url.path == "/printer/objects/query":
+            queries.append(dict(request.url.params))
+        return httpx.Response(
+            200, stream=httpx.ByteStream(json.dumps(replies[request.url.path]).encode())
+        )
+
+    async with Moonraker(
+        Settings(printer_url="http://printer.invalid"), transport=httpx.MockTransport(serve)
+    ) as client:
+        assert (await U1Reader(client).status()).outcome == "ok"
+    assert queries[0].get("exclude_object") == (
+        "excluded_objects,current_object,in_excluded_region"
+    )

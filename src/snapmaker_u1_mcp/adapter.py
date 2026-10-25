@@ -18,7 +18,7 @@ from .models import (
     Temperature,
 )
 from .runtime import normalize_runtime
-from .transport import EXTRUDERS, OBJECTS, SENSORS, Moonraker, ReadError
+from .transport import EXTRUDERS, OBJECTS, SENSORS, Moonraker, ReadError, object_query
 
 READ_TOOLS = ["u1_capabilities", "u1_status", "u1_materials"]
 FILE_TOOLS = ["u1_prepare_print", "u1_upload_print"]
@@ -83,7 +83,7 @@ class U1Reader:
         missing = [name for name in requested if name not in present]
         if not present:
             raise ReadError("unsupported")
-        result = await self.client.get("/printer/objects/query", dict.fromkeys(present, ""))
+        result = await self.client.get("/printer/objects/query", object_query(present))
         if not isinstance(result.get("status"), dict):
             raise ReadError("invalid_response")
         status = result["status"]
@@ -114,6 +114,7 @@ class U1Reader:
             "toolhead",
             "gcode_move",
             "bed_mesh",
+            "exclude_object",
             "heater_bed",
             "exception_manager",
         )

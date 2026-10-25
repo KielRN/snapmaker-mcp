@@ -254,3 +254,26 @@ It does not attest running code, calibration provenance, every transform or any
 firmware-owned motion. No macro/stock export is newly accepted, uploads remain
 disabled, and hardware acceptance remains pending. See the
 [runtime report](docs/research/2026-10-25-runtime-evidence.md).
+
+## D017 — Bind exclusion reports without inferring transform lifecycle
+
+Date: 2026-10-25 · Status: Implemented engineering choice within owner scope
+
+Extend existing status/runtime receipts with a fixed three-field exclusion
+projection, bounded private label hashes/counts, current-object presence and
+reported region state. Explicit null and absent current-object fields have
+different meanings. Policy 5 refuses policy-1–4 dispatch/uncertain promotion;
+existing repeated-read/time/receipt/no-replay checks remain.
+
+Matched source shows an empty exclusion list can coexist with an installed
+transform, and region state can lag object markers. Installation stays null;
+neither membership nor matrices attest chain order, effective mesh fade/lookup/
+ZFADE or calibration provenance. The inspected supported status/dump contracts
+do not expose those decisive values. No guessed endpoint/field or G-code probe
+substitutes for a supported read. See the
+[transform lifecycle report](docs/research/2026-10-25-transform-evidence.md).
+
+One read-only GET confirmed the exclusion field forms. No command/stock export
+is newly accepted, uploads remain disabled and all hardware/control/camera
+acceptance stays pending. The owner explicitly authorized review, commit and
+push on main for this one-time continuation; no branch/PR is needed.

@@ -6,6 +6,13 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-25
 
+- All-head reported nozzle/volume, pressure advance/smoothing and queue-name
+  evidence in status/receipts under policy 6. Used nozzle reports must agree
+  with file requirements and operator attestation. Policies 1–5 cannot dispatch/
+  promote uncertain uploads; repeated-read and no-replay safeguards remain.
+  Historical response reused; no new live request. Actual trapq, saved K and
+  hidden feed thermal/consumption remain unknown. No command/export newly
+  accepted; uploads remain disabled and hardware acceptance pending.
 - Fixed exclusion status projection with private label hashes/counts,
   current-object presence and reported region flag, bound into policy-5 runtime
   receipts. A single three-field live GET confirmed forms. Policy-1–4 receipts
@@ -70,6 +77,11 @@ Implemented changes only. No published release exists.
 
 ### Verification
 
+- Per-head continuation: 403 tests passed on Python 3.11.14/3.13.12; Ruff
+  check/format and wheel/source builds passed. Independent review found no
+  actionable issue and separately passed all 403 tests, 50 malformed/privacy
+  probes and source identities. Full audit passed: 54 files, 104 links, both
+  archives and 14 ignore samples. No live printer request.
 - Transform continuation: 342 tests passed on Python 3.11.14/3.13.12; Ruff,
   wheel/source builds and full privacy/artifact/link audit passed. Independent
   fresh-context review separately passed all 342 tests, verified source identities

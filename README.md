@@ -103,6 +103,17 @@ and complete transform chain remain unestablished. See the
 [runtime evidence report](docs/research/2026-10-25-runtime-evidence.md) and
 [transform lifecycle report](docs/research/2026-10-25-transform-evidence.md).
 
+Each head also reports nozzle settings, pressure advance/smoothing and bounded
+queue-name evidence. These values bind receipts, including on unused heads.
+Nozzle settings are persisted software reports; used heads must agree with both
+the file and operator nozzle attestation. An explicit null queue name is known
+unnamed reporting, not proof of stepper detachment: the matched constructor
+attaches a queue without updating that name. Current advance does not establish
+saved calibration K. Actual trapq attachment and hidden feed thermal/consumption
+demand remain unknown. This subset was confirmed in the earlier saved response;
+no new hardware query was needed. See the
+[per-head extrusion report](docs/research/2026-10-25-head-extrusion-evidence.md).
+
 `loaded` requires an enabled positive toolhead sensor plus present/positive feed
 module reporting completed loading without a feed error. An enabled negative
 toolhead sensor gives `not_loaded`; missing, disabled, contradictory, or
@@ -198,14 +209,17 @@ SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serializati
 cancellation and restart reconciliation. Tests need no printer or credentials.
 No hardware upload/control tests have run.
 
-Receipt policy 5 invalidates policy-1/2/3/4 preparations for new uploads. Old inflight
+Receipt policy 6 invalidates policy-1/2/3/4/5 preparations for new uploads. Old inflight
 receipts with a policy mismatch remain unknown and never resend a POST; retain
 the journal and investigate with read-only checks in the supported app.
 Runtime evidence is rechecked before dispatch and around remote byte verification;
 changes or backwards source times block dispatch/promotion. Repeated equal HTTP
 reads cannot exclude intervening changes, stale peer data or other-client races.
 Exclusion reports participate in the binding; known reports do not establish
-the running transform chain. The restricted G-code dialect is unchanged.
+the running transform chain. Reported nozzle/advance/smoothing/queue values also
+participate; missing fields prevent preparation, used nozzle conflicts return
+`nozzle_mismatch`, and all-head changes prevent dispatch/promotion. The restricted
+G-code dialect is unchanged.
 
 Reads use fixed routes/objects, disable environment proxies/redirects, request
 uncompressed data, reject other encodings, and cap raw bytes and total request
@@ -256,3 +270,5 @@ dependence, or automatic product-order dispatch.
 | [Runtime evidence plan](docs/superpowers/plans/2026-10-25-runtime-evidence.md) | Focused collection, normalization and receipt verification ledger. |
 | [Transform lifecycle report](docs/research/2026-10-25-transform-evidence.md) | Exclusion field evidence, policy-5 binding and unsupported lifecycle/provenance claims. |
 | [Transform evidence plan](docs/superpowers/plans/2026-10-25-transform-evidence.md) | Focused continuation, review and verification ledger. |
+| [Per-head extrusion evidence](docs/research/2026-10-25-head-extrusion-evidence.md) | Nozzle/advance/queue report semantics, policy-6 binding and hidden-demand limits. |
+| [Per-head extrusion plan](docs/superpowers/plans/2026-10-25-head-extrusion-evidence.md) | Focused implementation, review and verification ledger. |

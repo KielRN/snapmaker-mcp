@@ -13,6 +13,22 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Per-head extrusion continuation: policy **6** binds reported nozzle diameter/
+  volume type, pressure advance/smoothing and queue-name evidence for all heads.
+  Used reported nozzle sizes must agree with file and operator attestation.
+  Reused the historical 13:59:41 UTC response; **no live request** in this round.
+  Null queue name can coexist with constructor-attached trapq; actual attachment,
+  saved K and hidden feed/thermal demand remain unknown. Inspected transform reads
+  still lack the decisive diagnostic; no macro/export newly accepted. See
+  [per-head evidence](docs/research/2026-10-25-head-extrusion-evidence.md).
+- Current software verification: **403 tests passed on Python 3.11.14 and
+  3.13.12**, including all five head-field races through preparation/preflight/
+  hashing/restart and actual MCP/loopback HTTP policy-5 refusal. Ruff check/format
+  and wheel/source builds passed. Independent fresh-context review found no
+  actionable findings, separately passed all 403 tests on Python 3.13.12 and
+  checked 50 malformed/privacy cases and source/report identities. Audit:
+  54 files, 104 local links, both archives and 14 ignore samples; no configured
+  private literals/generated artifacts found in source/package scope.
 - Focused transform continuation: one three-field exclusion GET at **2026-10-25
   15:23:02 UTC** confirmed empty excluded list, explicit null current object and
   false region flag. Status and policy-5 receipts now bind bounded private label
@@ -145,11 +161,14 @@ records pinned public source and installed-contract limits.
    exact path/flag envelope, no-start/no-queue behavior, authentication and recovery.
    Bind the traced stock-U1 macro/offset/mesh, per-head thermal/consumption and
    conditional runtime dependencies before accepting normal Orca U1 profiles.
-   The reported coordinate/mesh subset is now collected and bound; next resolve
-   a vendor-supported passive diagnostic for chain installation/order, effective
+   The reported coordinate/mesh/head subset is collected and bound. A
+   vendor-supported passive diagnostic for chain installation/order, effective
    mesh fade/lookup/ZFADE and calibration provenance: inspected status/dump fields
-   do not expose them. Exclusion reports are now bound but do not prove lifecycle.
-   Preserve unknowns rather than repeating matrix/config reads. This does not bound the remaining
+   do not expose them. No such diagnostic was identified; keep these unknowns.
+   Next trace pause/end configurable callbacks and job flags into a bounded
+   supported read contract. Saved K and hidden feed thermal/consumption are also
+   absent from the inspected status providers. Do not repeat head/mesh/config
+   snapshots or infer those values from reports. This does not bound the remaining
    macro chains. Current restricted files and journals are described in
    the [upload evidence](docs/research/2026-10-24-uploads.md).
 4. Implement future print job-parameter/start/controls after their contracts are

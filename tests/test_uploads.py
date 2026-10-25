@@ -123,7 +123,7 @@ async def test_prepare_and_verified_upload_are_bound_and_idempotent(setup_upload
 
 
 @pytest.mark.parametrize("dispatched", [False, True])
-@pytest.mark.parametrize("validator", [1, 2, 3, 4])
+@pytest.mark.parametrize("validator", [1, 2, 3, 4, 5])
 async def test_old_validator_receipts_cannot_dispatch_or_reconcile(
     setup_upload, monkeypatch, dispatched, validator
 ):

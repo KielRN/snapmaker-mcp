@@ -277,3 +277,26 @@ One read-only GET confirmed the exclusion field forms. No command/stock export
 is newly accepted, uploads remain disabled and all hardware/control/camera
 acceptance stays pending. The owner explicitly authorized review, commit and
 push on main for this one-time continuation; no branch/PR is needed.
+
+## D018 — Bind head reports without inventing physical extrusion evidence
+
+Date: 2026-10-25 · Status: Implemented engineering choice within owner scope
+
+Policy 6 adds all-head reported nozzle diameter/volume type, pressure advance,
+smoothing and queue-name evidence to existing repeated receipt binding. Used
+reported diameters must agree with both file requirements and operator nozzle
+attestation. Policies 1–5 cannot dispatch/promote uncertain operations; no upload
+is replayed. Missing/malformed values remain unknown and prevent preparation.
+
+Persisted nozzle labels do not measure physical nozzles; current advance does
+not establish saved calibrator K. The matched constructor attaches its own trapq
+without updating the null queue name, so neither null nor a name attests actual
+attachment. Preserve that unknown alongside hidden feed/thermal demand and the
+unresolved transform/provenance contract. No command/export is newly accepted.
+See the [head report](docs/research/2026-10-25-head-extrusion-evidence.md).
+
+Reuse the historical seven-object response and verified source/artifact for
+this contract; no new live query is necessary. The owner authorized this immediate
+development/review/commit/push on main and the existing recurring loop. That does
+not authorize hardware mutations. Advance pause/end callback/job-flag research
+next instead of repeating unsupported transform or head snapshots.

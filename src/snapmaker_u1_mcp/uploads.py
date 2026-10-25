@@ -154,7 +154,7 @@ class Coordinator:
                 "roots": [str(p) for p in self.settings.allowed_roots],
                 "nozzles": self.settings.nozzle_diameters,
                 "maximum": self.settings.max_gcode_bytes,
-                "validator": 5,
+                "validator": 6,
             }
         )
 
@@ -206,6 +206,8 @@ class Coordinator:
             if (
                 len(self.settings.nozzle_diameters) != 4
                 or self.settings.nozzle_diameters[physical] != inspection.nozzle_diameter[logical]
+                or runtime.tools[physical].reported_nozzle_diameter
+                != inspection.nozzle_diameter[logical]
             ):
                 raise ValidationError("nozzle_mismatch")
         # Bind previous job identity privately; the public status deliberately omits filenames.

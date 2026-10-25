@@ -72,6 +72,14 @@ def normalize_runtime(snapshot: dict) -> RuntimeEvidence:
         value = signed_number(v)
         return value if value is not None and value > 0 else None
 
+    def bounded(v, low, high):
+        value = signed_number(v)
+        return value if value is not None and low <= value <= high else None
+
+    def nozzle(v):
+        value = signed_number(v)
+        return value if value in {0.2, 0.4, 0.6, 0.8} else None
+
     def homed(v):
         return (
             v if isinstance(v, str) and v in {"", "x", "y", "z", "xy", "xz", "yz", "xyz"} else None
@@ -109,6 +117,12 @@ def normalize_runtime(snapshot: dict) -> RuntimeEvidence:
 
     heads = []
     for i, name in enumerate(EXTRUDERS):
+        queue = raw(name).get("motion_queue")
+        queue_known = "motion_queue" in raw(name) and (
+            queue is None or (isinstance(queue, str) and queue in EXTRUDERS)
+        )
+        if not queue_known:
+            missing.append(f"{name}.motion_queue")
         report = raw(name).get("real_extruder_stats")
         tool, status = None, None
         if isinstance(report, list) and len(report) == 2 and type(report[1]) is int:
@@ -122,6 +136,18 @@ def normalize_runtime(snapshot: dict) -> RuntimeEvidence:
         heads.append(
             HeadEvidence(
                 physical_tool=i + 1,
+                reported_nozzle_diameter=field(name, "nozzle_diameter", nozzle),
+                reported_nozzle_volume_type=field(
+                    name,
+                    "nozzle_volume_type",
+                    lambda v: v if isinstance(v, str) and v in {"standard", "high_flow"} else None,
+                ),
+                pressure_advance=field(name, "pressure_advance", lambda v: bounded(v, 0, 1e6)),
+                pressure_advance_smooth_time=field(
+                    name, "smooth_time", lambda v: bounded(v, 0, 0.2)
+                ),
+                motion_queue_named=(queue is not None) if queue_known else None,
+                motion_queue_physical_tool=physical(queue) if queue_known else None,
                 reported_index=field(name, "extruder_index", index),
                 reported_offset=field(name, "extruder_offset", lambda v: vector(v, 3)),
                 activating_move=field(name, "activating_move", boolean),

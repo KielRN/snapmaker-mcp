@@ -17,6 +17,9 @@ from test_upload_stdio import connected, file_printer
         ("exclusion", "evidence_changed"),
         ("missing_exclusion", "runtime_evidence_missing"),
         ("uncertain_exclusion", "evidence_changed"),
+        ("head_flow", "evidence_changed"),
+        ("missing_head", "runtime_evidence_missing"),
+        ("uncertain_head", "evidence_changed"),
     ],
 )
 async def test_runtime_receipts_and_no_replay_over_actual_mcp(setup_upload, tmp_path, change, code):
@@ -72,6 +75,10 @@ async def test_runtime_receipts_and_no_replay_over_actual_mcp(setup_upload, tmp_
             del objects["extruder3"]["extruder_offset"]
         elif change == "missing_exclusion":
             del objects["exclude_object"]["current_object"]
+        elif change == "missing_head":
+            del objects["extruder3"]["motion_queue"]
+        elif change in {"head_flow", "uncertain_head"}:
+            objects["extruder3"]["pressure_advance"] = 0.03
         elif change in {"exclusion", "uncertain_exclusion"}:
             objects["exclude_object"]["excluded_objects"] = ["PRIVATE OBJECT"]
         else:
@@ -85,3 +92,6 @@ async def test_runtime_receipts_and_no_replay_over_actual_mcp(setup_upload, tmp_
                 "unknown" if change.startswith("uncertain") else "rejected"
             )
             assert printer.posts == int(change.startswith("uncertain"))
+            assert evidence["tools"][0].get("reported_nozzle_diameter") == 0.4
+            assert evidence["tools"][0].get("pressure_advance") == 0.02
+            assert evidence["tools"][0].get("motion_queue_named") is False

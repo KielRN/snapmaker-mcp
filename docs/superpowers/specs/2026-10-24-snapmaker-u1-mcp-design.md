@@ -140,7 +140,7 @@ strings alone.
 
 The normal path is prepare -> upload and verify -> start -> observe.
 
-The current receipt policy is 5. The restricted inspector retains policy-3
+The current receipt policy is 6. The restricted inspector retains policy-3
 command semantics. Every T invalidates XYZ, full
 G28 invalidates active-tool/E knowledge, positive nozzle targets participate in
 requirements and requested physical mappings must be injective. Reestablishing
@@ -158,7 +158,14 @@ preflight and remote hash reads. Missing/inconsistent/drifting or backwards-time
 evidence blocks dispatch/promotion. The
 [transform follow-up](../../research/2026-10-25-transform-evidence.md) adds fixed
 exclusion reports (private label hashes/counts, current-object presence and region
-state) to the same repeated binding. Policies 1–4 cannot bypass current checks.
+state) to the same repeated binding. The
+[head follow-up](../../research/2026-10-25-head-extrusion-evidence.md) adds all-head
+reported nozzle diameter/volume, pressure advance/smoothing and queue-name
+evidence. Used reported diameters must agree with file and operator attestation;
+missing fields prevent preparation and all-head changes block dispatch/promotion.
+Policies 1–5 cannot bypass current checks. A null queue name does not prove
+detachment: the constructor can attach trapq without updating the name. Actual
+attachment, saved K and hidden feed/thermal demand remain unestablished.
 Empty exclusions do not prove transform removal, and region flags can lag markers;
 installation stays null. Effective mesh lookup offsets/ZFADE and calibration
 provenance remain unknown alongside fade and chain order.

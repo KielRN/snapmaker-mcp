@@ -55,6 +55,14 @@ class MeshEvidence(BaseModel):
 
 class HeadEvidence(BaseModel):
     physical_tool: int
+    # Optional defaults deserialize historical receipts, never certify new ones.
+    reported_nozzle_diameter: float | None = None
+    reported_nozzle_volume_type: Literal["standard", "high_flow"] | None = None
+    pressure_advance: float | None = None
+    pressure_advance_smooth_time: float | None = None
+    # False is an explicit null NAME report, not proof of a detached stepper.
+    motion_queue_named: bool | None = None
+    motion_queue_physical_tool: int | None = None
     reported_index: int | None = None
     reported_offset: list[float] | None = None
     activating_move: bool | None = None
@@ -111,6 +119,9 @@ class RuntimeEvidence(BaseModel):
             "exclusion_transform_lifecycle",
             "transform_chain",
             "toolchanger_motion_envelope",
+            "stepper_trapq_attachment",
+            "saved_calibration_k",
+            "hidden_feed_thermal_consumption",
         ]
     )
 

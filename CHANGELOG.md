@@ -6,6 +6,16 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-25
 
+- Bounded reported runtime evidence in `u1_status`: coordinate frames/modes,
+  global origin, per-head offsets/park/activation reports and current mesh/profile
+  digests. One read-only seven-object hardware query confirmed availability;
+  missing fields and unexposed calibration/transform provenance remain unknown.
+- Policy-4 preparation/receipt binding, repeated runtime observations around
+  material/job reads and remote byte verification, ordered event times and a
+  persistent reconciliation watermark. Policies 1–3 cannot dispatch/promote an
+  uncertain upload, and no dispatched upload is replayed. Five tools remain;
+  uploads stay disabled, all eight normal exports remain blocked, and no hardware
+  mutation or acceptance occurred.
 - Startup/toolchange chain investigation using the already matched firmware
   artifact. Restricted validation now invalidates XYZ after T and active tool/E
   after G28, accounts for positive heater targets, rejects physical heater aliases
@@ -52,6 +62,13 @@ Implemented changes only. No published release exists.
   tests. Stock U1 macros remain rejected; hardware compatibility is not claimed.
 
 ### Verification
+
+- Runtime-evidence follow-up: 300 tests passed on Python 3.11.14/3.13.12;
+  Ruff check/format and wheel/source builds passed. Independent review ran the
+  pre-fix 295-test suite and found two P2 report-consistency gaps; failing
+  regressions reproduced both, fixes passed the final complete suites, and
+  no finding was deferred. Tracked/package privacy and artifact audit: 49 files,
+  76 local links, both archives and nine ignore samples. One live GET only.
 
 - Startup/toolchange follow-up: 246 tests passed on Python 3.11.14/3.13.12,
   including real MCP/loopback HTTP and policy-2 restart rejection. Ruff

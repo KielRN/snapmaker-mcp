@@ -17,6 +17,8 @@ OBJECTS = (
     "print_stats",
     "virtual_sdcard",
     "toolhead",
+    "gcode_move",
+    "bed_mesh",
     "heater_bed",
     "exception_manager",
     "print_task_config",

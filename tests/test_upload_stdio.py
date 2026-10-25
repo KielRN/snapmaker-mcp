@@ -336,8 +336,9 @@ async def test_orca_forms_over_real_mcp_preserve_bytes_and_rejections(
 
 
 @pytest.mark.parametrize("dispatched", [False, True])
-async def test_policy_two_receipts_cannot_promote_over_real_mcp(
-    setup_upload, tmp_path, monkeypatch, dispatched
+@pytest.mark.parametrize("validator", [2, 3])
+async def test_old_policy_receipts_cannot_promote_over_real_mcp(
+    setup_upload, tmp_path, monkeypatch, dispatched, validator
 ):
     from dataclasses import replace
 
@@ -357,7 +358,7 @@ async def test_policy_two_receipts_cannot_promote_over_real_mcp(
                         "roots": [str(p) for p in settings.allowed_roots],
                         "nozzles": settings.nozzle_diameters,
                         "maximum": settings.max_gcode_bytes,
-                        "validator": 2,
+                        "validator": validator,
                     }
                 )
                 with monkeypatch.context() as patch:

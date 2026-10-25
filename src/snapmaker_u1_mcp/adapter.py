@@ -17,6 +17,7 @@ from .models import (
     Status,
     Temperature,
 )
+from .runtime import normalize_runtime
 from .transport import EXTRUDERS, OBJECTS, SENSORS, Moonraker, ReadError
 
 READ_TOOLS = ["u1_capabilities", "u1_status", "u1_materials"]
@@ -111,6 +112,8 @@ class U1Reader:
             "print_stats",
             "virtual_sdcard",
             "toolhead",
+            "gcode_move",
+            "bed_mesh",
             "heater_bed",
             "exception_manager",
         )
@@ -183,9 +186,12 @@ class U1Reader:
             exceptions_known=known,
             exceptions=exceptions,
             missing_objects=missing,
+            runtime_evidence=normalize_runtime(status),
         )
         partial = (
             bool(missing)
+            or bool(data.runtime_evidence.missing_fields)
+            or bool(data.runtime_evidence.inconsistencies)
             or klipper is None
             or state is None
             or active is None

@@ -38,6 +38,76 @@ class PrinterException(BaseModel):
     blocking: bool | None = None
 
 
+class MatrixEvidence(BaseModel):
+    rows: int
+    columns: int
+    sha256: str
+
+
+class MeshEvidence(BaseModel):
+    profile_sha256: str | None = None
+    reported_state: Literal["populated", "empty", "unknown"] = "unknown"
+    mesh_min: list[float] | None = None
+    mesh_max: list[float] | None = None
+    probed_matrix: MatrixEvidence | None = None
+    mesh_matrix: MatrixEvidence | None = None
+
+
+class HeadEvidence(BaseModel):
+    physical_tool: int
+    reported_index: int | None = None
+    reported_offset: list[float] | None = None
+    activating_move: bool | None = None
+    park_state: Literal["PARKED", "ACTIVATE", "UNKNOWN"] | None = None
+    active_pin: bool | None = None
+    park_pin: bool | None = None
+    grab_valid_pin: bool | None = None
+    activation_report_tool: int | None = None
+    activation_status: int | None = None
+
+
+class RuntimeEvidence(BaseModel):
+    homed_axes: str | None = None
+    selected_physical_tool: int | None = None
+    reported_gripped_tool: int | None = None
+    toolhead_position: list[float] | None = None
+    axis_minimum: list[float] | None = None
+    axis_maximum: list[float] | None = None
+    homing_origin: list[float] | None = None
+    gcode_move_position: list[float] | None = None
+    gcode_position: list[float] | None = None
+    absolute_coordinates: bool | None = None
+    absolute_extrude: bool | None = None
+    speed_factor: float | None = None
+    extrude_factor: float | None = None
+    tools: list[HeadEvidence]
+    mesh: MeshEvidence
+    missing_fields: list[str]
+    inconsistencies: list[str]
+    atomic: Literal[False] = False
+    running_code_attested: Literal[False] = False
+    offset_basis: str = "Reported extruder_offset; firmware may return zero fallback."
+    unestablished_dependencies: list[str] = Field(
+        default_factory=lambda: [
+            "gcode_base_position",
+            "per_head_homing_origin",
+            "offset_calibration_provenance",
+            "mesh_fade_and_tool_offset",
+            "transform_chain",
+            "toolchanger_motion_envelope",
+        ]
+    )
+
+
+class RuntimeBinding(BaseModel):
+    observation_started_at: datetime
+    observed_at: datetime
+    source_eventtime_start: float
+    source_eventtime_end: float
+    data: RuntimeEvidence
+    atomic_across_requests: Literal[False] = False
+
+
 class Status(BaseModel):
     connected: bool = True
     klipper_state: str | None
@@ -55,6 +125,7 @@ class Status(BaseModel):
     exceptions_known: bool
     exceptions: list[PrinterException]
     missing_objects: list[str]
+    runtime_evidence: RuntimeEvidence
     atomic_across_requests: bool = False
 
 

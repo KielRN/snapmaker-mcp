@@ -67,7 +67,7 @@ Call the three read tools with `{}`. Discovery includes typed input/output schem
 | Tool | Result |
 | --- | --- |
 | `u1_capabilities` | Observed firmware/Moonraker identity, HTTP/object inventory, implemented/future tools, unresolved camera support. |
-| `u1_status` | Klipper/print state, virtual SD, progress fraction (0–1), layers/duration, selected physical tool, four nozzle/bed temperatures in °C, numeric exceptions. |
+| `u1_status` | Klipper/print state, virtual SD, progress, temperatures, exceptions and bounded reported coordinate/selection/offset/mesh evidence. |
 | `u1_materials` | Four physical tools, T0–T3/API names, 32 logical mapping slots, job-use flags, RFID identity/color, feed/toolhead sensor evidence, loaded state. |
 | `u1_prepare_print` | Read-only inspection of one allowed file/plate and fresh mapping/material/feed evidence; expiring durable receipt. |
 | `u1_upload_print` | No-start/no-queue upload of a prepared hash, exact returned-path check and remote download SHA256 verification; simulator-verified only. |
@@ -88,6 +88,15 @@ known clear exceptions. Separate HTTP requests are not atomic. Exception levels
 2/3 are classified as blocking from pinned public source; active hardware fault
 semantics remain untested. Raw messages, filenames, machine identity/paths, RFID
 card UIDs, and camera credentials are omitted.
+
+`runtime_evidence` distinguishes the selected object from park/grip reports,
+per-head reported offsets from the global homing origin, and toolhead/G-code
+positions from one another. Mesh profile/matrices are represented by digests
+and dimensions. Missing/malformed fields stay unknown; a populated mesh and
+zero offsets do not establish an applied transform or calibrated safety.
+Unexposed base positions, per-head origins, fade/tool offset, calibration
+provenance and complete transform chain remain unestablished. See the
+[runtime evidence report](docs/research/2026-10-25-runtime-evidence.md).
 
 `loaded` requires an enabled positive toolhead sensor plus present/positive feed
 module reporting completed loading without a feed error. An enabled negative
@@ -136,6 +145,11 @@ Plate labels this exported file; it does not extract a plate from 3MF. Every mm/
 consumption entry and nonzero E move participates in requirements, even when the
 first entry is zero. Used tools need matching material and completed feed/sensor
 evidence. Preparation also requires idle state and known prior job identity.
+It now requires the supported coordinate-evidence subset without missing or
+inconsistent fields. Repeated runtime reads bracket material/job evidence; their
+normalized values must agree and source times must be ordered. The receipt
+includes that observation window and reported subset, with explicit non-atomic
+semantics. Fresh homing or physical gripping is not asserted by preparation.
 
 `u1_upload_print` requires a **new** UUID4 `operation_id` and the returned
 `preparation_id`. When enabled, it rereads the file hash and current printer
@@ -179,9 +193,12 @@ SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serializati
 cancellation and restart reconciliation. Tests need no printer or credentials.
 No hardware upload/control tests have run.
 
-Validator policy 3 invalidates policy-1/2 preparations for new uploads. Old inflight
+Validator policy 4 invalidates policy-1/2/3 preparations for new uploads. Old inflight
 receipts with a policy mismatch remain unknown and never resend a POST; retain
 the journal and investigate with read-only checks in the supported app.
+Runtime evidence is rechecked before dispatch and around remote byte verification;
+changes or backwards source times block dispatch/promotion. Repeated equal HTTP
+reads cannot exclude intervening changes, stale peer data or other-client races.
 
 Reads use fixed routes/objects, disable environment proxies/redirects, request
 uncompressed data, reject other encodings, and cap raw bytes and total request
@@ -228,3 +245,5 @@ dependence, or automatic product-order dispatch.
 | [Orca validation plan](docs/superpowers/plans/2026-10-25-orca-u1-validation.md) | Focused follow-up execution and acceptance limits. |
 | [Startup/toolchange report](docs/research/2026-10-25-startup-toolchange.md) | Transitive source effects, validation hardening and missing runtime evidence. |
 | [Startup/toolchange plan](docs/superpowers/plans/2026-10-25-startup-toolchange-validation.md) | Focused hardening, review and verification record. |
+| [Runtime evidence](docs/research/2026-10-25-runtime-evidence.md) | Observed coordinate/selection/mesh fields, policy-4 binding and remaining provenance/transform gaps. |
+| [Runtime evidence plan](docs/superpowers/plans/2026-10-25-runtime-evidence.md) | Focused collection, normalization and receipt verification ledger. |

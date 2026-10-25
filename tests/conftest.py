@@ -14,7 +14,29 @@ def objects():
             "message": "private upstream text",
         },
         "virtual_sdcard": {"progress": 0.25, "is_active": True},
-        "toolhead": {"extruder": "extruder1"},
+        "toolhead": {
+            "extruder": "extruder1",
+            "homed_axes": "xyz",
+            "position": [100.0, 100.0, 2.1, 0.0],
+            "axis_minimum": [-5.0, -5.0, -2.0, 0.0],
+            "axis_maximum": [280.0, 280.0, 280.0, 0.0],
+        },
+        "gcode_move": {
+            "homing_origin": [-0.1, 0.2, 0.05, 0.0],
+            "position": [100.0, 100.0, 2.0, 0.0],
+            "gcode_position": [100.1, 99.8, 1.95, 0.0],
+            "absolute_coordinates": True,
+            "absolute_extrude": False,
+            "speed_factor": 1.0,
+            "extrude_factor": 1.0,
+        },
+        "bed_mesh": {
+            "profile_name": "synthetic-private-profile",
+            "mesh_min": [10.0, 10.0],
+            "mesh_max": [250.0, 250.0],
+            "probed_matrix": [[0.1, -0.2], [0.0, 0.2]],
+            "mesh_matrix": [[0.1, 0.0, -0.2], [0.0, 0.1, 0.0], [0.0, 0.1, 0.2]],
+        },
         "heater_bed": {"temperature": 60.2, "target": 60},
         "exception_manager": {"exceptions": []},
         "print_task_config": {
@@ -41,7 +63,18 @@ def objects():
         "filament_feed right": {},
     }
     for i, name in enumerate(["extruder", "extruder1", "extruder2", "extruder3"]):
-        status[name] = {"temperature": 200 + i, "target": 210, "extruder_index": i}
+        status[name] = {
+            "temperature": 200 + i,
+            "target": 210,
+            "extruder_index": i,
+            "extruder_offset": [-0.1 * i, 0.2 * i, 0.05 * i],
+            "activating_move": False,
+            "state": "ACTIVATE" if i == 1 else "PARKED",
+            "active_pin": i == 1,
+            "park_pin": i != 1,
+            "grab_valid_pin": i == 1,
+            "real_extruder_stats": ["extruder1", 0],
+        }
         status[f"filament_motion_sensor e{i}_filament"] = {
             "enabled": True,
             "filament_detected": True,

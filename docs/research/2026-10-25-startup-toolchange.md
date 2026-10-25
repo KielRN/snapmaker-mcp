@@ -2,6 +2,11 @@
 
 ## Result and evidence boundary
 
+The subsequent [runtime follow-up](2026-10-25-runtime-evidence.md) performs the
+seven-object read proposed below and binds the established reported subset under
+policy 4. This report's policy-3 hardening and no-request statements describe its
+earlier stage. Full calibration/transform/macro envelopes remain unresolved.
+
 This follow-up hardens restricted validation; **no additional stock command or
 intact normal export is accepted**. Tool selection invalidates inferred XYZ;
 full G28 invalidates inferred active tool and E origin; positive heater targets

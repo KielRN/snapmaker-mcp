@@ -231,3 +231,26 @@ contract before broader acceptance. The
 [focused report](docs/research/2026-10-25-startup-toolchange.md) records the
 transitive paths and limits. No live request, camera action, configuration change
 or hardware acceptance occurred in this follow-up; full milestones remain partial.
+
+## D016 — Bind reported runtime evidence without promoting it to motion safety
+
+Date: 2026-10-25 · Status: Implemented engineering choice within owner scope
+
+Extend the existing status query with bounded coordinate, per-head offset/park
+and active-mesh reports. Keep selection separate from gripping, reported offset
+separate from configured/backup calibration, and global origin separate from
+per-head origins. Project exact types, signed finite vectors, fixed enums and
+bounded mesh/profile digests; keep missing fields unknown and raw config private.
+
+Policy 4 binds this normalized subset to preparation and upload receipts, with
+repeated equal runtime observations bracketing material/job reads and ordered
+source times. Recheck before dispatch and around remote byte verification;
+persist the reconciliation time watermark. Refuse policies 1–3 for dispatch or
+uncertain-result promotion without replaying an upload. Matching HTTP snapshots
+are not atomic or proof against intervening changes and stale peer data.
+
+The live seven-object GET establishes field availability on one observed setup.
+It does not attest running code, calibration provenance, every transform or any
+firmware-owned motion. No macro/stock export is newly accepted, uploads remain
+disabled, and hardware acceptance remains pending. See the
+[runtime report](docs/research/2026-10-25-runtime-evidence.md).

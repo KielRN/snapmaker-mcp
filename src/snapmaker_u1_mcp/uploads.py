@@ -10,11 +10,12 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from .adapter import U1Reader, now
+from .adapter import U1Reader, now, number, obj
 from .files import FileTransport
 from .gcode import Inspection, ValidationError, inspect, read_file
-from .models import Issue, Observation
+from .models import Issue, Observation, RuntimeBinding
 from .receipts import Store
+from .runtime import RUNTIME_OBJECTS, normalize_runtime
 from .transport import Moonraker, ReadError
 
 
@@ -84,6 +85,8 @@ class Preparation(BaseModel):
     expires_at: datetime
     logical_to_physical: list[int]
     inspection: Inspection
+    # Optional only to deserialize historical receipts; policy checks refuse their reuse.
+    runtime_evidence: RuntimeBinding | None = None
     authorizes_start: Literal[False] = False
 
 
@@ -151,11 +154,13 @@ class Coordinator:
                 "roots": [str(p) for p in self.settings.allowed_roots],
                 "nozzles": self.settings.nozzle_diameters,
                 "maximum": self.settings.max_gcode_bytes,
-                "validator": 3,
+                "validator": 4,
             }
         )
 
-    async def _evidence(self, inspection: Inspection, mapping: list[int]) -> str:
+    async def _evidence(
+        self, inspection: Inspection, mapping: list[int], *, not_before: float | None = None
+    ) -> tuple[str, RuntimeBinding]:
         # Inspection tracks heaters/E by logical index. Aliasing those indices
         # could hide cooling or incompatible requirements on one physical head.
         # Refuse aliases until physical-state tracking is implemented.
@@ -167,11 +172,20 @@ class Coordinator:
             raise ValidationError(status.errors[0].code)
         if status.data is None or status.data.idle is not True:
             raise ValidationError("printer_not_idle")
+        runtime = status.data.runtime_evidence
+        if runtime.missing_fields or status.source_eventtime is None:
+            raise ValidationError("runtime_evidence_missing")
+        if runtime.inconsistencies:
+            raise ValidationError("runtime_evidence_inconsistent")
+        if not_before is not None and status.source_eventtime < not_before:
+            raise ValidationError("runtime_evidence_changed")
         materials = await self.reader.materials()
         data = materials.data
         if data is None and materials.errors:
             raise ValidationError(materials.errors[0].code)
         if data is None or not data.mapping_complete:
+            raise ValidationError("material_evidence_missing")
+        if materials.source_eventtime is None:
             raise ValidationError("material_evidence_missing")
         if (
             len(mapping) != len(inspection.filament_mm)
@@ -196,23 +210,42 @@ class Coordinator:
                 raise ValidationError("nozzle_mismatch")
         # Bind previous job identity privately; the public status deliberately omits filenames.
         raw = await self.client.get(
-            "/printer/objects/query", {"print_stats": "", "virtual_sdcard": ""}
+            "/printer/objects/query",
+            dict.fromkeys((*RUNTIME_OBJECTS, "print_stats", "virtual_sdcard"), ""),
         )
-        snapshot = raw.get("status", {})
-        job = snapshot.get("print_stats", {})
-        sd = snapshot.get("virtual_sdcard", {})
+        snapshot = obj(raw.get("status"))
+        job = obj(snapshot.get("print_stats"))
+        sd = obj(snapshot.get("virtual_sdcard"))
         if (
             job.get("state") != status.data.print_state
             or sd.get("is_active") is not False
             or not isinstance(job.get("filename"), str)
         ):
             raise ValidationError("printer_not_idle")
+        closing_runtime = normalize_runtime(snapshot)
+        eventtime = number(raw.get("eventtime"))
+        if closing_runtime.missing_fields or eventtime is None:
+            raise ValidationError("runtime_evidence_missing")
+        if closing_runtime.inconsistencies:
+            raise ValidationError("runtime_evidence_inconsistent")
+        if (
+            not status.source_eventtime <= materials.source_eventtime <= eventtime
+            or closing_runtime != runtime
+        ):
+            raise ValidationError("runtime_evidence_changed")
         if (
             not isinstance(info.get("hostname"), str)
             or not info["hostname"]
             or not isinstance(info.get("software_version"), str)
         ):
             raise ValidationError("printer_identity_missing")
+        binding = RuntimeBinding(
+            observation_started_at=status.observation_started_at,
+            observed_at=now(),
+            source_eventtime_start=status.source_eventtime,
+            source_eventtime_end=eventtime,
+            data=runtime,
+        )
         return digest(
             {
                 "policy": self._policy(),
@@ -220,8 +253,11 @@ class Coordinator:
                 "materials": data.model_dump(),
                 "state": status.data.print_state,
                 "job": job["filename"],
+                # Times are freshness metadata, not state: a later equal read
+                # must compare equal. Unexposed dependencies remain unestablished.
+                "runtime": runtime.model_dump(),
             }
-        )
+        ), binding
 
     async def prepare(self, request: PrepareInput) -> Transaction:
         start = now()
@@ -258,7 +294,7 @@ class Coordinator:
                 raise ValidationError("operation_conflict")
             return Transaction.model_validate(old[2]["result"])
         inspection = await asyncio.to_thread(inspect, content)
-        evidence = await self._evidence(inspection, request.logical_to_physical)
+        evidence, runtime = await self._evidence(inspection, request.logical_to_physical)
         expires = self.clock() + self.settings.receipt_ttl_seconds
         receipt = Preparation(
             preparation_id=request.operation_id,
@@ -268,6 +304,7 @@ class Coordinator:
             expires_at=datetime.fromtimestamp(expires, UTC),
             logical_to_physical=request.logical_to_physical,
             inspection=inspection,
+            runtime_evidence=runtime,
         )
         response = result(request.operation_id, start, data=receipt)
         self.store.save(
@@ -334,6 +371,8 @@ class Coordinator:
                 raise ValidationError("receipt_expired")
             if preparation[2]["policy"] != self._policy():
                 raise ValidationError("evidence_changed")
+            if prep.runtime_evidence is None:
+                raise ValidationError("runtime_evidence_missing")
             _, content = await asyncio.to_thread(
                 read_file,
                 preparation[2]["path"],
@@ -342,7 +381,11 @@ class Coordinator:
             )
             if hashlib.sha256(content).hexdigest() != prep.sha256:
                 raise ValidationError("file_changed")
-            fresh = await self._evidence(prep.inspection, prep.logical_to_physical)
+            fresh, runtime = await self._evidence(
+                prep.inspection,
+                prep.logical_to_physical,
+                not_before=prep.runtime_evidence.source_eventtime_end,
+            )
             if fresh != preparation[2]["evidence"]:
                 raise ValidationError("evidence_changed")
             name = f"u1-{UUID(request.operation_id).hex}-{prep.sha256}.gcode"
@@ -350,7 +393,12 @@ class Coordinator:
             if await self.files.download(name, prep.size_bytes) is not None:
                 raise ValidationError("remote_collision")
             # Close the read/POST gap as far as this non-atomic protocol allows.
-            if await self._evidence(prep.inspection, prep.logical_to_physical) != fresh:
+            closing, runtime = await self._evidence(
+                prep.inspection,
+                prep.logical_to_physical,
+                not_before=runtime.source_eventtime_end,
+            )
+            if closing != fresh:
                 raise ValidationError("evidence_changed")
             if self.clock() >= preparation[2]["expiry"]:
                 raise ValidationError("receipt_expired")
@@ -361,7 +409,11 @@ class Coordinator:
                 sha256=prep.sha256,
                 expires_at=prep.expires_at,
             )
-            payload.update(state="inflight", data=data.model_dump(mode="json"))
+            payload.update(
+                state="inflight",
+                data=data.model_dump(mode="json"),
+                runtime_eventtime=runtime.source_eventtime_end,
+            )
             # Commit BEFORE issuing any bytes. Cancellation/process death leaves reconcilable state.
             self.store.begin_upload(
                 request.preparation_id, request.operation_id, fingerprint, payload
@@ -400,10 +452,17 @@ class Coordinator:
             if preparation["policy"] != self._policy():
                 raise ValidationError("evidence_changed")
             prep = Preparation.model_validate(preparation["result"]["data"])
-            if (
-                await self._evidence(prep.inspection, prep.logical_to_physical)
-                != preparation["evidence"]
-            ):
+            if prep.runtime_evidence is None:
+                raise ValidationError("runtime_evidence_missing")
+            fresh, runtime = await self._evidence(
+                prep.inspection,
+                prep.logical_to_physical,
+                not_before=payload["runtime_eventtime"],
+            )
+            # Retain the latest observed time even when remote bytes are absent.
+            # Restart reconciliation must not accept an older cached observation.
+            payload["runtime_eventtime"] = runtime.source_eventtime_end
+            if fresh != preparation["evidence"]:
                 raise ValidationError("evidence_changed")
             remote = await self.files.download(data.remote_path, prep.size_bytes)
             if remote is None:
@@ -411,6 +470,14 @@ class Coordinator:
             sha = hashlib.sha256(remote).hexdigest()
             if len(remote) != prep.size_bytes or sha != data.sha256:
                 raise ValidationError("hash_mismatch")
+            closing, runtime = await self._evidence(
+                prep.inspection,
+                prep.logical_to_physical,
+                not_before=runtime.source_eventtime_end,
+            )
+            payload["runtime_eventtime"] = runtime.source_eventtime_end
+            if closing != fresh:
+                raise ValidationError("evidence_changed")
             data.remote_sha256 = sha
             data.reconciled = reconciled
             data.state = "verified"

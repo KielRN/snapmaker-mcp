@@ -140,7 +140,8 @@ strings alone.
 
 The normal path is prepare -> upload and verify -> start -> observe.
 
-The current restricted inspector uses policy 3. Every T invalidates XYZ, full
+The current receipt policy is 4. The restricted inspector retains policy-3
+command semantics. Every T invalidates XYZ, full
 G28 invalidates active-tool/E knowledge, positive nozzle targets participate in
 requirements and requested physical mappings must be injective. Reestablishing
 explicit coordinates does not bound firmware-owned selection/homing or calibrated
@@ -148,6 +149,16 @@ offset/mesh motion. Stock macro support remains blocked pending the
 [traced runtime-evidence contract](../../research/2026-10-25-startup-toolchange.md).
 These implementation limits do not establish hardware acceptance or change the
 future start authorization contract.
+
+The [bounded runtime follow-up](../../research/2026-10-25-runtime-evidence.md)
+adds reported coordinate, selection/park, per-head offset and current mesh
+evidence to the existing status tool. Preparations bind that normalized subset
+and its repeated-read observation window; uploads recheck it around dispatch
+preflight and remote hash reads. Missing/inconsistent/drifting or backwards-time
+evidence blocks dispatch/promotion, and policies 1–3 cannot bypass the new checks.
+Unexposed base positions, per-head origins, calibration provenance, mesh fade/tool
+offset and the complete transform chain remain unestablished. Reported values
+and equal HTTP snapshots do not establish calibrated safety or atomicity.
 
 - A preparation receipt binds the file hash, selected plate, mapping, material
   requirements, process values, printer identity, and an expiry. Default expiry

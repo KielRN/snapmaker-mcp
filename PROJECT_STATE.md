@@ -13,6 +13,25 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Bounded runtime-evidence follow-up: one seven-object GET at **2026-10-25
+  13:59:41 UTC** confirmed reported per-head offsets, global homing origin,
+  coordinate/mode fields and populated mesh matrices. Selected head 2 coexisted
+  with all heads reported parked and no homed axes. The five-tool bridge now
+  normalizes this subset in status and binds repeated observations to policy-4
+  preparations/receipts, refusing missing/inconsistent/drifting/backwards-time
+  evidence without upload replay. Calibration provenance, full transform chain
+  and machine-space motion remain unestablished. All eight intact exports still
+  fail. See [runtime evidence](docs/research/2026-10-25-runtime-evidence.md).
+- Runtime follow-up verification: **300 tests passed on Python 3.11.14 and
+  3.13.12**, including actual MCP/loopback HTTP, runtime races and policies 1–3
+  dispatch/reconciliation refusal. Ruff check/format and wheel/source builds
+  passed. Independent review ran the full pre-fix 295-test suite and identified
+  two P2 contradictions (all-parked selection and empty-mesh extrema); both were
+  reproduced in failing normalization/preparation regressions and corrected.
+  Final 300-test suites passed after fixes; no finding was deferred. Audit:
+  49 source/doc files, 76 local links, both archives and nine ignore samples;
+  no configured private value or generated runtime artifact in tracked/package
+  scope. Exactly one new live GET; no mutation or hardware acceptance.
 - Startup/toolchange follow-up traces physical selection/retries, calibrated
   XYZ/E origins, saved flow K, hidden feed/calibration/purge, homing/mesh and
   pause/object/end/camera branches. Restricted validation now forgets XYZ after
@@ -108,8 +127,10 @@ records pinned public source and installed-contract limits.
    exact path/flag envelope, no-start/no-queue behavior, authentication and recovery.
    Bind the traced stock-U1 macro/offset/mesh, per-head thermal/consumption and
    conditional runtime dependencies before accepting normal Orca U1 profiles.
-   The focused report specifies the next bounded read-only evidence contract;
-   current read tools do not establish it. Current restricted files and journals are described in
+   The reported coordinate/mesh subset is now collected and bound; next resolve
+   active transform lifecycle, exclusion and mesh fade/tool-offset/provenance
+   through focused source and supported reads. This does not bound the remaining
+   macro chains. Current restricted files and journals are described in
    the [upload evidence](docs/research/2026-10-24-uploads.md).
 4. Implement future print job-parameter/start/controls after their contracts are
    resolved. The preparation/upload implementation applies no job parameters.

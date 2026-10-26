@@ -6,6 +6,11 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-26
 
+- Focused saved-firmware camera RPC research: client correlation/timeout/QoS
+  limits and server registrations/status/stop handlers. Monitor stop can return
+  success without cleanup, while time-lapse stop can detach work; coarse server
+  flags do not establish ownership, expiry, freshness or completed cleanup.
+  Documentation only; no live request, new tool/field/policy or acceptance.
 - Bounded job preference reports in existing status/runtime receipts under
   policy 9, with a fixed projection retaining existing material fields. Missing,
   malformed or changed flags block dispatch/promotion; policy-1–8 uncertain

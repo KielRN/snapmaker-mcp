@@ -371,3 +371,22 @@ The transform/provenance diagnostic gap is unchanged. Continue distinct camera
 RPC/failure-lifecycle research from saved artifacts, without starting/stopping
 cameras. Readiness remains incomplete under the owner's ongoing main/review/
 verification/commit/push authorization.
+
+## D022 — Require completed camera cleanup beyond client/server flags
+
+Date: 2026-10-26 · Status: Confirmed investigation boundary; camera unimplemented
+
+Do not implement camera lifecycle from a local inactive/subscription bit or a
+successful stop acknowledgment. Saved firmware server tracing shows a monitor-stop
+routine that validates/logs a domain and returns true without changing monitoring
+flags or invoking cleanup. The time-lapse stop has a detached-work branch. Its
+registered passive `camera.get_status` candidate reports coarse monitoring/domain
+and time-lapse flags, with no owner, lease, freshness or cleanup receipt. These
+are static artifact observations, not installed behavior or an externally verified
+API. See the [RPC report](docs/research/2026-10-26-camera-rpc-evidence.md).
+
+No live request, tool/field/policy change or new acceptance. Preserve policy 9,
+disabled uploads and all prior safeguards. Next bound the saved monitor worker's
+exit/expiry/destructor paths without opening/closing a camera; if no decisive
+contract emerges, record the limitation and advance independent feed/flow work.
+Full readiness and camera hardware acceptance remain incomplete.

@@ -13,6 +13,22 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Camera RPC continuation: saved firmware `unisrv` registrations/handlers now
+  have focused static evidence. Monitor stop validates a domain and can return
+  success without clearing flags or calling cleanup; time-lapse stop can return
+  after detaching work. Registered `camera.get_status` reports coarse domain/
+  time-lapse flags, not ownership, expiry, freshness or completed cleanup.
+  Client correlation/timeouts/subscription/QoS limits are traced. **No live
+  request**, new tool/field, policy or acceptance change. Camera readiness remains
+  blocked; see the [RPC report](docs/research/2026-10-26-camera-rpc-evidence.md)
+  and [execution ledger](docs/superpowers/plans/2026-10-26-camera-rpc-evidence.md).
+- Camera continuation verification: **700 tests passed on Python 3.11.14 and
+  3.13.12**, plus Ruff check/format and wheel/source builds. Independent review
+  validated all 2,976 reported instructions, separately passed 700 tests and
+  caught one reversed domain-precedence statement; corrected against artifact
+  bytes, with no findings remaining. Complete audit: 65 files, 156 local links,
+  both archives and 27 ignore samples; no private-literal/credential-pattern/
+  generated-artifact matches or broken links. Runtime behavior is unchanged.
 - Job preference continuation: policy **9** binds eight exact booleans, two
   physical four-head boolean arrays and fixed entanglement sensitivity through
   existing status/runtime reads. Missing/malformed/changed reports prevent
@@ -224,10 +240,14 @@ records pinned public source and installed-contract limits.
    Pause/end source dependencies and independent saved-pause binding are now
    documented; machine/action labels now also bind receipts without certifying
    transition/hook completion. Job preferences now bind receipts, with read-time
-   refreshes and reset/reprint/consumer limits documented. Next trace the distinct
-   time-lapse RPC response/correlation and failure lifecycle from saved artifacts;
-   local inactive state after failed stop is not server cleanup evidence. No
-   camera start/stop is authorized. Callback bodies remain unbound. Saved K and hidden feed thermal/consumption are also
+   refreshes and reset/reprint/consumer limits documented. Camera RPC tracing now
+   finds a monitor-stop acknowledgment without cleanup and a coarse server status
+   candidate that cannot prove ownership/cleanup. Next trace the saved `unisrv`
+   monitor start/capture worker's exit/expiry and destructor paths; do not repeat
+   stop/status probes. If that bounded trace cannot establish the contract, record
+   the server limitation and advance hidden feed/flow demand research. No camera
+   start/stop is authorized. Callback bodies remain unbound. Saved K and hidden
+   feed thermal/consumption are also
    absent from the inspected status providers. Do not repeat head/mesh/config
    snapshots or infer those values from reports. This does not bound the remaining
    macro chains. Current restricted files and journals are described in

@@ -270,6 +270,12 @@ claimed. The [camera report](docs/research/2026-10-24-camera.md) records artifac
 identities, exact native/source anchors, tooling limits and the smallest passive
 validation probe. Camera tools remain unimplemented.
 
+The saved firmware [camera RPC report](docs/research/2026-10-26-camera-rpc-evidence.md)
+adds server-side evidence: monitor stop can acknowledge without cleanup,
+time-lapse stop can detach work, and coarse server status lacks ownership,
+expiry, freshness and completed cleanup. These are static limits; no camera
+session or new live request was made and no camera API is newly supported.
+
 Future controls must retain per-plate authorization and fresh human confirmation
 of an installed, clear bed. Slicing stays in the separate OrcaSlicer integration.
 This bridge introduces no firmware/calibration/configuration changes, cloud
@@ -306,3 +312,5 @@ dependence, or automatic product-order dispatch.
 | [Machine/action plan](docs/superpowers/plans/2026-10-26-machine-state-evidence.md) | Focused implementation, review and verification ledger. |
 | [Job preference evidence](docs/research/2026-10-26-job-flag-evidence.md) | Fixed job reports, policy-9 binding and getter/reset/reprint/feed/end/camera limits. |
 | [Job preference plan](docs/superpowers/plans/2026-10-26-job-flag-evidence.md) | Focused implementation, review and verification ledger. |
+| [Camera RPC evidence](docs/research/2026-10-26-camera-rpc-evidence.md) | Client correlation/timeouts and saved server stop/status/cleanup limits. |
+| [Camera RPC plan](docs/superpowers/plans/2026-10-26-camera-rpc-evidence.md) | Focused static investigation, review and verification ledger. |

@@ -242,6 +242,14 @@ parsed; whole-bundle analysis hit its bounded heap and native provider readiness
 remains unavailable. The [camera report](../../research/2026-10-24-camera.md)
 records exact artifacts, limitations, and unresolved wire/session contracts.
 
+The later [camera RPC report](../../research/2026-10-26-camera-rpc-evidence.md)
+traces the distinct time-lapse client and selected saved-firmware server handlers.
+Monitor stop can return success without clearing flags or invoking cleanup;
+time-lapse stop can acknowledge detached work. The registered server status
+candidate supplies coarse flags, not session ownership, expiry, freshness or
+completed cleanup. None is an installed compatibility result or a newly supported
+bridge API. Resolve the monitor worker's lifecycle before proposing camera tools.
+
 Start with REA's desktop and JavaScript inspection of the installed bundle.
 Trace the camera RPC request construction, selected transport, response parsing,
 authentication/session fields, and LAN URL lifecycle. Separate monitor snapshots,
@@ -255,10 +263,10 @@ the relevant DLL/function rather than decompiling the whole app. REA documents
 install/check its required Ghidra/JDK separately if needed. Do not equate an
 inferred decompilation with a verified protocol contract.
 
-Make initial live probes read-only. Starting an ordinary camera session is
-permitted within the requested camera capability, but must not change print,
-motion, firmware, or calibration state. Do not bypass authentication. Stop only
-bridge-owned camera sessions and avoid interfering with existing app sessions.
+The current continuation authorizes read-only live interactions only. Future
+camera start/stop acceptance requires separate authorization and must not change
+print, motion, firmware, or calibration state. Do not bypass authentication.
+Stop only bridge-owned camera sessions and avoid interfering with existing app sessions.
 If native analysis stalls, record the exact missing contract and choose the next
 targeted source/capture probe; do not run open-ended whole-app reconstruction.
 

@@ -182,6 +182,13 @@ internal pause-request/SD-pause flags, executable callback identity/effects and
 physical completion remain unestablished. No pause/resume/end/cancel, layer or
 camera command is newly accepted. Equal repeated reads are still non-atomic.
 
+The [machine/action follow-up](../../research/2026-10-26-machine-state-evidence.md)
+projects fixed main_state/action_code reports and binds them under policy 8.
+Both exact integer IDLE codes are required alongside all prior checks; recognized
+nonzero activity independently blocks idle and missing/unfamiliar codes remain
+unknown. Mutable labels do not attest transition/hook or physical completion,
+queue draining or loaded code. No additional G-code/control is accepted.
+
 - A preparation receipt binds the file hash, selected plate, mapping, material
   requirements, process values, printer identity, and an expiry. Default expiry
   is ten minutes. Revalidate before the first mutation and immediately before

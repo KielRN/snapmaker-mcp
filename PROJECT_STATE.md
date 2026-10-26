@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-10-25
+Last updated: 2026-10-26
 
 ## Current stage
 
@@ -13,6 +13,23 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Machine/action continuation: policy **8** binds fixed integer main/action
+  reports. Both IDLE codes are required for positive idle; recognized nonzero
+  activity independently vetoes idle and unknown reports cannot establish it.
+  One passive GET at **2026-10-26 05:46:40 UTC** confirmed both integer zero.
+  Artifact tracing establishes separate labels/SD/statistics and post-update
+  hook ordering, not transition/physical completion or loaded hook identity.
+  No command/export newly accepted or live mutation; see the
+  [machine/action report](docs/research/2026-10-26-machine-state-evidence.md).
+- Machine/action software verification: **520 tests passed on Python 3.11.14
+  and 3.13.12**, including machine report races and actual MCP/loopback HTTP.
+  Ruff check/format and wheel/source builds passed; all 12 source modules match
+  both packages. Scope audit passed 60 files, 130 local links, both archives and
+  19 ignore samples with no configured private literals/generated artifacts or
+  broken links. Independent review found no actionable findings or deferred
+  minors, separately passed all 520 tests on Python 3.13.12 and checked historical
+  policy-7 schemas/terminal timestamps without upload replay. See the
+  [execution ledger](docs/superpowers/plans/2026-10-26-machine-state-evidence.md).
 - Pause/end continuation: policy **7** binds fixed `pause_resume.is_paused`
   reports. Idle/preparation now require explicit false; true is independently
   busy and missing/null/malformed stays unknown. Source traces layer/error/idle
@@ -21,7 +38,7 @@ this focused implementation and commit/push on `main`, with no live mutations.
   20:44:18 UTC** confirmed boolean false. No live mutation/preparation/control.
   Saved restore state and complete callback effects remain unknown. See the
   [pause/end evidence](docs/research/2026-10-25-pause-end-evidence.md).
-- Current software verification: **454 tests passed on Python 3.11.14 and
+- Pause/end software verification: **454 tests passed on Python 3.11.14 and
   3.13.12**, including true/null/missing pause races through preparation/preflight/
   hashing/restart and actual MCP/loopback HTTP policy-6 refusal. Ruff check/format
   and wheel/source builds passed. Independent review found no actionable issues
@@ -185,9 +202,10 @@ records pinned public source and installed-contract limits.
    mesh fade/lookup/ZFADE and calibration provenance: inspected status/dump fields
    do not expose them. No such diagnostic was identified; keep these unknowns.
    Pause/end source dependencies and independent saved-pause binding are now
-   documented; job flags/callback bodies remain unbound. Next trace the supported
-   machine/action-state provider and its transition hooks against virtual-SD/
-   control callers before extending idle or control semantics. Saved K and hidden feed thermal/consumption are also
+   documented; machine/action labels now also bind receipts without certifying
+   transition/hook completion. Next trace supported job flags/read-time effects
+   against startup/end/feed/camera consumers before defining a bounded flag
+   contract. Callback bodies remain unbound. Saved K and hidden feed thermal/consumption are also
    absent from the inspected status providers. Do not repeat head/mesh/config
    snapshots or infer those values from reports. This does not bound the remaining
    macro chains. Current restricted files and journals are described in

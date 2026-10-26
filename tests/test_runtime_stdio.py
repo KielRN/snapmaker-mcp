@@ -23,6 +23,10 @@ from test_upload_stdio import connected, file_printer
         ("pause", "printer_not_idle"),
         ("missing_pause", "printer_not_idle"),
         ("uncertain_pause", "printer_not_idle"),
+        ("machine_main", "printer_not_idle"),
+        ("machine_action", "printer_not_idle"),
+        ("missing_machine", "printer_not_idle"),
+        ("uncertain_machine", "printer_not_idle"),
     ],
 )
 async def test_runtime_receipts_and_no_replay_over_actual_mcp(setup_upload, tmp_path, change, code):
@@ -52,6 +56,8 @@ async def test_runtime_receipts_and_no_replay_over_actual_mcp(setup_upload, tmp_
             assert evidence["exclusion"]["current_object_present"] is False
             assert evidence["exclusion"]["move_transform_installed"] is None
             assert evidence.get("pause_resume_is_paused") is False
+            assert evidence.get("machine_main_state") == 0
+            assert evidence.get("machine_action_code") == 0
             assert "SYNTHETIC PRIVATE OBJECT" not in status.content[0].text
             args = {
                 "operation_id": str(uuid4()),
@@ -75,7 +81,13 @@ async def test_runtime_receipts_and_no_replay_over_actual_mcp(setup_upload, tmp_
                 printer.files[result.structuredContent["data"]["remote_path"]] = file.read_bytes()
                 printer.failure = None
         objects = printer.replies["/printer/objects/query"]["result"]["status"]
-        if change == "missing":
+        if change in {"machine_main", "uncertain_machine"}:
+            objects["machine_state_manager"]["main_state"] = 3
+        elif change == "machine_action":
+            objects["machine_state_manager"]["action_code"] = 576
+        elif change == "missing_machine":
+            del objects["machine_state_manager"]["action_code"]
+        elif change == "missing":
             del objects["extruder3"]["extruder_offset"]
         elif change == "missing_exclusion":
             del objects["exclude_object"]["current_object"]

@@ -112,6 +112,7 @@ class U1Reader:
             "print_stats",
             "virtual_sdcard",
             "pause_resume",
+            "machine_state_manager",
             "toolhead",
             "gcode_move",
             "bed_mesh",
@@ -133,10 +134,24 @@ class U1Reader:
         active = boolean(sd.get("is_active"))
         runtime = normalize_runtime(status)
         paused = runtime.pause_resume_is_paused
+        main = runtime.machine_main_state
+        action = runtime.machine_action_code
         busy = (
             True
-            if state in {"printing", "paused"} or active is True or paused is True
-            else (False if state is not None and active is False and paused is False else None)
+            if state in {"printing", "paused"}
+            or active is True
+            or paused is True
+            or (main is not None and main != 0)
+            or (action is not None and action != 0)
+            else (
+                False
+                if state is not None
+                and active is False
+                and paused is False
+                and main == 0
+                and action == 0
+                else None
+            )
         )
         raw = obj(status.get("exception_manager")).get("exceptions")
         known = isinstance(raw, list) and len(raw) <= 256

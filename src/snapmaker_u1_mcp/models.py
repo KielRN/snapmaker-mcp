@@ -86,6 +86,10 @@ class ExclusionEvidence(BaseModel):
 
 
 class RuntimeEvidence(BaseModel):
+    # Independent enum reports, not transition/physical completion attestations.
+    # Defaults deserialize historical receipts; policy prevents their reuse.
+    machine_main_state: int | None = None
+    machine_action_code: int | None = None
     # Independent saved-pause flag; optional only for historical receipts.
     pause_resume_is_paused: bool | None = None
     homed_axes: str | None = None
@@ -126,6 +130,8 @@ class RuntimeEvidence(BaseModel):
             "hidden_feed_thermal_consumption",
             "pause_restore_state",
             "pause_end_callback_effects",
+            "machine_transition_completion",
+            "loaded_state_hook_identity",
         ]
     )
 

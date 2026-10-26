@@ -4,6 +4,16 @@ Implemented changes only. No published release exists.
 
 ## Unreleased — 0.1.0.dev0
 
+### Added — 2026-10-26
+
+- Fixed machine main-state/action-code status projection and policy-8 receipt
+  binding. Positive idle requires both exact reported IDLE codes alongside prior
+  checks. Recognized activity independently blocks idle; missing or unfamiliar
+  codes stay unknown. Policy-1–7 uncertain receipts cannot promote or replay.
+  One passive GET confirmed integer forms; source transition/SD/control ordering
+  and omitted hook/completion evidence are documented. No command/export newly
+  accepted; uploads remain disabled and hardware acceptance pending.
+
 ### Added — 2026-10-25
 
 - Fixed saved-pause status projection, independently conservative idle checks and

@@ -1,6 +1,6 @@
 # Decisions
 
-Last updated: 2026-10-25
+Last updated: 2026-10-26
 
 Record durable choices with their date, status, and reason. **Confirmed** means
 directly established by owner direction or carried-forward printer operating
@@ -325,3 +325,24 @@ acceptance occurred. No command/export is newly accepted. Continue with the
 supported machine/action-state provider and transition hooks rather than repeating
 pause/head/mesh snapshots. Readiness remains incomplete and the recurring loop
 continues under the owner's review/commit/push authorization on main.
+
+## D020 — Treat machine/action labels as independent idle vetoes
+
+Date: 2026-10-26 · Status: Implemented engineering choice within owner scope
+
+Project only machine_state_manager.main_state/action_code through both runtime
+queries. Normalize exact integer enum members from the verified artifact; keep
+missing/malformed/future values unknown. Positive idle requires both IDLE codes
+alongside prior checks; either recognized nonzero report independently blocks
+idle, including when the other is unknown. No inferred pair compatibility table.
+Policy 8 binds both reports and refuses policy-1–7 dispatch/uncertain promotion,
+preserving historical terminal results, every prior guard and no-replay behavior.
+
+The provider exposes mutable labels, not transition locks/history, rule/hook
+identity, post-hook success or drained physical queues. Label/history update
+precedes post-hooks; SD/statistics/pause sequencing remains separate. One passive
+GET confirmed both integer zero forms, not safe control or hardware acceptance.
+See the [machine/action report](docs/research/2026-10-26-machine-state-evidence.md).
+No new command/export/tool is accepted; uploads remain disabled. Continue with
+job flags/read-time effects and their consumers instead of repeated snapshots.
+Readiness remains incomplete; live mutations need separate authorization.

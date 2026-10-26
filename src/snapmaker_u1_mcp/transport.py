@@ -17,6 +17,7 @@ OBJECTS = (
     "print_stats",
     "virtual_sdcard",
     "pause_resume",
+    "machine_state_manager",
     "toolhead",
     "gcode_move",
     "bed_mesh",
@@ -31,11 +32,12 @@ OBJECTS = (
 OBJECT_FIELDS = {
     "exclude_object": "excluded_objects,current_object,in_excluded_region",
     "pause_resume": "is_paused",
+    "machine_state_manager": "main_state,action_code",
 }
 
 
 def object_query(names):
-    """Only fixed projections for exclusion and saved-pause reports."""
+    """Use fixed projections for exclusion, pause and machine/action reports."""
     return {name: OBJECT_FIELDS.get(name, "") for name in names}
 
 

@@ -15,6 +15,7 @@ def objects():
         },
         "virtual_sdcard": {"progress": 0.25, "is_active": True},
         "pause_resume": {"is_paused": False},
+        "machine_state_manager": {"main_state": 0, "action_code": 0},
         "toolhead": {
             "extruder": "extruder1",
             "homed_axes": "xyz",

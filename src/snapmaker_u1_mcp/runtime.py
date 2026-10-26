@@ -14,6 +14,41 @@ RUNTIME_OBJECTS = (
     "bed_mesh",
     "exclude_object",
     "pause_resume",
+    "machine_state_manager",
+)
+
+# Artifact MachineMainState / ActionCode members. Future or coerced codes stay
+# unknown; these reports do not establish transitions or hook completion.
+MAIN_STATES = frozenset(range(15))
+ACTION_CODES = frozenset(
+    [
+        0,
+        1,
+        2,
+        3,
+        *range(128, 137),
+        *range(192, 202),
+        256,
+        257,
+        258,
+        320,
+        321,
+        322,
+        323,
+        384,
+        512,
+        513,
+        514,
+        515,
+        576,
+        640,
+        704,
+        768,
+        769,
+        770,
+        832,
+        896,
+    ]
 )
 
 
@@ -228,6 +263,16 @@ def normalize_runtime(snapshot: dict) -> RuntimeEvidence:
         else:
             inconsistent.append("mesh_state_mismatch")
     data = dict(
+        machine_main_state=field(
+            "machine_state_manager",
+            "main_state",
+            lambda v: v if type(v) is int and v in MAIN_STATES else None,
+        ),
+        machine_action_code=field(
+            "machine_state_manager",
+            "action_code",
+            lambda v: v if type(v) is int and v in ACTION_CODES else None,
+        ),
         pause_resume_is_paused=field("pause_resume", "is_paused", boolean),
         homed_axes=field("toolhead", "homed_axes", homed),
         selected_physical_tool=selected,

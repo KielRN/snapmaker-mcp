@@ -140,7 +140,7 @@ strings alone.
 
 The normal path is prepare -> upload and verify -> start -> observe.
 
-The current receipt policy is 6. The restricted inspector retains policy-3
+The current receipt policy is 7. The restricted inspector retains policy-3
 command semantics. Every T invalidates XYZ, full
 G28 invalidates active-tool/E knowledge, positive nozzle targets participate in
 requirements and requested physical mappings must be injective. Reestablishing
@@ -163,7 +163,7 @@ state) to the same repeated binding. The
 reported nozzle diameter/volume, pressure advance/smoothing and queue-name
 evidence. Used reported diameters must agree with file and operator attestation;
 missing fields prevent preparation and all-head changes block dispatch/promotion.
-Policies 1–5 cannot bypass current checks. A null queue name does not prove
+Policies 1–6 cannot bypass current checks. A null queue name does not prove
 detachment: the constructor can attach trapq without updating the name. Actual
 attachment, saved K and hidden feed/thermal demand remain unestablished.
 Empty exclusions do not prove transform removal, and region flags can lag markers;
@@ -172,6 +172,15 @@ provenance remain unknown alongside fade and chain order.
 Unexposed base positions, per-head origins, calibration provenance, mesh fade/tool
 offset and the complete transform chain remain unestablished. Reported values
 and equal HTTP snapshots do not establish calibrated safety or atomicity.
+
+The [pause/end follow-up](../../research/2026-10-25-pause-end-evidence.md)
+projects only `pause_resume.is_paused` through both fixed runtime queries and
+binds it in receipts. True independently blocks idle; missing/null/malformed
+reports remain unknown and prevent positive idle/preparation. False is necessary
+alongside the prior state/SD/Klipper/exception checks. Saved restore state,
+internal pause-request/SD-pause flags, executable callback identity/effects and
+physical completion remain unestablished. No pause/resume/end/cancel, layer or
+camera command is newly accepted. Equal repeated reads are still non-atomic.
 
 - A preparation receipt binds the file hash, selected plate, mapping, material
   requirements, process values, printer identity, and an expiry. Default expiry

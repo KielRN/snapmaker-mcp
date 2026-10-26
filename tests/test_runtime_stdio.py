@@ -20,6 +20,9 @@ from test_upload_stdio import connected, file_printer
         ("head_flow", "evidence_changed"),
         ("missing_head", "runtime_evidence_missing"),
         ("uncertain_head", "evidence_changed"),
+        ("pause", "printer_not_idle"),
+        ("missing_pause", "printer_not_idle"),
+        ("uncertain_pause", "printer_not_idle"),
     ],
 )
 async def test_runtime_receipts_and_no_replay_over_actual_mcp(setup_upload, tmp_path, change, code):
@@ -48,6 +51,7 @@ async def test_runtime_receipts_and_no_replay_over_actual_mcp(setup_upload, tmp_
             assert evidence["exclusion"]["excluded_count"] == 0
             assert evidence["exclusion"]["current_object_present"] is False
             assert evidence["exclusion"]["move_transform_installed"] is None
+            assert evidence.get("pause_resume_is_paused") is False
             assert "SYNTHETIC PRIVATE OBJECT" not in status.content[0].text
             args = {
                 "operation_id": str(uuid4()),
@@ -77,6 +81,10 @@ async def test_runtime_receipts_and_no_replay_over_actual_mcp(setup_upload, tmp_
             del objects["exclude_object"]["current_object"]
         elif change == "missing_head":
             del objects["extruder3"]["motion_queue"]
+        elif change == "missing_pause":
+            del objects["pause_resume"]["is_paused"]
+        elif change in {"pause", "uncertain_pause"}:
+            objects["pause_resume"]["is_paused"] = True
         elif change in {"head_flow", "uncertain_head"}:
             objects["extruder3"]["pressure_advance"] = 0.03
         elif change in {"exclusion", "uncertain_exclusion"}:

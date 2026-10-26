@@ -300,3 +300,28 @@ this contract; no new live query is necessary. The owner authorized this immedia
 development/review/commit/push on main and the existing recurring loop. That does
 not authorize hardware mutations. Advance pause/end callback/job-flag research
 next instead of repeating unsupported transform or head snapshots.
+
+## D019 — Require explicit unpaused evidence without certifying resume/end
+
+Date: 2026-10-25 · Status: Implemented engineering choice within owner scope
+
+Project only `pause_resume.is_paused` through the existing status/runtime reads.
+Treat it as independent of print statistics and virtual-SD activity. True blocks
+idle; missing/null/malformed reporting stays unknown and cannot establish idle.
+Policy 7 binds this report through existing repeated observations and refuses
+policy-1–6 dispatch/uncertain promotion without replay. Historical model defaults
+exist only for receipt deserialization. Preserve every prior guard.
+
+Supported status does not expose saved restore state or the internal pause-request/
+SD-pause flags. Source tracing establishes motion, heat/feed/flow/cleaning and
+camera-dependent pause/resume/end/cancel branches, plus configurable layer/error/
+idle callbacks. Reported job flags and macro variables do not attest template
+identity, transitive effects or action completion. Commented client-hook examples
+are not installed callback execution. See the
+[pause/end report](docs/research/2026-10-25-pause-end-evidence.md).
+
+One focused read-only GET confirmed boolean false; no mutation or hardware control
+acceptance occurred. No command/export is newly accepted. Continue with the
+supported machine/action-state provider and transition hooks rather than repeating
+pause/head/mesh snapshots. Readiness remains incomplete and the recurring loop
+continues under the owner's review/commit/push authorization on main.

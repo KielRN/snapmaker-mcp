@@ -7,7 +7,14 @@ import math
 from .models import ExclusionEvidence, HeadEvidence, MatrixEvidence, MeshEvidence, RuntimeEvidence
 from .transport import EXTRUDERS
 
-RUNTIME_OBJECTS = ("toolhead", "gcode_move", *EXTRUDERS, "bed_mesh", "exclude_object")
+RUNTIME_OBJECTS = (
+    "toolhead",
+    "gcode_move",
+    *EXTRUDERS,
+    "bed_mesh",
+    "exclude_object",
+    "pause_resume",
+)
 
 
 def signed_number(value):
@@ -221,6 +228,7 @@ def normalize_runtime(snapshot: dict) -> RuntimeEvidence:
         else:
             inconsistent.append("mesh_state_mismatch")
     data = dict(
+        pause_resume_is_paused=field("pause_resume", "is_paused", boolean),
         homed_axes=field("toolhead", "homed_axes", homed),
         selected_physical_tool=selected,
         reported_gripped_tool=gripped,

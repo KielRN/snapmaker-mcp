@@ -13,6 +13,25 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Pause/end continuation: policy **7** binds fixed `pause_resume.is_paused`
+  reports. Idle/preparation now require explicit false; true is independently
+  busy and missing/null/malformed stays unknown. Source traces layer/error/idle
+  callbacks and motion/heat/feed/camera effects without accepting commands or
+  treating reset job flags as completed actions. One passive GET at **2026-10-25
+  20:44:18 UTC** confirmed boolean false. No live mutation/preparation/control.
+  Saved restore state and complete callback effects remain unknown. See the
+  [pause/end evidence](docs/research/2026-10-25-pause-end-evidence.md).
+- Current software verification: **454 tests passed on Python 3.11.14 and
+  3.13.12**, including true/null/missing pause races through preparation/preflight/
+  hashing/restart and actual MCP/loopback HTTP policy-6 refusal. Ruff check/format
+  and wheel/source builds passed. Independent review found no actionable issues
+  or deferred minors and separately passed all 454 tests on Python 3.13.12,
+  checked historical policy-6 schemas without replay, and verified source/report
+  identities. Final audit passed: 57 files, 118 local links, both archives and
+  17 ignore samples; no configured private literals/generated artifacts or broken
+  links. All 12 source modules match both packages. The interrupted prior run was
+  reconciled without another live request. See the
+  [execution ledger](docs/superpowers/plans/2026-10-25-pause-end-evidence.md).
 - Per-head extrusion continuation: policy **6** binds reported nozzle diameter/
   volume type, pressure advance/smoothing and queue-name evidence for all heads.
   Used reported nozzle sizes must agree with file and operator attestation.
@@ -21,7 +40,7 @@ this focused implementation and commit/push on `main`, with no live mutations.
   saved K and hidden feed/thermal demand remain unknown. Inspected transform reads
   still lack the decisive diagnostic; no macro/export newly accepted. See
   [per-head evidence](docs/research/2026-10-25-head-extrusion-evidence.md).
-- Current software verification: **403 tests passed on Python 3.11.14 and
+- Head continuation verification: **403 tests passed on Python 3.11.14 and
   3.13.12**, including all five head-field races through preparation/preflight/
   hashing/restart and actual MCP/loopback HTTP policy-5 refusal. Ruff check/format
   and wheel/source builds passed. Independent fresh-context review found no
@@ -165,8 +184,10 @@ records pinned public source and installed-contract limits.
    vendor-supported passive diagnostic for chain installation/order, effective
    mesh fade/lookup/ZFADE and calibration provenance: inspected status/dump fields
    do not expose them. No such diagnostic was identified; keep these unknowns.
-   Next trace pause/end configurable callbacks and job flags into a bounded
-   supported read contract. Saved K and hidden feed thermal/consumption are also
+   Pause/end source dependencies and independent saved-pause binding are now
+   documented; job flags/callback bodies remain unbound. Next trace the supported
+   machine/action-state provider and its transition hooks against virtual-SD/
+   control callers before extending idle or control semantics. Saved K and hidden feed thermal/consumption are also
    absent from the inspected status providers. Do not repeat head/mesh/config
    snapshots or infer those values from reports. This does not bound the remaining
    macro chains. Current restricted files and journals are described in

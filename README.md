@@ -67,7 +67,7 @@ Call the three read tools with `{}`. Discovery includes typed input/output schem
 | Tool | Result |
 | --- | --- |
 | `u1_capabilities` | Observed firmware/Moonraker identity, HTTP/object inventory, implemented/future tools, unresolved camera support. |
-| `u1_status` | Klipper/print state, virtual SD, progress, temperatures, exceptions and bounded reported coordinate/selection/offset/mesh/exclusion evidence. |
+| `u1_status` | Klipper/print state, virtual SD, saved pause, progress, temperatures, exceptions and bounded reported coordinate/selection/offset/mesh/exclusion evidence. |
 | `u1_materials` | Four physical tools, T0–T3/API names, 32 logical mapping slots, job-use flags, RFID identity/color, feed/toolhead sensor evidence, loaded state. |
 | `u1_prepare_print` | Read-only inspection of one allowed file/plate and fresh mapping/material/feed evidence; expiring durable receipt. |
 | `u1_upload_print` | No-start/no-queue upload of a prepared hash, exact returned-path check and remote download SHA256 verification; simulator-verified only. |
@@ -83,8 +83,13 @@ partial results do not.
 Physical tools are one-based. `logical_to_physical[0]` is logical T0's one-based
 physical tool. Unused mapping defaults do not imply material use; `used_by_job`
 is the current physical job-use flag. Klipper ready can coexist with printing.
-Idle requires an inactive print state, inactive virtual SD, ready Klipper, and
-known clear exceptions. Separate HTTP requests are not atomic. Exception levels
+Idle requires an inactive print state, inactive virtual SD, explicitly false
+`runtime_evidence.pause_resume_is_paused`, ready Klipper and known clear exceptions.
+A true saved-pause report is busy independently of the statistics label. Missing,
+null or malformed pause reports prevent a positive idle result. This bit does
+not establish safe resume, saved-coordinate validity or completion of pause/end
+actions. See the [pause/end report](docs/research/2026-10-25-pause-end-evidence.md).
+Separate HTTP requests are not atomic. Exception levels
 2/3 are classified as blocking from pinned public source; active hardware fault
 semantics remain untested. Raw messages, filenames, machine identity/paths, RFID
 card UIDs, and camera credentials are omitted.
@@ -209,7 +214,7 @@ SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serializati
 cancellation and restart reconciliation. Tests need no printer or credentials.
 No hardware upload/control tests have run.
 
-Receipt policy 6 invalidates policy-1/2/3/4/5 preparations for new uploads. Old inflight
+Receipt policy 7 invalidates policy-1/2/3/4/5/6 preparations for new uploads. Old inflight
 receipts with a policy mismatch remain unknown and never resend a POST; retain
 the journal and investigate with read-only checks in the supported app.
 Runtime evidence is rechecked before dispatch and around remote byte verification;
@@ -219,7 +224,9 @@ Exclusion reports participate in the binding; known reports do not establish
 the running transform chain. Reported nozzle/advance/smoothing/queue values also
 participate; missing fields prevent preparation, used nozzle conflicts return
 `nozzle_mismatch`, and all-head changes prevent dispatch/promotion. The restricted
-G-code dialect is unchanged.
+G-code dialect is unchanged. Saved pause is also bound across both runtime reads;
+its missing/changed report blocks dispatch or uncertain-result promotion. Pause,
+resume, cancel, end and configurable layer callbacks remain unsupported commands.
 
 Reads use fixed routes/objects, disable environment proxies/redirects, request
 uncompressed data, reject other encodings, and cap raw bytes and total request
@@ -272,3 +279,5 @@ dependence, or automatic product-order dispatch.
 | [Transform evidence plan](docs/superpowers/plans/2026-10-25-transform-evidence.md) | Focused continuation, review and verification ledger. |
 | [Per-head extrusion evidence](docs/research/2026-10-25-head-extrusion-evidence.md) | Nozzle/advance/queue report semantics, policy-6 binding and hidden-demand limits. |
 | [Per-head extrusion plan](docs/superpowers/plans/2026-10-25-head-extrusion-evidence.md) | Focused implementation, review and verification ledger. |
+| [Pause/end evidence](docs/research/2026-10-25-pause-end-evidence.md) | Independent saved-pause status, policy-7 idle/receipt checks and unresolved callback/end dependencies. |
+| [Pause/end plan](docs/superpowers/plans/2026-10-25-pause-end-evidence.md) | Focused implementation, review and verification ledger. |

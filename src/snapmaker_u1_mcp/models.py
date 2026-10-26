@@ -86,6 +86,8 @@ class ExclusionEvidence(BaseModel):
 
 
 class RuntimeEvidence(BaseModel):
+    # Independent saved-pause flag; optional only for historical receipts.
+    pause_resume_is_paused: bool | None = None
     homed_axes: str | None = None
     selected_physical_tool: int | None = None
     reported_gripped_tool: int | None = None
@@ -122,6 +124,8 @@ class RuntimeEvidence(BaseModel):
             "stepper_trapq_attachment",
             "saved_calibration_k",
             "hidden_feed_thermal_consumption",
+            "pause_restore_state",
+            "pause_end_callback_effects",
         ]
     )
 

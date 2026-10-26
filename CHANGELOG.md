@@ -6,6 +6,12 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-25
 
+- Fixed saved-pause status projection, independently conservative idle checks and
+  policy-7 receipt binding. Explicit false is required for idle; true/null/missing
+  pause races cannot dispatch/promote uploads. Policies 1–6 cannot reuse old
+  uncertain receipts; no upload replay. One passive GET confirmed the boolean.
+  Pause/resume/end/cancel and configurable callback dependencies are documented,
+  not newly accepted. Uploads remain disabled; hardware acceptance is pending.
 - All-head reported nozzle/volume, pressure advance/smoothing and queue-name
   evidence in status/receipts under policy 6. Used nozzle reports must agree
   with file requirements and operator attestation. Policies 1–5 cannot dispatch/

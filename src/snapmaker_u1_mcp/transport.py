@@ -16,6 +16,7 @@ OBJECTS = (
     *SENSORS,
     "print_stats",
     "virtual_sdcard",
+    "pause_resume",
     "toolhead",
     "gcode_move",
     "bed_mesh",
@@ -27,11 +28,14 @@ OBJECTS = (
     "filament_feed left",
     "filament_feed right",
 )
-OBJECT_FIELDS = {"exclude_object": "excluded_objects,current_object,in_excluded_region"}
+OBJECT_FIELDS = {
+    "exclude_object": "excluded_objects,current_object,in_excluded_region",
+    "pause_resume": "is_paused",
+}
 
 
 def object_query(names):
-    """Only fixed projections; exclusion geometry/extra metadata is not requested."""
+    """Only fixed projections for exclusion and saved-pause reports."""
     return {name: OBJECT_FIELDS.get(name, "") for name in names}
 
 

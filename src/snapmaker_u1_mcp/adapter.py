@@ -111,6 +111,7 @@ class U1Reader:
             *EXTRUDERS,
             "print_stats",
             "virtual_sdcard",
+            "pause_resume",
             "toolhead",
             "gcode_move",
             "bed_mesh",
@@ -130,10 +131,12 @@ class U1Reader:
             stats.get("state"), {"standby", "printing", "paused", "complete", "cancelled", "error"}
         )
         active = boolean(sd.get("is_active"))
+        runtime = normalize_runtime(status)
+        paused = runtime.pause_resume_is_paused
         busy = (
             True
-            if state in {"printing", "paused"} or active is True
-            else (False if state is not None and active is False else None)
+            if state in {"printing", "paused"} or active is True or paused is True
+            else (False if state is not None and active is False and paused is False else None)
         )
         raw = obj(status.get("exception_manager")).get("exceptions")
         known = isinstance(raw, list) and len(raw) <= 256
@@ -187,7 +190,7 @@ class U1Reader:
             exceptions_known=known,
             exceptions=exceptions,
             missing_objects=missing,
-            runtime_evidence=normalize_runtime(status),
+            runtime_evidence=runtime,
         )
         partial = (
             bool(missing)

@@ -14,6 +14,7 @@ def objects():
             "message": "private upstream text",
         },
         "virtual_sdcard": {"progress": 0.25, "is_active": True},
+        "pause_resume": {"is_paused": False},
         "toolhead": {
             "extruder": "extruder1",
             "homed_axes": "xyz",

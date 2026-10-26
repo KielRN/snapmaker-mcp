@@ -248,7 +248,17 @@ Monitor stop can return success without clearing flags or invoking cleanup;
 time-lapse stop can acknowledge detached work. The registered server status
 candidate supplies coarse flags, not session ownership, expiry, freshness or
 completed cleanup. None is an installed compatibility result or a newly supported
-bridge API. Resolve the monitor worker's lifecycle before proposing camera tools.
+bridge API. The [worker continuation](../../research/2026-10-26-camera-worker-evidence.md)
+subsequently establishes shared renewal/expiry, normal exit and destructor/join
+paths, but no externally observable owned cleanup. Flags clear before callbacks/
+resource release; compiled timer thresholds are not an installed lease, and
+notification time does not establish image freshness. Do not implement camera
+tools around these flags or wait a guessed lease. This bounded source trace is
+closed pending changed evidence. Advance the independent
+[feed-resolution contract](../../research/2026-10-26-feed-resolution-evidence.md):
+per-key table fallback/rollback can discard found temperature values, while the
+supported status omits effective resolver provenance. Flow parameter precedence
+and loop/search demand are next; no diagnostic G-code is authorized.
 
 Start with REA's desktop and JavaScript inspection of the installed bundle.
 Trace the camera RPC request construction, selected transport, response parsing,

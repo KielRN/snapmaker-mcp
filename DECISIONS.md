@@ -390,3 +390,25 @@ disabled uploads and all prior safeguards. Next bound the saved monitor worker's
 exit/expiry/destructor paths without opening/closing a camera; if no decisive
 contract emerges, record the limitation and advance independent feed/flow work.
 Full readiness and camera hardware acceptance remain incomplete.
+
+## D023 — Do not promote shared worker expiry to an owned camera lease
+
+Date: 2026-10-26 · Status: Confirmed investigation boundary; runtime unchanged
+
+The saved server's worker has one shared renewal timer, an automatic expiry path
+and a monitor destructor that clears flags and joins the thread. These establish
+static teardown paths, not an external per-client owner/lease/completion API.
+Flags clear before callbacks/resource release; compiled timing is not a bounded
+installed cleanup deadline, and a notification timestamp is not frame freshness.
+The earlier stop-acknowledgment limit remains. Do not implement camera lifecycle
+or wait a guessed lease on this evidence. See the
+[worker report](docs/research/2026-10-26-camera-worker-evidence.md).
+
+Close this bounded camera trace unless new supported evidence appears; advance
+independent stock-file dependencies. The
+[feed report](docs/research/2026-10-26-feed-resolution-evidence.md) now establishes
+per-key fallback and rollback that can discard otherwise found temperatures.
+Static defaults/material labels cannot attest the effective resolver result.
+Next trace flow-calibrator parameter precedence and complete loop/search demand.
+No live request, tool/field/policy/command acceptance or hardware mutation.
+Policy 9, disabled uploads and all prior safeguards remain; readiness incomplete.

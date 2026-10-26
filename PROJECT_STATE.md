@@ -13,6 +13,24 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Camera worker continuation: saved `unisrv` has shared renewal/expiry and an
+  object destructor that clears both domain flags and joins its worker. Flags
+  can clear before callbacks/resource release; approximate compiled timing is
+  not an installed lease or external completion receipt. Camera ownership,
+  freshness and completed cleanup remain blocked. Independent feed tracing finds
+  per-key table fallback and rollback to defaults after later flow-validation
+  failure, with no exposed resolved provenance. **No live request** or tool/
+  field/policy/acceptance change. See the
+  [worker report](docs/research/2026-10-26-camera-worker-evidence.md),
+  [feed report](docs/research/2026-10-26-feed-resolution-evidence.md) and
+  [execution ledger](docs/superpowers/plans/2026-10-26-camera-worker-evidence.md).
+- Worker/feed verification: **700 tests passed on each Python 3.11.14/3.13.12**,
+  Ruff check/format and wheel/source builds passed. Independent review found no
+  actionable findings, checked all 4,560 decoded instructions/thresholds/source
+  anchors and separately passed 700 tests. Audit: 68 files, 180 local links,
+  both archives and 33 ignore samples; no configured private-literal/credential-
+  pattern/generated-artifact matches or broken links. Runtime is unchanged;
+  these checks do not establish firmware execution or hardware acceptance.
 - Camera RPC continuation: saved firmware `unisrv` registrations/handlers now
   have focused static evidence. Monitor stop validates a domain and can return
   success without clearing flags or calling cleanup; time-lapse stop can return
@@ -242,11 +260,13 @@ records pinned public source and installed-contract limits.
    transition/hook completion. Job preferences now bind receipts, with read-time
    refreshes and reset/reprint/consumer limits documented. Camera RPC tracing now
    finds a monitor-stop acknowledgment without cleanup and a coarse server status
-   candidate that cannot prove ownership/cleanup. Next trace the saved `unisrv`
-   monitor start/capture worker's exit/expiry and destructor paths; do not repeat
-   stop/status probes. If that bounded trace cannot establish the contract, record
-   the server limitation and advance hidden feed/flow demand research. No camera
-   start/stop is authorized. Callback bodies remain unbound. Saved K and hidden
+   candidate that cannot prove ownership/cleanup. The worker's shared expiry and
+   destructor are now traced, without an external owned-completion contract.
+   Do not repeat these camera traces without changed evidence. Feed resolution
+   now establishes per-key fallback and rollback that can discard temperature
+   lookups. Next bound flow-calibrator effective parameter precedence and loop/
+   search termination/demand from saved source. No camera start/stop or diagnostic
+   G-code is authorized. Callback bodies remain unbound. Saved K and hidden
    feed thermal/consumption are also
    absent from the inspected status providers. Do not repeat head/mesh/config
    snapshots or infer those values from reports. This does not bound the remaining

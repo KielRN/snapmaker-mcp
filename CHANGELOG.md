@@ -6,6 +6,12 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-26
 
+- Saved-firmware camera worker renewal/expiry/normal-exit/destructor evidence.
+  Shared expiry exists but supplies no externally completed owned cleanup;
+  notification timestamps do not establish image freshness. Independent feed
+  resolver tracing establishes per-key fallback and rollback after later flow
+  validation. Documentation only; no live request, runtime/policy/tool change or
+  new file acceptance. Camera and stock-file readiness remain incomplete.
 - Focused saved-firmware camera RPC research: client correlation/timeout/QoS
   limits and server registrations/status/stop handlers. Monitor stop can return
   success without cleanup, while time-lapse stop can detach work; coarse server

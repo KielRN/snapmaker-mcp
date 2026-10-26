@@ -276,6 +276,14 @@ time-lapse stop can detach work, and coarse server status lacks ownership,
 expiry, freshness and completed cleanup. These are static limits; no camera
 session or new live request was made and no camera API is newly supported.
 
+The [worker continuation](docs/research/2026-10-26-camera-worker-evidence.md)
+finds shared timer expiry and destructor/join paths, but no externally observable
+owned-session cleanup contract. False flags can precede resource release;
+compiled timing and notification timestamps do not prove cleanup or fresh images.
+The independent [feed report](docs/research/2026-10-26-feed-resolution-evidence.md)
+records table fallback/rollback that can discard material-temperature lookups.
+Neither finding changes policy 9 or broadens accepted files/tools.
+
 Future controls must retain per-plate authorization and fresh human confirmation
 of an installed, clear bed. Slicing stays in the separate OrcaSlicer integration.
 This bridge introduces no firmware/calibration/configuration changes, cloud
@@ -314,3 +322,6 @@ dependence, or automatic product-order dispatch.
 | [Job preference plan](docs/superpowers/plans/2026-10-26-job-flag-evidence.md) | Focused implementation, review and verification ledger. |
 | [Camera RPC evidence](docs/research/2026-10-26-camera-rpc-evidence.md) | Client correlation/timeouts and saved server stop/status/cleanup limits. |
 | [Camera RPC plan](docs/superpowers/plans/2026-10-26-camera-rpc-evidence.md) | Focused static investigation, review and verification ledger. |
+| [Camera worker evidence](docs/research/2026-10-26-camera-worker-evidence.md) | Shared renewal/expiry, normal exit/destructor and external cleanup limits. |
+| [Feed resolution evidence](docs/research/2026-10-26-feed-resolution-evidence.md) | Per-key fallback, rollback and missing effective parameter provenance. |
+| [Worker/feed plan](docs/superpowers/plans/2026-10-26-camera-worker-evidence.md) | Focused continuation, independent review and verification ledger. |

@@ -13,6 +13,26 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Job preference continuation: policy **9** binds eight exact booleans, two
+  physical four-head boolean arrays and fixed entanglement sensitivity through
+  existing status/runtime reads. Missing/malformed/changed reports prevent
+  dispatch/promotion; policy-1–8 uncertain work cannot promote or replay. Getter
+  refresh/reset/reprint and calibration/feed/end/time-lapse consumers are traced.
+  Preferences do not prove action completion; a failed time-lapse stop can clear
+  local activity without proving server cleanup. **No live request** or new
+  tool/command/export acceptance. See the
+  [job report](docs/research/2026-10-26-job-flag-evidence.md) and
+  [execution ledger](docs/superpowers/plans/2026-10-26-job-flag-evidence.md).
+- Job preference software verification: **700 tests passed on Python 3.11.14
+  and 3.13.12**, including all-field change/missing races, actual MCP/loopback
+  HTTP and policy-8 refusal. Ruff check/format and wheel/source builds passed;
+  all 12 source modules match both archives. Scope audit checked 63 source/doc
+  files, 142 local links, both archives and 23 ignore samples with no configured
+  private literals, generated artifacts, credential-pattern matches or broken
+  links. All eight original exports remain byte/hash-identical and rejected.
+  Independent review found no actionable or deferred findings, separately passed
+  all 700 tests on Python 3.13.12 and 176 malformed/schema/historical-receipt probes.
+  Hardware compatibility, action completion and camera cleanup remain unproven.
 - Machine/action continuation: policy **8** binds fixed integer main/action
   reports. Both IDLE codes are required for positive idle; recognized nonzero
   activity independently vetoes idle and unknown reports cannot establish it.
@@ -203,9 +223,11 @@ records pinned public source and installed-contract limits.
    do not expose them. No such diagnostic was identified; keep these unknowns.
    Pause/end source dependencies and independent saved-pause binding are now
    documented; machine/action labels now also bind receipts without certifying
-   transition/hook completion. Next trace supported job flags/read-time effects
-   against startup/end/feed/camera consumers before defining a bounded flag
-   contract. Callback bodies remain unbound. Saved K and hidden feed thermal/consumption are also
+   transition/hook completion. Job preferences now bind receipts, with read-time
+   refreshes and reset/reprint/consumer limits documented. Next trace the distinct
+   time-lapse RPC response/correlation and failure lifecycle from saved artifacts;
+   local inactive state after failed stop is not server cleanup evidence. No
+   camera start/stop is authorized. Callback bodies remain unbound. Saved K and hidden feed thermal/consumption are also
    absent from the inspected status providers. Do not repeat head/mesh/config
    snapshots or infer those values from reports. This does not bound the remaining
    macro chains. Current restricted files and journals are described in

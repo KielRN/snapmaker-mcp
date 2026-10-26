@@ -11,6 +11,17 @@ from .config import Settings
 
 EXTRUDERS = ("extruder", "extruder1", "extruder2", "extruder3")
 SENSORS = tuple(f"filament_motion_sensor e{i}_filament" for i in range(4))
+JOB_BOOLEAN_FIELDS = (
+    "time_lapse_camera",
+    "auto_bed_leveling",
+    "flow_calibrate",
+    "shaper_calibrate",
+    "auto_replenish_filament",
+    "replenish_ignore_color",
+    "filament_entangle_detect",
+    "end_led_turn_off",
+)
+JOB_TOOL_FIELDS = ("flow_calib_extruders", "end_unload_filament")
 OBJECTS = (
     *EXTRUDERS,
     *SENSORS,
@@ -33,11 +44,21 @@ OBJECT_FIELDS = {
     "exclude_object": "excluded_objects,current_object,in_excluded_region",
     "pause_resume": "is_paused",
     "machine_state_manager": "main_state,action_code",
+    "print_task_config": ",".join(
+        (
+            "extruder_map_table",
+            "extruders_used",
+            "filament_type",
+            *JOB_BOOLEAN_FIELDS,
+            *JOB_TOOL_FIELDS,
+            "filament_entangle_sen",
+        )
+    ),
 }
 
 
 def object_query(names):
-    """Use fixed projections for exclusion, pause and machine/action reports."""
+    """Use fixed projections for bounded runtime and material reports."""
     return {name: OBJECT_FIELDS.get(name, "") for name in names}
 
 

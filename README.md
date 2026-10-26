@@ -67,7 +67,7 @@ Call the three read tools with `{}`. Discovery includes typed input/output schem
 | Tool | Result |
 | --- | --- |
 | `u1_capabilities` | Observed firmware/Moonraker identity, HTTP/object inventory, implemented/future tools, unresolved camera support. |
-| `u1_status` | Klipper/print state, virtual SD, saved pause, machine/action codes, progress, temperatures, exceptions and bounded reported coordinate/selection/offset/mesh/exclusion evidence. |
+| `u1_status` | Klipper/print state, virtual SD, saved pause, machine/action codes, job preferences, progress, temperatures, exceptions and bounded reported coordinate/selection/offset/mesh/exclusion evidence. |
 | `u1_materials` | Four physical tools, T0–T3/API names, 32 logical mapping slots, job-use flags, RFID identity/color, feed/toolhead sensor evidence, loaded state. |
 | `u1_prepare_print` | Read-only inspection of one allowed file/plate and fresh mapping/material/feed evidence; expiring durable receipt. |
 | `u1_upload_print` | No-start/no-queue upload of a prepared hash, exact returned-path check and remote download SHA256 verification; simulator-verified only. |
@@ -124,6 +124,16 @@ saved calibration K. Actual trapq attachment and hidden feed thermal/consumption
 demand remain unknown. This subset was confirmed in the earlier saved response;
 no new hardware query was needed. See the
 [per-head extrusion report](docs/research/2026-10-25-head-extrusion-evidence.md).
+
+`runtime_evidence.job` reports eight boolean job preferences, four-head flow/
+end-unload flags in physical T0–T3 order and fixed entanglement sensitivity.
+Missing/malformed reports stay unknown; preferences do not establish completed
+calibration, effective protection, feed/end actions or camera ownership/cleanup.
+The fixed provider projection retains existing material fields. Its getter
+refreshes in-memory filament existence/edit reports before returning a shallow
+copy; projection does not avoid that refresh. Independent feed/sensor loading
+checks remain required. No new live request was needed for this source-backed
+contract. See the [job report](docs/research/2026-10-26-job-flag-evidence.md).
 
 `loaded` requires an enabled positive toolhead sensor plus present/positive feed
 module reporting completed loading without a feed error. An enabled negative
@@ -220,7 +230,7 @@ SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serializati
 cancellation and restart reconciliation. Tests need no printer or credentials.
 No hardware upload/control tests have run.
 
-Receipt policy 8 invalidates policy-1/2/3/4/5/6/7 preparations for new uploads. Old inflight
+Receipt policy 9 invalidates policy-1/2/3/4/5/6/7/8 preparations for new uploads. Old inflight
 receipts with a policy mismatch remain unknown and never resend a POST; retain
 the journal and investigate with read-only checks in the supported app.
 Runtime evidence is rechecked before dispatch and around remote byte verification;
@@ -235,6 +245,9 @@ its missing/changed report blocks dispatch or uncertain-result promotion. Pause,
 resume, cancel, end and configurable layer callbacks remain unsupported commands.
 Machine/action reports bind both runtime observations too; missing or changed
 codes prevent dispatch/promotion. Transition/hook completion remains unknown.
+Job preferences bind both reads as well; missing/malformed/changed reports block
+dispatch/promotion. Their values do not change idle classification or authorize
+macros. Nested reprint/second job parameters and action completion remain unknown.
 
 Reads use fixed routes/objects, disable environment proxies/redirects, request
 uncompressed data, reject other encodings, and cap raw bytes and total request
@@ -291,3 +304,5 @@ dependence, or automatic product-order dispatch.
 | [Pause/end plan](docs/superpowers/plans/2026-10-25-pause-end-evidence.md) | Focused implementation, review and verification ledger. |
 | [Machine/action evidence](docs/research/2026-10-26-machine-state-evidence.md) | Conservative activity reports, policy-8 binding and transition/SD/hook limitations. |
 | [Machine/action plan](docs/superpowers/plans/2026-10-26-machine-state-evidence.md) | Focused implementation, review and verification ledger. |
+| [Job preference evidence](docs/research/2026-10-26-job-flag-evidence.md) | Fixed job reports, policy-9 binding and getter/reset/reprint/feed/end/camera limits. |
+| [Job preference plan](docs/superpowers/plans/2026-10-26-job-flag-evidence.md) | Focused implementation, review and verification ledger. |

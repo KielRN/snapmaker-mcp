@@ -85,7 +85,25 @@ class ExclusionEvidence(BaseModel):
     move_transform_installed: Literal[None] = None
 
 
+class JobEvidence(BaseModel):
+    # Preferences only, never action completion or an effective calibration.
+    time_lapse_camera: bool | None = None
+    auto_bed_leveling: bool | None = None
+    flow_calibrate: bool | None = None
+    shaper_calibrate: bool | None = None
+    auto_replenish_filament: bool | None = None
+    replenish_ignore_color: bool | None = None
+    filament_entangle_detect: bool | None = None
+    end_led_turn_off: bool | None = None
+    # Physical T0-T3 order, independent of logical filament mapping.
+    flow_calib_extruders: list[bool] | None = None
+    end_unload_filament: list[bool] | None = None
+    filament_entangle_sen: Literal["low", "medium", "high"] | None = None
+
+
 class RuntimeEvidence(BaseModel):
+    # Default deserializes historical receipts; policy prevents their reuse.
+    job: JobEvidence = Field(default_factory=JobEvidence)
     # Independent enum reports, not transition/physical completion attestations.
     # Defaults deserialize historical receipts; policy prevents their reuse.
     machine_main_state: int | None = None
@@ -132,6 +150,8 @@ class RuntimeEvidence(BaseModel):
             "pause_end_callback_effects",
             "machine_transition_completion",
             "loaded_state_hook_identity",
+            "job_action_completion",
+            "reprint_and_job_parameters",
         ]
     )
 

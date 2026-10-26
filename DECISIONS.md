@@ -346,3 +346,28 @@ See the [machine/action report](docs/research/2026-10-26-machine-state-evidence.
 No new command/export/tool is accepted; uploads remain disabled. Continue with
 job flags/read-time effects and their consumers instead of repeated snapshots.
 Readiness remains incomplete; live mutations need separate authorization.
+
+## D021 — Bind reported job preferences without certifying their effects
+
+Date: 2026-10-26 · Status: Implemented engineering choice within owner scope
+
+Project only eight boolean preferences, two four-boolean physical-head arrays
+and fixed entanglement sensitivity into runtime evidence. Preserve the three
+existing materials fields in the fixed provider projection. Missing/malformed
+reports stay unknown, both boolean values are valid, and current preferences
+do not establish activity, completed actions or calibration/camera results.
+Policy 9 binds all reports and refuses policy-1–8 dispatch/uncertain promotion
+without replay, preserving all prior guards and historical terminal results.
+
+The supported getter refreshes in-memory filament existence/edit reports before
+returning a shallow dictionary. Projection does not suppress this behavior;
+independent sensor/feed checks remain required. Reset/reprint and hidden second
+job parameters remain distinct from action completion. The time-lapse local bit
+can clear after a failed stop and does not establish server cleanup or ownership.
+See the [job report](docs/research/2026-10-26-job-flag-evidence.md).
+
+No live request or new tool/command/export acceptance; uploads remain disabled.
+The transform/provenance diagnostic gap is unchanged. Continue distinct camera
+RPC/failure-lifecycle research from saved artifacts, without starting/stopping
+cameras. Readiness remains incomplete under the owner's ongoing main/review/
+verification/commit/push authorization.

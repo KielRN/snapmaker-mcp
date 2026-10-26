@@ -4,8 +4,15 @@ import hashlib
 import json
 import math
 
-from .models import ExclusionEvidence, HeadEvidence, MatrixEvidence, MeshEvidence, RuntimeEvidence
-from .transport import EXTRUDERS
+from .models import (
+    ExclusionEvidence,
+    HeadEvidence,
+    JobEvidence,
+    MatrixEvidence,
+    MeshEvidence,
+    RuntimeEvidence,
+)
+from .transport import EXTRUDERS, JOB_BOOLEAN_FIELDS, JOB_TOOL_FIELDS
 
 RUNTIME_OBJECTS = (
     "toolhead",
@@ -15,6 +22,7 @@ RUNTIME_OBJECTS = (
     "exclude_object",
     "pause_resume",
     "machine_state_manager",
+    "print_task_config",
 )
 
 # Artifact MachineMainState / ActionCode members. Future or coerced codes stay
@@ -110,6 +118,11 @@ def normalize_runtime(snapshot: dict) -> RuntimeEvidence:
     def index(v):
         return v if type(v) is int and 0 <= v <= 3 else None
 
+    def tool_flags(v):
+        if isinstance(v, list) and len(v) == 4 and all(type(flag) is bool for flag in v):
+            return list(v)
+        return None
+
     def positive(v):
         value = signed_number(v)
         return value if value is not None and value > 0 else None
@@ -140,6 +153,15 @@ def normalize_runtime(snapshot: dict) -> RuntimeEvidence:
             return sorted(v)
         return None
 
+    job = JobEvidence(
+        **{key: field("print_task_config", key, boolean) for key in JOB_BOOLEAN_FIELDS},
+        **{key: field("print_task_config", key, tool_flags) for key in JOB_TOOL_FIELDS},
+        filament_entangle_sen=field(
+            "print_task_config",
+            "filament_entangle_sen",
+            lambda v: v if isinstance(v, str) and v in {"low", "medium", "high"} else None,
+        ),
+    )
     names = field("exclude_object", "excluded_objects", excluded)
     current = raw("exclude_object").get("current_object")
     current_known = "current_object" in raw("exclude_object") and (
@@ -290,6 +312,7 @@ def normalize_runtime(snapshot: dict) -> RuntimeEvidence:
     )
     return RuntimeEvidence(
         **data,
+        job=job,
         tools=heads,
         mesh=mesh,
         exclusion=exclusion,

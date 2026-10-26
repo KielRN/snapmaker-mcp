@@ -113,6 +113,7 @@ class U1Reader:
             "virtual_sdcard",
             "pause_resume",
             "machine_state_manager",
+            "print_task_config",
             "toolhead",
             "gcode_move",
             "bed_mesh",

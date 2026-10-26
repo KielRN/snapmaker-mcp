@@ -189,6 +189,16 @@ nonzero activity independently blocks idle and missing/unfamiliar codes remain
 unknown. Mutable labels do not attest transition/hook or physical completion,
 queue draining or loaded code. No additional G-code/control is accepted.
 
+The [job preference follow-up](../../research/2026-10-26-job-flag-evidence.md)
+adds a fixed provider projection and policy-9 binding of eight exact boolean
+preferences, two physical four-head boolean arrays and fixed sensitivity.
+Missing/malformed/changed reports block dispatch or uncertain-result promotion;
+policies 1–8 cannot be reused. Preferences do not change idle classification or
+certify completed actions, calibration or camera cleanup. The provider refreshes
+in-memory filament existence/edit reports before a shallow copy; projection does
+not suppress that refresh. Reprint/second parameters and action completion remain
+unestablished; no macro/tool/export is newly accepted. No live request was made.
+
 - A preparation receipt binds the file hash, selected plate, mapping, material
   requirements, process values, printer identity, and an expiry. Default expiry
   is ten minutes. Revalidate before the first mutation and immediately before

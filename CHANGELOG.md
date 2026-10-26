@@ -6,6 +6,12 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-26
 
+- Bounded job preference reports in existing status/runtime receipts under
+  policy 9, with a fixed projection retaining existing material fields. Missing,
+  malformed or changed flags block dispatch/promotion; policy-1–8 uncertain
+  receipts cannot promote or replay. Getter refresh/reset/reprint and calibration,
+  feed/end/time-lapse consumer limits are documented. No live request, new command,
+  tool or export acceptance; uploads remain disabled and readiness incomplete.
 - Fixed machine main-state/action-code status projection and policy-8 receipt
   binding. Positive idle requires both exact reported IDLE codes alongside prior
   checks. Recognized activity independently blocks idle; missing or unfamiliar

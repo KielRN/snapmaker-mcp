@@ -312,6 +312,16 @@ reaches the connected Device view and a usable camera image after enabling the
 chamber light. That is vendor-UI evidence; bridge transfer, print/control and
 camera ownership/freshness/cleanup acceptance remain incomplete.
 
+A later [diagnostic round](docs/research/2026-10-27-diagnostic-preprint-evidence.md)
+prepared one small external coupon and exercised the ordinary Upload-only path.
+That path opens a second Send page; after operator assistance, bounded readback
+matched all 49,972 native-export bytes and SHA256 while the printer stayed idle
+with inactive virtual SD. This establishes vendor transfer evidence only. The
+file is still rejected by the bridge; setup macros leave its complete physical
+demand unresolved. No print started and no fresh installed/clear-bed confirmation
+was supplied. Reuse the existing receipt/file for the next ordinary preprint
+inspection rather than repeating the transfer.
+
 Future controls must retain per-plate authorization and fresh human confirmation
 of an installed, clear bed. The owner now delegates selection of very small
 diagnostic prints and permits normal desktop UI use, including observation;
@@ -364,3 +374,5 @@ dependence, or automatic product-order dispatch.
 | [Hidden parameter plan](docs/superpowers/plans/2026-10-27-job-parameter-evidence.md) | Focused source investigation, independent review and verification ledger. |
 | [Desktop/metadata report](docs/research/2026-10-27-desktop-metadata-evidence.md) | Attended connection/camera observation, matched metadata producer and distinct client display fallbacks. |
 | [Desktop/metadata ledger](docs/superpowers/plans/2026-10-27-desktop-metadata-evidence.md) | Focused UI/source continuation, review, verification and acceptance limits. |
+| [Diagnostic preprint report](docs/research/2026-10-27-diagnostic-preprint-evidence.md) | External coupon, native/portable export differences and operator-assisted vendor transfer with exact remote bytes. |
+| [Diagnostic preprint ledger](docs/superpowers/plans/2026-10-27-diagnostic-preprint-evidence.md) | Review, fresh checks, one-use UI receipt and remaining acceptance. |

@@ -14,6 +14,12 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-27 UTC
 
+- Diagnostic preparation and ordinary Upload-only evidence for a small external
+  coupon. Owner-assisted final Send followed embedded-WebView input refusals;
+  all 49,972 remote native-export bytes/SHA256 matched while state stayed idle
+  with inactive virtual SD. Native arrays align for this sample; its setup
+  remains unbounded and bridge validation still rejects it. No start, new MCP
+  acceptance, runtime/policy change or fresh installed/clear-bed confirmation.
 - Attended desktop follow-up evidence: connected/idle Device view and a clear
   ordinary camera image after chamber lighting was enabled. Viewer and light
   were left on. No print, transfer or bridge camera lifecycle acceptance; no

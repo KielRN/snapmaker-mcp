@@ -16,8 +16,28 @@ follow-up now reaches the connected Device view and a usable ordinary camera
 image. This resolves the desktop pairing dependency, not MCP camera lifecycle,
 file-transfer/control acceptance or physical clearance for a diagnostic print.
 
+The next manual round prepared one 10 × 10 × 0.6 mm coupon externally and reached
+the ordinary Upload-only/Send workflow. With the owner's final Send assistance,
+all 49,972 native-export bytes were read back from the exact G-code-root target
+with matching SHA256 by 20:31:29 UTC; surrounding state stayed idle/inactive-SD.
+This is vendor transfer evidence, not MCP upload or print acceptance. Stock setup
+effects remain unbounded, the file remains rejected, and no fresh human installed/
+clear-bed confirmation or physical start exists. See the
+[diagnostic report](docs/research/2026-10-27-diagnostic-preprint-evidence.md).
+
 ## Verified evidence
 
+- Diagnostic continuation, **2026-10-27 20:19–20:31:29 UTC**: current supported
+  status/material reads confirmed idle, zero targets, inactive virtual SD,
+  mapping and loaded PLA evidence. Two intact external-slicer exports show
+  one-versus-four metadata differences; the native file has aligned four-entry
+  arrays and T0-only declared consumption, but setup still invokes multi-head
+  feed/flow, mesh and camera paths. Ordinary Upload opens a second Send page.
+  After embedded-WebView input refusals, the owner submitted that Send; exact
+  remote bytes/SHA256 matched. No captured start/queue response flags, start,
+  calibration or MCP acceptance. Fresh suites passed **706 on each Python
+  3.11.14/3.13.12**; see the
+  [ledger](docs/superpowers/plans/2026-10-27-diagnostic-preprint-evidence.md).
 - Attended desktop follow-up, **2026-10-27 20:06–20:08:25 UTC**: owner reported
   connection; the normal Device view showed connected/idle, all heater targets
   zero, nozzles 28–29 °C and bed 26 °C. One normal camera-view action initially
@@ -352,9 +372,12 @@ records pinned public source and installed-contract limits.
    now traced; no bound file provenance is exposed. The upstream server/client
    producer is also traced: submission preserves array mismatch while display
    fallbacks can hide it. Close both source traces without guessing mappings.
-   Normal LAN binding now reaches the connected Device view; inspect the ordinary
-   metadata/preprint workflow for a small diagnostic plate next. Do not repeat
-   pairing while the existing connection works or bypass normal authorization.
+   Normal LAN binding now reaches the connected Device view, and one ordinary
+   operator-assisted Upload-only transfer has exact remote-byte evidence. Inspect
+   the existing uploaded diagnostic's ordinary preprint options next; do not
+   repeat that transfer or submit a start/setter as a probe. Its aligned native
+   metadata does not bound startup effects. Do not repeat pairing while the
+   existing connection works or bypass normal authorization.
    Unverified camera API mutations and diagnostic raw G-code remain outside this
    scope. Callback bodies remain unbound. Saved K and hidden
    feed thermal/consumption are also

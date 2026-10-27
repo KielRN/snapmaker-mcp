@@ -122,6 +122,13 @@ or guessing physical mapping in exports 05–07. All original bytes remain intac
 
 ## Acceptance blocker and next action
 
+The subsequent [diagnostic continuation](2026-10-27-diagnostic-preprint-evidence.md)
+prepared one external coupon and verified an operator-assisted ordinary transfer
+by complete remote byte equality. No print or bridge file acceptance followed;
+continue with that existing file's preprint options rather than repeating the
+completed transfer. The observations in the two earlier UI rounds below remain
+historical.
+
 The attended follow-up below resolves desktop pairing. Inspect the already
 connected device and ordinary preprint workflow for one documented very small
 diagnostic plate next. Do not request pairing again while the existing connection

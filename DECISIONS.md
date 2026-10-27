@@ -537,3 +537,23 @@ policy-1–9 dispatch and uncertain promotion because their missing history cann
 be recovered. Preserve historical terminal results, expiry and every prior guard.
 See the [fix ledger](docs/superpowers/plans/2026-10-27-reconciliation-watermark.md).
 No command/tool/export is newly accepted; uploads and full readiness remain incomplete.
+
+## D030 — Separate ordinary vendor transfer from bridge and print acceptance
+
+Date: 2026-10-27 UTC · Status: Confirmed observation boundary
+
+One externally sliced small diagnostic reached the ordinary Upload-only path.
+Its first Upload choice opens an additional Send page, so that click alone is
+not completed transfer. After the owner's final Send assistance, bounded readback
+matched the complete native export and SHA256 at its exact generated G-code-root
+destination with consistent idle/inactive-SD evidence. Raw no-start/no-queue
+response flags were not captured. This is vendor transfer plus installed-read
+evidence, not an accepted MCP upload, physical start or hardware print acceptance.
+
+Native four-entry metadata aligns for this sample; normal setup still invokes
+unbounded macro paths. Keep the exported bytes intact and bridge refusals/uploads
+unchanged. Reuse the exact saved file and receipt for the next ordinary preprint
+inspection, without repeating transfer or probing effective options by mutation.
+Fresh installed/clear-bed confirmation and every file/material/runtime safeguard
+remain required before any authorized start. See the
+[diagnostic evidence](docs/research/2026-10-27-diagnostic-preprint-evidence.md).

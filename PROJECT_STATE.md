@@ -9,7 +9,10 @@ read tools plus restricted `u1_prepare_print` / `u1_upload_print`. File transact
 are verified against local simulation and actual MCP subprocesses; uploads remain
 disabled by default and unaccepted on hardware. Print controls, broad stock-U1
 G-code support and camera implementation remain incomplete. The owner requested
-this focused implementation and commit/push on `main`, with no live mutations.
+ongoing development and commit/push on `main`. The 2026-10-27 owner scope update
+authorizes normal desktop UI use and very small agent-selected diagnostic prints;
+see D026 and AGENTS.md. Physical clearance remains time-specific; recording this
+authorization performed no UI/printer action and establishes no hardware result.
 
 ## Verified evidence
 
@@ -279,10 +282,12 @@ records pinned public source and installed-contract limits.
    simulated/source evidence, not hardware acceptance.
 2. Validate the native camera branch against installed firmware with one bounded,
    redacted passive trace of an ordinary operator-authorized transaction. No
-   camera opening/closing is authorized by this investigation. Server ownership,
+   unverified camera API mutation is authorized by desktop permission alone.
+   Normal authenticated UI viewing is now permitted under D026. Server ownership,
    expiry, credential provisioning, freshness and safe cleanup remain prerequisites
    for camera tools; the trace alone will not resolve them all.
-3. Obtain separately authorized hardware acceptance of multipart upload/download,
+3. Perform scoped hardware acceptance for authorized very small diagnostic jobs:
+   multipart upload/download,
    exact path/flag envelope, no-start/no-queue behavior, authentication and recovery.
    Bind the traced stock-U1 macro/offset/mesh, per-head thermal/consumption and
    conditional runtime dependencies before accepting normal Orca U1 profiles.
@@ -302,11 +307,12 @@ records pinned public source and installed-contract limits.
    lookups. Flow-calibrator precedence and finite local search counts are now
    traced; total demand and effective parameters remain unreported. Hidden-table
    parsing, array roles, reset/reprint lifetime and asynchronous persistence are
-   now traced; no bound file provenance is exposed. Next locate the upstream
-   metadata-to-parameter producer in saved client preprint/metadata call sites;
-   do not repeat this consumer trace or guess metadata mappings. No camera
-   start/stop or diagnostic G-code is
-   authorized. Callback bodies remain unbound. Saved K and hidden
+   now traced; no bound file provenance is exposed. Next use the authorized
+   desktop UI to observe the ordinary metadata/preprint path and prepare bounded
+   acceptance; the saved upstream producer remains a focused source lead when
+   needed. Do not repeat this consumer trace or guess metadata mappings.
+   Unverified camera API mutations and diagnostic raw G-code remain outside this
+   scope. Callback bodies remain unbound. Saved K and hidden
    feed thermal/consumption are also
    absent from the inspected status providers. Do not repeat head/mesh/config
    snapshots or infer those values from reports. This does not bound the remaining
@@ -314,8 +320,10 @@ records pinned public source and installed-contract limits.
    the [upload evidence](docs/research/2026-10-24-uploads.md).
 4. Implement future print job-parameter/start/controls after their contracts are
    resolved. The preparation/upload implementation applies no job parameters.
-5. Obtain specific-job authorization and fresh clear-bed confirmation before any
-   start/control hardware acceptance. Print completion/quality checks remain.
+5. D026 delegates selecting a very small diagnostic file/plate. Document it and
+   verify installed-plate/current human clearance before start; fresh clearance
+   is needed after each plate or uncertain intervening activity. Other jobs need
+   their own authorization. Print completion/quality checks remain.
 
 The [roadmap](ROADMAP.md) owns milestone status. This milestone is neither a
 release nor full print/camera capability.

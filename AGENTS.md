@@ -36,6 +36,8 @@ behavior. Use the tested setup commands in README for the implemented tools.
   confirmation that the build plate is installed and clear. Require removal of
   finished parts and a new clear-bed confirmation before each subsequent plate.
   A tool parameter is an attestation, not independent proof of physical clearance.
+  The owner's diagnostic-print delegation below supplies task authorization for
+  an agent-selected very small test plate; physical clearance remains separate.
 - Before start, check Klipper readiness, idle print state, inactive virtual SD,
   and blocking exceptions. Never start over a printing or paused job.
 - Physical toolheads 1-4 correspond to `extruder`, `extruder1`, `extruder2`, and
@@ -57,6 +59,33 @@ behavior. Use the tested setup commands in README for the implemented tools.
 - Camera access must use the normal supported protocol and authentication. Do
   not bypass authentication or stop another client's camera session. Closing
   bridge-owned sessions must not interfere with the print.
+
+## Owner-authorized desktop and diagnostic workflow
+
+- On 2026-10-27 the owner authorized using the normal Snapmaker desktop UI with
+  the desktop/computer-use tool and may leave the UI running for that purpose.
+  Read the computer-use skill before interacting; inspect the actual current UI.
+- The owner also authorized agent-selected **very small diagnostic prints** when
+  useful for bridge readiness. Select and record one exact file/plate, purpose,
+  dimensions, estimated time/material and physical tool before a start. Preparing,
+  uploading, starting, monitoring and necessary pause/resume/cancel of that test
+  are within this delegation through the normal UI or an established protocol.
+  Do not ask again solely because the agent selected the diagnostic filename.
+- Prefer a simple, short, low-material single-tool test. Keep geometry/slicing
+  in the existing external workflow; retain normal setup/safety commands and all
+  mapping/feed/nozzle/thermal/hash/state/reconciliation checks. Unsupported bridge
+  files remain rejected; success through the vendor UI is distinct evidence.
+- Normal UI camera viewing is permitted for observation. Use normal authentication
+  and preserve other clients' sessions; desktop access is not blanket permission
+  for unverified camera API mutations or bypassing ownership/cleanup requirements.
+- Record human bed-clearance statements with their time and exact scope in the
+  ignored local handoff. They are not standing clearance for future runs. Verify
+  plate installation; never invent an installed-plate confirmation from a statement
+  that only says the bed is clear. After a print, bed intervention or uncertain
+  intervening activity, obtain fresh human clearance before another start.
+- This delegation supersedes earlier blanket read-only restrictions only within
+  this diagnostic scope. It does not authorize unrelated/larger jobs, firmware,
+  persistent printer configuration, calibration changes or altered safety features.
 
 ## Boundaries and secrets
 

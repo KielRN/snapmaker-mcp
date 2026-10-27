@@ -298,7 +298,12 @@ effective parameters. Consumer nozzle-entry-zero indexing does not resolve the
 three ambiguous export headers. No runtime policy or file acceptance changed.
 
 Future controls must retain per-plate authorization and fresh human confirmation
-of an installed, clear bed. Slicing stays in the separate OrcaSlicer integration.
+of an installed, clear bed. The owner now delegates selection of very small
+diagnostic prints and permits normal desktop UI use, including observation;
+see D026 in [DECISIONS.md](DECISIONS.md) and the workflow in [AGENTS.md](AGENTS.md).
+This does not establish new hardware or MCP acceptance. Bed-clear statements are
+time-specific; later plates need fresh clearance. Slicing stays in the separate
+OrcaSlicer integration.
 This bridge introduces no firmware/calibration/configuration changes, cloud
 dependence, or automatic product-order dispatch.
 

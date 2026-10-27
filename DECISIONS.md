@@ -39,6 +39,10 @@ Do not change firmware, persistent printer configuration, or calibration as part
 of this bridge workflow. Read-only inspection is appropriate while printing;
 control actions must stay within the authorized job scope.
 
+The later D026 delegation authorizes the agent to select the specific plate for
+a very small diagnostic print. It preserves the physical-clearance requirement;
+it avoids asking again solely to approve the selected diagnostic filename.
+
 ## D004 — Local connection using the verified protocol
 
 Date: 2026-10-24 · Status: Confirmed for read milestone; advanced RPC proposed
@@ -453,3 +457,30 @@ policy/acceptance change. Preserve policy 9, disabled uploads and all prior guar
 Close this bounded consumer/persistence trace; next locate the upstream metadata-
 to-parameter producer from saved preprint/metadata client call sites. Readiness
 and hardware acceptance remain incomplete.
+
+## D026 — Owner delegates desktop UI and very small diagnostic prints
+
+Date: 2026-10-27 UTC · Status: Confirmed by direct owner instruction
+
+The owner may leave the normal Snapmaker desktop UI running and explicitly
+authorized controlling it with the desktop/computer-use tool. The owner also
+authorized creating very small prints when useful for bridge readiness. This
+delegates selection of an exact small diagnostic file/plate and its necessary
+preparation, upload, start, monitoring and pause/resume/cancel through the normal
+UI or an established protocol. Record purpose, dimensions, estimated time/material
+and actual tool requirements; do not request repeat task approval solely for an
+agent-selected filename within this scope. Normal UI camera viewing is permitted
+while retaining authentication and session-ownership safeguards.
+
+This supersedes D011 and historical blanket read-only instructions for this
+limited workflow. It does not establish any hardware acceptance or newly supported
+MCP command/file, and does not relax G-code/metadata/state/material/hash/no-replay
+checks or authorize firmware/configuration/calibration/safety changes. Slicing
+and geometry remain outside the bridge. Vendor-UI behavior and bridge acceptance
+must be recorded separately.
+
+The owner's current bed-clear statement is recorded with its receipt time in the
+ignored handoff, not made a permanent fact here. Keep its exact wording and scope;
+verify plate installation without inventing a human attestation. Require removal
+of finished parts and fresh human clearance for subsequent plates or uncertain
+intervening activity. No UI/printer action was performed to record this decision.

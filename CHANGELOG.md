@@ -6,6 +6,10 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-27 UTC
 
+- Durable owner instructions for normal Snapmaker desktop UI use and delegated
+  very small diagnostic prints. Physical-clearance freshness, session ownership,
+  validation and evidence boundaries remain. Authorization record only; no UI/
+  printer execution, new MCP capability or hardware acceptance.
 - Saved-source hidden job-parameter evidence: per-field parsing/fallback, array
   roles, reset/reprint lifetime, assignment before filename checks and separate
   asynchronous persistence. Effective file-bound provenance and upstream metadata

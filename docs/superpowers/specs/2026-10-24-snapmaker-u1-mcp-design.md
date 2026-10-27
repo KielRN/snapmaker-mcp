@@ -217,6 +217,14 @@ unestablished; no macro/tool/export is newly accepted. No live request was made.
   argument alone cannot independently prove physical clearance or human consent.
 - Consume authorization once. Preparing/uploading does not authorize starting;
   starting one plate does not authorize another.
+  Under D026 the owner delegates selecting very small diagnostic files/plates
+  for bridge readiness, with normal desktop UI use permitted. Record the exact
+  test and requirements; no repeat task approval is needed solely for its filename.
+  This delegation does not make a bed-clear statement reusable after printing,
+  bed intervention or uncertain activity. Verify plate installation and fresh
+  human clearance. Normal UI camera observation retains authentication/session
+  ownership limits; vendor UI success is not MCP/protocol acceptance. Earlier
+  blanket read-only scope is superseded only within this owner-authorized workflow.
 - Recalculate job parameters from the selected file and explicit mapping.
   Verify all used physical tools and required materials. Do not infer physical
   tool selection from a one-based slicer filament label or displayed color.
@@ -268,11 +276,14 @@ The setter assigns hidden tables before filename validation and enqueues separat
 persistence writes without completed-write/file-binding receipts. No exposed
 effective file-bound provenance was established; consumer nozzle-entry-zero
 comparison does not resolve export metadata correspondence. Runtime policy and
-all eight export refusals remain unchanged. Next locate the upstream metadata-
-to-parameter producer from saved client preprint/metadata call sites. No hidden
-file/guessed-field query, parameter mutation or diagnostic G-code is authorized.
+all eight export refusals remain unchanged. Next observe the ordinary metadata/
+preprint workflow through the authorized UI; follow the saved upstream producer
+lead when needed. These findings do not authorize hidden-file/guessed-field reads,
+arbitrary parameter mutations or raw diagnostic G-code. Normal UI job preparation
+for an owner-delegated D026 test is within the new scope.
 
-Start with REA's desktop and JavaScript inspection of the installed bundle.
+Use focused REA/JavaScript inspection when saved source and ordinary authorized
+UI observation cannot answer a specific missing contract.
 Trace the camera RPC request construction, selected transport, response parsing,
 authentication/session fields, and LAN URL lifecycle. Separate monitor snapshots,
 live streams, and timelapse files. Use source and narrow observations to validate
@@ -285,10 +296,12 @@ the relevant DLL/function rather than decompiling the whole app. REA documents
 install/check its required Ghidra/JDK separately if needed. Do not equate an
 inferred decompilation with a verified protocol contract.
 
-The current continuation authorizes read-only live interactions only. Future
-camera start/stop acceptance requires separate authorization and must not change
-print, motion, firmware, or calibration state. Do not bypass authentication.
-Stop only bridge-owned camera sessions and avoid interfering with existing app sessions.
+D026 now authorizes normal desktop UI use, including camera observation, and
+very small diagnostic print workflows. Unverified camera API start/stop acceptance
+still requires its own established scope and ownership/cleanup contract. Desktop
+viewing alone does not establish that API's hardware acceptance. Do not bypass
+authentication, change firmware/calibration or disrupt other clients. Close only
+sessions opened by this agent; retain separate physical/job checks for test prints.
 If native analysis stalls, record the exact missing contract and choose the next
 targeted source/capture probe; do not run open-ended whole-app reconstruction.
 

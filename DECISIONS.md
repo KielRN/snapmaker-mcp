@@ -1,6 +1,6 @@
 # Decisions
 
-Last updated: 2026-10-26
+Last updated: 2026-10-27 UTC
 
 Record durable choices with their date, status, and reason. **Confirmed** means
 directly established by owner direction or carried-forward printer operating
@@ -432,3 +432,24 @@ prior safeguard. Close this bounded search trace; next investigate hidden second
 job-parameter parsing/defaults, array roles and reset/reprint/file association
 from saved sources. Camera/transform evidence and honest hardware acceptance
 remain unresolved; readiness is incomplete.
+
+## D025 — Require file-bound effective parameters beyond setter acknowledgment
+
+Date: 2026-10-27 UTC · Status: Confirmed investigation boundary; runtime unchanged
+
+Saved-source setter parsing can replace invalid fields with defaults, compares
+used physical heads with logical nozzle entry zero, and assigns hidden tables
+before the with-parameters start path validates/opens a filename. Ordinary reset
+retains the second table; reprint capture does not include it. Persistence calls
+enqueue separate writes without completed-write or joint file-binding receipts.
+Visible preferences and setter acknowledgment cannot establish exact effective
+parameters or selected-file association. Consumer indexing does not settle slicer
+header array correspondence. See the
+[parameter report](docs/research/2026-10-27-job-parameter-evidence.md).
+
+Do not query hidden files/guessed fields, mutate parameters as a probe, or relax
+the three ambiguous metadata rejections. No live request, runtime/tool/field/
+policy/acceptance change. Preserve policy 9, disabled uploads and all prior guards.
+Close this bounded consumer/persistence trace; next locate the upstream metadata-
+to-parameter producer from saved preprint/metadata client call sites. Readiness
+and hardware acceptance remain incomplete.

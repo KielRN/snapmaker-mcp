@@ -6,6 +6,11 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-27 UTC
 
+- Saved-source hidden job-parameter evidence: per-field parsing/fallback, array
+  roles, reset/reprint lifetime, assignment before filename checks and separate
+  asynchronous persistence. Effective file-bound provenance and upstream metadata
+  correspondence remain unresolved. Documentation only; no live request,
+  runtime/policy/tool/field change or expanded file acceptance.
 - Saved-source flow-calibration evidence: field-specific parameter precedence,
   default-validation limits, finite per-invocation search counts and conditional
   direct-E arithmetic. Abort/thermal/pressure-advance/cleanup effects leave total

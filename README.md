@@ -290,6 +290,13 @@ precedence. Effective parameters/provenance, full material/thermal/time demand
 and completed cleanup remain unreported. No status provider is exposed by the
 inspected calibrator; static counts do not authorize calibration or stock files.
 
+The [hidden-parameter report](docs/research/2026-10-27-job-parameter-evidence.md)
+traces parser fallback, array roles and reset/reprint lifetime. The setter can
+assign hidden tables before filename checks; persistence only enqueues separate
+writes. Neither acknowledgment nor visible preferences establishes file-bound
+effective parameters. Consumer nozzle-entry-zero indexing does not resolve the
+three ambiguous export headers. No runtime policy or file acceptance changed.
+
 Future controls must retain per-plate authorization and fresh human confirmation
 of an installed, clear bed. Slicing stays in the separate OrcaSlicer integration.
 This bridge introduces no firmware/calibration/configuration changes, cloud
@@ -333,3 +340,5 @@ dependence, or automatic product-order dispatch.
 | [Worker/feed plan](docs/superpowers/plans/2026-10-26-camera-worker-evidence.md) | Focused continuation, independent review and verification ledger. |
 | [Flow-calibration evidence](docs/research/2026-10-27-flow-calibration-evidence.md) | Parameter precedence, finite search counts and unresolved full-demand/provider evidence. |
 | [Flow-calibration plan](docs/superpowers/plans/2026-10-27-flow-calibration-evidence.md) | Focused source investigation, review and verification ledger. |
+| [Hidden job-parameter evidence](docs/research/2026-10-27-job-parameter-evidence.md) | Parsing/fallback, array roles, reset/reprint lifetime, asynchronous persistence and unresolved file provenance. |
+| [Hidden parameter plan](docs/superpowers/plans/2026-10-27-job-parameter-evidence.md) | Focused source investigation, independent review and verification ledger. |

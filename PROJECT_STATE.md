@@ -13,6 +13,23 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Hidden job-parameter continuation traces per-field parser fallback, logical/
+  physical/category array roles, retained reset/reprint state and selected-file
+  ordering. The setter compares used heads with nozzle entry zero; that does not
+  resolve export header cardinalities. It assigns tables before filename checks,
+  and persistence success means enqueue acceptance, not completed atomic writes.
+  Effective parameters and file association remain unreported. **No live request**
+  or runtime/policy/tool/acceptance change. See the
+  [parameter report](docs/research/2026-10-27-job-parameter-evidence.md) and
+  [execution ledger](docs/superpowers/plans/2026-10-27-job-parameter-evidence.md).
+- Parameter continuation verification: **700 tests on each Python 3.11.14/
+  3.13.12**, Ruff check/format and wheel/source builds passed. Independent review
+  checked five artifact identities/two public blobs and all focused source
+  claims, separately passed 700 tests, and found no actionable issues. Audit:
+  72 files, 209 local links, two archives and 33 ignore samples; no configured
+  private-literal/credential-pattern/generated-artifact matches or broken links.
+  All 12 modules and eight changed documents match their packages. These are
+  software/source checks, not effective parameter or hardware acceptance evidence.
 - Flow-calibrator saved-source continuation resolves per-invocation measurement
   ceilings: six dichotomy, five linear-fitting and four OS calls. Field-specific
   parameter precedence/default validation, abort checkpoints, pressure-advance
@@ -283,10 +300,12 @@ records pinned public source and installed-contract limits.
    Do not repeat these camera traces without changed evidence. Feed resolution
    now establishes per-key fallback and rollback that can discard temperature
    lookups. Flow-calibrator precedence and finite local search counts are now
-   traced; total demand and effective parameters remain unreported. Next trace
-   hidden second job-parameter parsing/defaults, logical/physical arrays and
-   reset/reprint/file association from saved source and its producer, without
-   guessing metadata mappings. No camera start/stop or diagnostic G-code is
+   traced; total demand and effective parameters remain unreported. Hidden-table
+   parsing, array roles, reset/reprint lifetime and asynchronous persistence are
+   now traced; no bound file provenance is exposed. Next locate the upstream
+   metadata-to-parameter producer in saved client preprint/metadata call sites;
+   do not repeat this consumer trace or guess metadata mappings. No camera
+   start/stop or diagnostic G-code is
    authorized. Callback bodies remain unbound. Saved K and hidden
    feed thermal/consumption are also
    absent from the inspected status providers. Do not repeat head/mesh/config

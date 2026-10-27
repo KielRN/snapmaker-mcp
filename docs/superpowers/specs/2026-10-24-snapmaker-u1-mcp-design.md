@@ -262,8 +262,15 @@ supported status omits effective resolver provenance. The
 establishes field-specific precedence and finite local search counts, without
 effective parameter provenance, total demand or completed cleanup. No supported
 status provider exists on that class; do not add guessed fields or nominal safe
-caps. Next trace hidden second job-parameter parsing/defaults, logical/physical
-arrays and reset/reprint/file association. No diagnostic G-code is authorized.
+caps. The [hidden-parameter continuation](../../research/2026-10-27-job-parameter-evidence.md)
+traces field fallback, logical/physical/category arrays and reset/reprint lifetime.
+The setter assigns hidden tables before filename validation and enqueues separate
+persistence writes without completed-write/file-binding receipts. No exposed
+effective file-bound provenance was established; consumer nozzle-entry-zero
+comparison does not resolve export metadata correspondence. Runtime policy and
+all eight export refusals remain unchanged. Next locate the upstream metadata-
+to-parameter producer from saved client preprint/metadata call sites. No hidden
+file/guessed-field query, parameter mutation or diagnostic G-code is authorized.
 
 Start with REA's desktop and JavaScript inspection of the installed bundle.
 Trace the camera RPC request construction, selected transport, response parsing,

@@ -2,7 +2,8 @@
 
 ## Result and scope
 
-The ordinary desktop workflow was inspected under D026. Snapmaker Orca was
+During the initial 2026-10-27 session, the ordinary desktop workflow was inspected
+under D026. Snapmaker Orca was
 running but disconnected. Its normal device discovery found the U1; one Connect
 action opened a request to authorize binding on the printer's touchscreen.
 The request expired and the UI reported **Binding rejected**. This does not
@@ -10,13 +11,17 @@ distinguish an explicit rejection from expiry. No connected device/preprint or
 camera view was reached, and no upload, job-parameter, print/control, calibration
 or firmware/configuration action was selected. Discovery/binding may exchange
 protocol requests; no wire capture was collected or exact request count claimed.
-This is new UI evidence on 2026-10-27, not a successful hardware acceptance test.
+That was the initial attempt's result, not a successful hardware acceptance test.
+The later [attended follow-up](#attended-desktop-follow-up) reaches the connected
+Device view and usable camera image; it supersedes the pairing blocker.
 
 The independent metadata-producer trace is now closed for the inspected sources.
 The server preserves independently parsed array lengths. The preprint client can
 instead pad/truncate consumption for display and fall back to a first nozzle.
-Neither path proves a file-bound effective parameter table. Policy 9, five tools,
-default/local upload disablement and all eight export refusals remain unchanged.
+Neither path proves a file-bound effective parameter table. That source trace
+left policy 9 unchanged. The separate cancellation correction subsequently
+advanced receipts to policy 10; five tools, default/local upload disablement
+and all eight export refusals remain unchanged by this UI follow-up.
 
 ## Evidence identity
 
@@ -117,11 +122,11 @@ or guessing physical mapping in exports 05–07. All original bytes remain intac
 
 ## Acceptance blocker and next action
 
-Complete the vendor touchscreen LAN authorization during an attended connection
-attempt, then inspect the connected device and ordinary preprint workflow for
-one documented very small diagnostic plate. Do not repeatedly request pairing
-in unattended runs or change authentication/configuration to bypass it. No
-diagnostic file/plate was selected in this run, so no dimensions/time/material/
+The attended follow-up below resolves desktop pairing. Inspect the already
+connected device and ordinary preprint workflow for one documented very small
+diagnostic plate next. Do not request pairing again while the existing connection
+works or change authentication/configuration to bypass it. No diagnostic file/
+plate was selected in either observation, so no dimensions/time/material/
 physical-tool or clearance claim is made. Obtain current human installed-plate/
 clear-bed confirmation before any start; the earlier clear-bed statement does
 not establish current installation or uninterrupted physical state.
@@ -129,3 +134,38 @@ not establish current installation or uninterrupted physical state.
 Close this source trace unless changed evidence presents a specific new question.
 Transform provenance, complete stock-file effects/demand, effective parameters,
 controls, camera lifecycle and honest hardware acceptance remain incomplete.
+
+## Attended desktop follow-up
+
+At **2026-10-27 20:06–20:08:25 UTC**, after the owner replied
+"Ready at the printer; request pairing" and then reported "It connected", the Device
+view displayed a connected device. No new Connect action was issued by the
+agent in this follow-up; the exact successful binding exchange was not captured.
+The UI showed idle, nozzle readings 28–29 °C, bed 26 °C and all heater targets
+zero. These are time-specific UI reports, not a complete bridge preflight.
+
+One normal viewer Play action was issued. Initially the viewer was nearly black;
+the chamber light was then enabled through its ordinary UI switch. A clear
+chamber image was visible by **20:08:25 UTC**. This establishes usable ordinary
+vendor-UI viewing in this observation, without identifying a wire protocol,
+loaded server code, frame capture time, latency bound, external session ownership
+or completed cleanup. No packet trace, credentials or raw frame was exported.
+The viewer remains open and chamber light on; no stop/cleanup action was issued
+or completed-cleanup receipt inferred. Normal UI start/lighting is an actual
+interaction, not a read-only protocol trace or absence of printer traffic.
+
+The computer-use API first rejected a stale screenshot identifier; a new
+observation preceded the single successful Play action. An accessibility attempt
+later failed outside window bounds without a confirmed input. No failed mutation
+was blindly replayed. Window maximization and one scroll supported observation.
+No file was selected/transferred, and no print, motion, heater, calibration,
+persistent configuration or separately crafted camera API action was selected.
+
+No diagnostic plate, material/time estimate or new human installed/clear-bed
+confirmation exists from this follow-up. The image cannot supply that human
+attestation. Next inspect the connected preprint workflow for one documented
+very small diagnostic plate sliced externally, keeping every setup/safety,
+mapping/feed/nozzle/thermal/consumption/hash/state check. Keep bridge uploads
+disabled and all eight original exports rejected; vendor-UI success does not
+resolve bridge lifecycle or print acceptance. The metadata source trace above
+remains closed absent a new concrete evidence question.

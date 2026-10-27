@@ -82,8 +82,9 @@ verification.
 
 ## Next nonduplicative action
 
-Complete one attended ordinary LAN pairing when the owner is ready at the
-touchscreen. Then inspect the connected preprint workflow for one exact very
+An attended follow-up now reaches the connected Device view and usable ordinary
+camera image; see the [observation record](../../research/2026-10-27-desktop-metadata-evidence.md#attended-desktop-follow-up).
+Next inspect the connected preprint workflow for one exact very
 small diagnostic plate sliced externally, preserving all setup/safety and
 validation checks. Obtain fresh installed/clear-bed confirmation before start.
 No unattended pairing retries or repeated closed source traces. Full stock-file

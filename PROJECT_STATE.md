@@ -11,12 +11,22 @@ disabled by default and unaccepted on hardware. Print controls, broad stock-U1
 G-code support and camera implementation remain incomplete. The owner requested
 ongoing development and commit/push on `main`. The 2026-10-27 owner scope update
 authorizes normal desktop UI use and very small agent-selected diagnostic prints;
-see D026 and AGENTS.md. Physical clearance remains time-specific. The first normal
-desktop LAN connection attempt required touchscreen authorization and expired
-with Binding rejected; no connected preprint/camera or hardware acceptance.
+see D026 and AGENTS.md. Physical clearance remains time-specific. An attended
+follow-up now reaches the connected Device view and a usable ordinary camera
+image. This resolves the desktop pairing dependency, not MCP camera lifecycle,
+file-transfer/control acceptance or physical clearance for a diagnostic print.
 
 ## Verified evidence
 
+- Attended desktop follow-up, **2026-10-27 20:06–20:08:25 UTC**: owner reported
+  connection; the normal Device view showed connected/idle, all heater targets
+  zero, nozzles 28–29 °C and bed 26 °C. One normal camera-view action initially
+  showed a dark image; after the ordinary chamber light was enabled, a clear
+  chamber image appeared. Viewer and light remain on. No print/file transfer,
+  heater/motion/calibration or separately crafted camera API command was selected.
+  Camera ownership, frame timestamps and completed cleanup remain unverified;
+  the image is not human installed/clear-bed confirmation. See the
+  [follow-up evidence](docs/research/2026-10-27-desktop-metadata-evidence.md#attended-desktop-follow-up).
 - Cancellation correction: policy **10** commits a completed opening
   reconciliation observation before awaiting remote bytes. A failing regression
   reproduced promotion of time 1500 after a cancelled time-2000 observation;
@@ -342,10 +352,9 @@ records pinned public source and installed-contract limits.
    now traced; no bound file provenance is exposed. The upstream server/client
    producer is also traced: submission preserves array mismatch while display
    fallbacks can hide it. Close both source traces without guessing mappings.
-   Next complete normal LAN touchscreen binding in an attended attempt, then
-   inspect the connected metadata/preprint workflow for a small diagnostic plate.
-   The first attempt expired with Binding rejected; do not repeatedly request
-   pairing in unattended runs or bypass normal authorization.
+   Normal LAN binding now reaches the connected Device view; inspect the ordinary
+   metadata/preprint workflow for a small diagnostic plate next. Do not repeat
+   pairing while the existing connection works or bypass normal authorization.
    Unverified camera API mutations and diagnostic raw G-code remain outside this
    scope. Callback bodies remain unbound. Saved K and hidden
    feed thermal/consumption are also

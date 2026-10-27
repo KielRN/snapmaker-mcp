@@ -14,6 +14,10 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-27 UTC
 
+- Attended desktop follow-up evidence: connected/idle Device view and a clear
+  ordinary camera image after chamber lighting was enabled. Viewer and light
+  were left on. No print, transfer or bridge camera lifecycle acceptance; no
+  runtime/tool/policy change or fresh human installed/clear-bed confirmation.
 - Normal desktop LAN connection evidence: discovery succeeded, but binding
   expired pending touchscreen authorization and reported Binding rejected.
   Firmware/public-matched metadata producer and saved client display/submission

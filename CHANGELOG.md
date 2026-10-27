@@ -4,6 +4,14 @@ Implemented changes only. No published release exists.
 
 ## Unreleased — 0.1.0.dev0
 
+### Added — 2026-10-27 UTC
+
+- Saved-source flow-calibration evidence: field-specific parameter precedence,
+  default-validation limits, finite per-invocation search counts and conditional
+  direct-E arithmetic. Abort/thermal/pressure-advance/cleanup effects leave total
+  demand, effective provenance and completion unresolved. Documentation only;
+  no live request, runtime/policy/tool/field change or expanded file acceptance.
+
 ### Added — 2026-10-26
 
 - Saved-firmware camera worker renewal/expiry/normal-exit/destructor evidence.

@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-10-26
+Last updated: 2026-10-27 UTC
 
 ## Current stage
 
@@ -13,6 +13,24 @@ this focused implementation and commit/push on `main`, with no live mutations.
 
 ## Verified evidence
 
+- Flow-calibrator saved-source continuation resolves per-invocation measurement
+  ceilings: six dichotomy, five linear-fitting and four OS calls. Field-specific
+  parameter precedence/default validation, abort checkpoints, pressure-advance
+  and cleanup effects are traced. Effective environment/parameters/provenance
+  and total material/time/completed cleanup remain unreported; no status provider
+  exists on the inspected class. **No live request**, runtime/policy/tool/field
+  change or expanded acceptance. See the
+  [flow report](docs/research/2026-10-27-flow-calibration-evidence.md) and
+  [execution ledger](docs/superpowers/plans/2026-10-27-flow-calibration-evidence.md).
+- Flow continuation verification: **700 tests passed on each Python 3.11.14/
+  3.13.12**, Ruff check/format and wheel/source builds passed. Independent review
+  corrected a temporary acceleration-cap precision gap, independently checked
+  all five file identities/source bounds and passed 700 tests; no findings remain.
+  Audit: 70 files, 193 local links, two archives and 33 ignore samples; no configured
+  private-literal/credential-pattern/generated-artifact matches or broken links.
+  All 12 modules and eight changed documents match their packages. No runtime
+  change or hardware acceptance; the source call counts are conditional local
+  bounds, not a complete physical demand/cleanup guarantee.
 - Camera worker continuation: saved `unisrv` has shared renewal/expiry and an
   object destructor that clears both domain flags and joins its worker. Flags
   can clear before callbacks/resource release; approximate compiled timing is
@@ -264,9 +282,12 @@ records pinned public source and installed-contract limits.
    destructor are now traced, without an external owned-completion contract.
    Do not repeat these camera traces without changed evidence. Feed resolution
    now establishes per-key fallback and rollback that can discard temperature
-   lookups. Next bound flow-calibrator effective parameter precedence and loop/
-   search termination/demand from saved source. No camera start/stop or diagnostic
-   G-code is authorized. Callback bodies remain unbound. Saved K and hidden
+   lookups. Flow-calibrator precedence and finite local search counts are now
+   traced; total demand and effective parameters remain unreported. Next trace
+   hidden second job-parameter parsing/defaults, logical/physical arrays and
+   reset/reprint/file association from saved source and its producer, without
+   guessing metadata mappings. No camera start/stop or diagnostic G-code is
+   authorized. Callback bodies remain unbound. Saved K and hidden
    feed thermal/consumption are also
    absent from the inspected status providers. Do not repeat head/mesh/config
    snapshots or infer those values from reports. This does not bound the remaining

@@ -257,8 +257,13 @@ tools around these flags or wait a guessed lease. This bounded source trace is
 closed pending changed evidence. Advance the independent
 [feed-resolution contract](../../research/2026-10-26-feed-resolution-evidence.md):
 per-key table fallback/rollback can discard found temperature values, while the
-supported status omits effective resolver provenance. Flow parameter precedence
-and loop/search demand are next; no diagnostic G-code is authorized.
+supported status omits effective resolver provenance. The
+[flow-calibrator continuation](../../research/2026-10-27-flow-calibration-evidence.md)
+establishes field-specific precedence and finite local search counts, without
+effective parameter provenance, total demand or completed cleanup. No supported
+status provider exists on that class; do not add guessed fields or nominal safe
+caps. Next trace hidden second job-parameter parsing/defaults, logical/physical
+arrays and reset/reprint/file association. No diagnostic G-code is authorized.
 
 Start with REA's desktop and JavaScript inspection of the installed bundle.
 Trace the camera RPC request construction, selected transport, response parsing,

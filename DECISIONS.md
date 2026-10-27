@@ -412,3 +412,23 @@ Static defaults/material labels cannot attest the effective resolver result.
 Next trace flow-calibrator parameter precedence and complete loop/search demand.
 No live request, tool/field/policy/command acceptance or hardware mutation.
 Policy 9, disabled uploads and all prior safeguards remain; readiness incomplete.
+
+## D024 — Separate finite flow search from an observable material budget
+
+Date: 2026-10-27 UTC · Status: Confirmed investigation boundary; runtime unchanged
+
+Saved source establishes at most six/five/four measurements per dichotomy/linear/
+OS calibration invocation. These are local call counts, not complete motor,
+material, thermal, duration or cleanup guarantees. Parameters merge by field;
+omitted command defaults bypass parser validation, effective loop/distance
+provenance is absent and nested cleanup/pressure advance add effects outside
+direct E-coordinate increments. The calibrator has no supported status provider.
+See the [flow report](docs/research/2026-10-27-flow-calibration-evidence.md).
+
+Do not add guessed fields, accept calibration macros as setup markers or apply
+nominal defaults as a safe common cap. No live request, runtime/tool/policy change
+or new command/export acceptance. Preserve policy 9, disabled uploads and every
+prior safeguard. Close this bounded search trace; next investigate hidden second
+job-parameter parsing/defaults, array roles and reset/reprint/file association
+from saved sources. Camera/transform evidence and honest hardware acceptance
+remain unresolved; readiness is incomplete.

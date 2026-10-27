@@ -284,6 +284,12 @@ The independent [feed report](docs/research/2026-10-26-feed-resolution-evidence.
 records table fallback/rollback that can discard material-temperature lookups.
 Neither finding changes policy 9 or broadens accepted files/tools.
 
+The [flow-calibration report](docs/research/2026-10-27-flow-calibration-evidence.md)
+establishes finite local measurement counts and field-specific parameter
+precedence. Effective parameters/provenance, full material/thermal/time demand
+and completed cleanup remain unreported. No status provider is exposed by the
+inspected calibrator; static counts do not authorize calibration or stock files.
+
 Future controls must retain per-plate authorization and fresh human confirmation
 of an installed, clear bed. Slicing stays in the separate OrcaSlicer integration.
 This bridge introduces no firmware/calibration/configuration changes, cloud
@@ -325,3 +331,5 @@ dependence, or automatic product-order dispatch.
 | [Camera worker evidence](docs/research/2026-10-26-camera-worker-evidence.md) | Shared renewal/expiry, normal exit/destructor and external cleanup limits. |
 | [Feed resolution evidence](docs/research/2026-10-26-feed-resolution-evidence.md) | Per-key fallback, rollback and missing effective parameter provenance. |
 | [Worker/feed plan](docs/superpowers/plans/2026-10-26-camera-worker-evidence.md) | Focused continuation, independent review and verification ledger. |
+| [Flow-calibration evidence](docs/research/2026-10-27-flow-calibration-evidence.md) | Parameter precedence, finite search counts and unresolved full-demand/provider evidence. |
+| [Flow-calibration plan](docs/superpowers/plans/2026-10-27-flow-calibration-evidence.md) | Focused source investigation, review and verification ledger. |

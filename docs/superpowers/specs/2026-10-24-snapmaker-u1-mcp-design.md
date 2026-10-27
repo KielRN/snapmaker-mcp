@@ -199,6 +199,15 @@ in-memory filament existence/edit reports before a shallow copy; projection does
 not suppress that refresh. Reprint/second parameters and action completion remain
 unestablished; no macro/tool/export is newly accepted. No live request was made.
 
+The [cancellation correction](../plans/2026-10-27-reconciliation-watermark.md)
+advances the implemented receipt identity to policy 10. A completed opening
+reconciliation observation is committed before the remote download await, so
+cancellation during that read cannot discard the newer watermark across restart.
+Policies 1–9 cannot dispatch or promote uncertain uploads; historical terminal
+results remain historical and no upload is replayed. This changes no evidence
+fields, supported G-code, tools or hardware acceptance, and gives no atomic
+snapshot or guarantee about observations that did not complete.
+
 - A preparation receipt binds the file hash, selected plate, mapping, material
   requirements, process values, printer identity, and an expiry. Default expiry
   is ten minutes. Revalidate before the first mutation and immediately before

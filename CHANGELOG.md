@@ -4,6 +4,14 @@ Implemented changes only. No published release exists.
 
 ## Unreleased — 0.1.0.dev0
 
+### Fixed — 2026-10-27 UTC
+
+- Reconciliation now durably records a completed opening runtime observation
+  before awaiting remote bytes. Cancellation during the download can no longer
+  lose that watermark and promote older evidence after restart. Policy 10 refuses
+  policy-1–9 dispatch or uncertain promotion without replaying uploads. Five tools,
+  the restricted file dialect and disabled uploads remain; no hardware acceptance.
+
 ### Added — 2026-10-27 UTC
 
 - Normal desktop LAN connection evidence: discovery succeeded, but binding

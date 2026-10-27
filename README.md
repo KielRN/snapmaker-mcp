@@ -230,12 +230,16 @@ SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serializati
 cancellation and restart reconciliation. Tests need no printer or credentials.
 No hardware upload/control tests have run.
 
-Receipt policy 9 invalidates policy-1/2/3/4/5/6/7/8 preparations for new uploads. Old inflight
+Receipt policy 10 invalidates policy-1–9 preparations for new uploads. Old inflight
 receipts with a policy mismatch remain unknown and never resend a POST; retain
 the journal and investigate with read-only checks in the supported app.
 Runtime evidence is rechecked before dispatch and around remote byte verification;
 changes or backwards source times block dispatch/promotion. Repeated equal HTTP
 reads cannot exclude intervening changes, stale peer data or other-client races.
+Each completed opening reconciliation observation is journaled before awaiting
+the remote download. Cancellation during that wait therefore retains its source
+time across restart; older evidence stays unknown and the POST is never replayed.
+See the [watermark fix ledger](docs/superpowers/plans/2026-10-27-reconciliation-watermark.md).
 Exclusion reports participate in the binding; known reports do not establish
 the running transform chain. Reported nozzle/advance/smoothing/queue values also
 participate; missing fields prevent preparation, used nozzle conflicts return
@@ -282,7 +286,8 @@ owned-session cleanup contract. False flags can precede resource release;
 compiled timing and notification timestamps do not prove cleanup or fresh images.
 The independent [feed report](docs/research/2026-10-26-feed-resolution-evidence.md)
 records table fallback/rollback that can discard material-temperature lookups.
-Neither finding changes policy 9 or broadens accepted files/tools.
+Neither investigation broadened accepted files/tools; current receipt policy
+also includes the cancellation fix described above.
 
 The [flow-calibration report](docs/research/2026-10-27-flow-calibration-evidence.md)
 establishes finite local measurement counts and field-specific parameter

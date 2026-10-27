@@ -154,7 +154,7 @@ class Coordinator:
                 "roots": [str(p) for p in self.settings.allowed_roots],
                 "nozzles": self.settings.nozzle_diameters,
                 "maximum": self.settings.max_gcode_bytes,
-                "validator": 9,
+                "validator": 10,
             }
         )
 
@@ -461,9 +461,10 @@ class Coordinator:
                 prep.logical_to_physical,
                 not_before=payload["runtime_eventtime"],
             )
-            # Retain the latest observed time even when remote bytes are absent.
-            # Restart reconciliation must not accept an older cached observation.
+            # Commit before the next await: cancellation/process death during the
+            # download must not let restart accept an older cached observation.
             payload["runtime_eventtime"] = runtime.source_eventtime_end
+            self.store.save(request.operation_id, "upload", fingerprint, payload)
             if fresh != preparation["evidence"]:
                 raise ValidationError("evidence_changed")
             remote = await self.files.download(data.remote_path, prep.size_bytes)

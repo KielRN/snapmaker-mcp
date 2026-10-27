@@ -518,3 +518,22 @@ UI acceptance; do not bypass it or repeatedly pair in unattended runs. No upload
 print/control or camera acceptance occurred. Preserve policy 9, all eight original
 refusals, disabled uploads and every guard. Close this producer trace absent new
 evidence; effective parameters, stock-file effects and full readiness remain gaps.
+
+## D029 — Persist reconciliation observations before the next asynchronous read
+
+Date: 2026-10-27 UTC · Status: Implemented software correction
+
+A cancellation regression demonstrated that a completed opening observation at
+source time 2000 could be lost while awaiting remote bytes. After restart, time
+1500 and matching bytes then promoted an uncertain upload from a journal still
+at 1000. The POST was not replayed; the defect was an invalid evidence promotion.
+
+Commit that completed observation's watermark synchronously before the next
+await, under the existing coordinator/OS locks and SQLite FULL synchronization.
+Older restart evidence remains unknown; equal-or-newer matching evidence may
+reconcile the original transfer without a new POST. This does not make HTTP
+snapshots atomic or attest an unavailable observation. Policy 10 refuses old
+policy-1–9 dispatch and uncertain promotion because their missing history cannot
+be recovered. Preserve historical terminal results, expiry and every prior guard.
+See the [fix ledger](docs/superpowers/plans/2026-10-27-reconciliation-watermark.md).
+No command/tool/export is newly accepted; uploads and full readiness remain incomplete.

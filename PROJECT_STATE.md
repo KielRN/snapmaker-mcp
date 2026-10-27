@@ -17,6 +17,19 @@ with Binding rejected; no connected preprint/camera or hardware acceptance.
 
 ## Verified evidence
 
+- Cancellation correction: policy **10** commits a completed opening
+  reconciliation observation before awaiting remote bytes. A failing regression
+  reproduced promotion of time 1500 after a cancelled time-2000 observation;
+  restart now refuses older evidence and can reconcile equal-time matching bytes
+  without replay. Policy-1–9 dispatch/uncertain promotion is refused. Fresh full
+  suites passed **706 tests on each Python 3.11.14/3.13.12**. Five tools, restricted
+  files and disabled uploads remain. Ruff/build/export/package gates passed;
+  audit checked 75 files, 227 links, both archives and 33 ignore samples with
+  zero configured private-literal/credential/artifact/link findings. Independent
+  final review found no actionable findings; see the
+  [fix ledger](docs/superpowers/plans/2026-10-27-reconciliation-watermark.md).
+  One desktop observation found Add Device still disconnected; no new Connect,
+  printer query, upload/control/camera action or hardware acceptance occurred.
 - Desktop/metadata continuation: normal UI discovery found the U1, but one LAN
   Connect attempt required printer-touchscreen approval and ended in Binding
   rejected after expiry. No connected device/preprint/camera view or upload/print/

@@ -1,5 +1,6 @@
 """Snapshot drift must refuse transfer even when file/material evidence agrees."""
 
+import asyncio
 import json
 from copy import deepcopy
 from uuid import uuid4
@@ -225,6 +226,57 @@ async def test_reconciliation_retains_latest_source_time_watermark(setup_upload)
             response = await coordinator.upload(request)
             assert response.outcome == "unknown"
             assert response.errors[0].code == "runtime_evidence_changed"
+            assert printer.posts == 1
+
+
+@pytest.mark.parametrize("resumed_eventtime", [1500, 2000])
+async def test_cancelled_reconciliation_retains_source_time_across_restart(
+    setup_upload, resumed_eventtime
+):
+    settings, printer, file = setup_upload
+    download_started = asyncio.Event()
+    block_download = False
+
+    async def serve(request):
+        if block_download and request.url.path.startswith("/server/files/gcodes/"):
+            download_started.set()
+            await asyncio.Event().wait()
+        return await printer.serve(request)
+
+    async with Moonraker(settings, transport=httpx.MockTransport(serve)) as client:
+        with Coordinator(client) as coordinator:
+            prep = await prepared(coordinator, file)
+            request = UploadInput(
+                operation_id=str(uuid4()), preparation_id=prep.data.preparation_id
+            )
+            printer.failure = "lost_without_write"
+            printer.replies["/printer/objects/query"]["result"]["eventtime"] = 1000
+            response = await coordinator.upload(request)
+            assert response.outcome == "unknown"
+            printer.files[response.data.remote_path] = file.read_bytes()
+            printer.failure = None
+
+        with Coordinator(client) as coordinator:
+            printer.replies["/printer/objects/query"]["result"]["eventtime"] = 2000
+            block_download = True
+            task = asyncio.create_task(coordinator.upload(request))
+            try:
+                await asyncio.wait_for(download_started.wait(), timeout=5)
+            finally:
+                task.cancel()
+                with pytest.raises(asyncio.CancelledError):
+                    await task
+
+        block_download = False
+        printer.replies["/printer/objects/query"]["result"]["eventtime"] = resumed_eventtime
+        with Coordinator(client) as coordinator:
+            response = await coordinator.upload(request)
+            if resumed_eventtime < 2000:
+                assert response.outcome == "unknown"
+                assert response.errors[0].code == "runtime_evidence_changed"
+            else:
+                assert response.outcome == "ok"
+                assert response.data.reconciled is True
             assert printer.posts == 1
 
 

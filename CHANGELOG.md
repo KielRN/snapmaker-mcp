@@ -6,6 +6,12 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-27 UTC
 
+- Normal desktop LAN connection evidence: discovery succeeded, but binding
+  expired pending touchscreen authorization and reported Binding rejected.
+  Firmware/public-matched metadata producer and saved client display/submission
+  paths are documented. Raw array lengths remain independent; display fallbacks
+  do not justify new acceptance. Documentation only; no runtime/policy change,
+  upload, print/control or camera acceptance.
 - Durable owner instructions for normal Snapmaker desktop UI use and delegated
   very small diagnostic prints. Physical-clearance freshness, session ownership,
   validation and evidence boundaries remain. Authorization record only; no UI/

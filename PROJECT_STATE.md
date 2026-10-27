@@ -11,11 +11,30 @@ disabled by default and unaccepted on hardware. Print controls, broad stock-U1
 G-code support and camera implementation remain incomplete. The owner requested
 ongoing development and commit/push on `main`. The 2026-10-27 owner scope update
 authorizes normal desktop UI use and very small agent-selected diagnostic prints;
-see D026 and AGENTS.md. Physical clearance remains time-specific; recording this
-authorization performed no UI/printer action and establishes no hardware result.
+see D026 and AGENTS.md. Physical clearance remains time-specific. The first normal
+desktop LAN connection attempt required touchscreen authorization and expired
+with Binding rejected; no connected preprint/camera or hardware acceptance.
 
 ## Verified evidence
 
+- Desktop/metadata continuation: normal UI discovery found the U1, but one LAN
+  Connect attempt required printer-touchscreen approval and ended in Binding
+  rejected after expiry. No connected device/preprint/camera view or upload/print/
+  control/configuration action. Three newly extracted producer modules match the
+  saved image and pinned public tree. The server preserves independent metadata
+  array lengths; client display padding/truncation/nozzle fallback does not
+  establish effective file-bound parameters. No runtime/policy/acceptance change.
+  See the [report](docs/research/2026-10-27-desktop-metadata-evidence.md) and
+  [ledger](docs/superpowers/plans/2026-10-27-desktop-metadata-evidence.md).
+- Desktop/metadata software checks: **700 tests on each Python 3.11.14/3.13.12**,
+  Ruff check/format and wheel/source builds passed. All eight original export
+  hashes/refusals remain unchanged. Audit: 74 files, 223 local links, two archives
+  and 33 ignore samples; zero configured private-literal/credential-pattern/
+  generated-artifact matches or broken links. All 12 modules and eight changed
+  documents match their packages. Independent source/document review found no
+  actionable findings; it checked parent gate receipts without rerunning suites.
+  Software checks do not prove UI pairing,
+  effective metadata, printer controls or hardware acceptance.
 - Hidden job-parameter continuation traces per-field parser fallback, logical/
   physical/category array roles, retained reset/reprint state and selected-file
   ordering. The setter compares used heads with nozzle entry zero; that does not
@@ -307,10 +326,13 @@ records pinned public source and installed-contract limits.
    lookups. Flow-calibrator precedence and finite local search counts are now
    traced; total demand and effective parameters remain unreported. Hidden-table
    parsing, array roles, reset/reprint lifetime and asynchronous persistence are
-   now traced; no bound file provenance is exposed. Next use the authorized
-   desktop UI to observe the ordinary metadata/preprint path and prepare bounded
-   acceptance; the saved upstream producer remains a focused source lead when
-   needed. Do not repeat this consumer trace or guess metadata mappings.
+   now traced; no bound file provenance is exposed. The upstream server/client
+   producer is also traced: submission preserves array mismatch while display
+   fallbacks can hide it. Close both source traces without guessing mappings.
+   Next complete normal LAN touchscreen binding in an attended attempt, then
+   inspect the connected metadata/preprint workflow for a small diagnostic plate.
+   The first attempt expired with Binding rejected; do not repeatedly request
+   pairing in unattended runs or bypass normal authorization.
    Unverified camera API mutations and diagnostic raw G-code remain outside this
    scope. Callback bodies remain unbound. Saved K and hidden
    feed thermal/consumption are also

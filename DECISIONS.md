@@ -497,3 +497,24 @@ unrelated work and push `main`. With no new changes, verify synchronization
 without an empty commit. Do not force-push or bypass a material verification/
 conflict/concurrent-edit failure; report the concrete blocker if integration
 cannot finish. Branch creation and pull requests still require separate scope.
+
+## D028 — Separate client display fallback from file-bound server parameters
+
+Date: 2026-10-27 UTC · Status: Confirmed investigation boundary; runtime unchanged
+
+Three metadata producer modules match the saved firmware image and pinned public
+Moonraker tree. They parse fields independently and preserve array lengths in the
+with-parameters start call. The saved client can pad/truncate consumption or fall
+back to a first nozzle for display; these are not physical correspondence or
+effective parameter guarantees. Neither cached metadata, background MD5 logging,
+G-code acknowledgment nor a start-complete event supplies a bound effective-table/
+file/active-SD receipt. Do not copy permissive serialization or compatibility
+retry behavior into bridge controls. See the
+[desktop/metadata report](docs/research/2026-10-27-desktop-metadata-evidence.md).
+
+The first normal desktop LAN Connect attempt required touchscreen approval and
+expired with Binding rejected. Complete that attended vendor step before connected
+UI acceptance; do not bypass it or repeatedly pair in unattended runs. No upload,
+print/control or camera acceptance occurred. Preserve policy 9, all eight original
+refusals, disabled uploads and every guard. Close this producer trace absent new
+evidence; effective parameters, stock-file effects and full readiness remain gaps.

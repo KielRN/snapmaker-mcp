@@ -297,6 +297,14 @@ writes. Neither acknowledgment nor visible preferences establishes file-bound
 effective parameters. Consumer nozzle-entry-zero indexing does not resolve the
 three ambiguous export headers. No runtime policy or file acceptance changed.
 
+The [desktop/metadata report](docs/research/2026-10-27-desktop-metadata-evidence.md)
+closes the upstream source trace: server submission preserves independent raw
+array lengths, while client preprint display can pad/truncate consumption and
+fall back to a first nozzle. These fallbacks are not bridge validation rules.
+The first ordinary LAN connection attempt found the U1 but expired waiting for
+touchscreen authorization, with Binding rejected. Complete that attended vendor
+step before connected UI acceptance; no upload, print or camera acceptance occurred.
+
 Future controls must retain per-plate authorization and fresh human confirmation
 of an installed, clear bed. The owner now delegates selection of very small
 diagnostic prints and permits normal desktop UI use, including observation;
@@ -347,3 +355,5 @@ dependence, or automatic product-order dispatch.
 | [Flow-calibration plan](docs/superpowers/plans/2026-10-27-flow-calibration-evidence.md) | Focused source investigation, review and verification ledger. |
 | [Hidden job-parameter evidence](docs/research/2026-10-27-job-parameter-evidence.md) | Parsing/fallback, array roles, reset/reprint lifetime, asynchronous persistence and unresolved file provenance. |
 | [Hidden parameter plan](docs/superpowers/plans/2026-10-27-job-parameter-evidence.md) | Focused source investigation, independent review and verification ledger. |
+| [Desktop/metadata report](docs/research/2026-10-27-desktop-metadata-evidence.md) | Normal LAN binding blocker, matched metadata producer and distinct client display fallbacks. |
+| [Desktop/metadata ledger](docs/superpowers/plans/2026-10-27-desktop-metadata-evidence.md) | Focused UI/source continuation, review, verification and acceptance limits. |

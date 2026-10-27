@@ -276,9 +276,17 @@ The setter assigns hidden tables before filename validation and enqueues separat
 persistence writes without completed-write/file-binding receipts. No exposed
 effective file-bound provenance was established; consumer nozzle-entry-zero
 comparison does not resolve export metadata correspondence. Runtime policy and
-all eight export refusals remain unchanged. Next observe the ordinary metadata/
-preprint workflow through the authorized UI; follow the saved upstream producer
-lead when needed. These findings do not authorize hidden-file/guessed-field reads,
+all eight export refusals remain unchanged. The
+[producer continuation](../../research/2026-10-27-desktop-metadata-evidence.md)
+now matches three server modules to the saved image/public tree: independently
+parsed array lengths survive into start parameters, while client display can
+pad/truncate consumption and fall back to a first nozzle. Neither supplies a
+file-bound effective table or justifies relaxed header correspondence. The first
+normal desktop LAN binding attempt expired waiting for touchscreen approval,
+with Binding rejected. Next complete an attended normal binding before inspecting
+connected metadata/preprint; do not repeatedly pair or copy legacy start fallback
+as a bridge retry. Close the producer source trace absent changed evidence.
+These findings do not authorize hidden-file/guessed-field reads,
 arbitrary parameter mutations or raw diagnostic G-code. Normal UI job preparation
 for an owner-delegated D026 test is within the new scope.
 

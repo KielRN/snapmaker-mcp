@@ -19,9 +19,15 @@ behavior. Use the tested setup commands in README for the implemented tools.
 
 - Default integration target is `main`. Do not create, switch, or rename branches
   unless the user requests it. Use existing isolation when appropriate.
-- Do not commit, push, or open a pull request unless requested. Before a requested
-  commit or push, inspect the current branch and full working-tree scope. Preserve
-  unrelated work and never rewrite or discard it without authorization.
+- The owner gives standing authorization to commit reviewed project changes and
+  push `main` at the end of every chat/work session, including manual follow-ups
+  and automation runs. Do not ask for repeat commit/push permission. When there
+  are no new changes, verify synchronization without creating an empty commit.
+- Before commit/push, inspect the branch and full working-tree scope; complete
+  appropriate review/checks and stage only this session's project work. Preserve
+  unrelated changes. Never force-push, rewrite or discard work to make a push
+  succeed. Report any verification, conflict, concurrent-edit or push blocker.
+- Do not open a pull request unless separately requested.
 - Keep this project separate from the 3DPrintPosters product repository and the
   existing OrcaSlicer MCP. Changes to either need their own task scope.
 - Prefer `rg` for targeted file/text searches. If an existing Graphify graph is

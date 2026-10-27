@@ -484,3 +484,16 @@ ignored handoff, not made a permanent fact here. Keep its exact wording and scop
 verify plate installation without inventing a human attestation. Require removal
 of finished parts and fresh human clearance for subsequent plates or uncertain
 intervening activity. No UI/printer action was performed to record this decision.
+
+## D027 — Push main at the end of every chat session
+
+Date: 2026-10-27 UTC · Status: Confirmed by direct owner instruction
+
+The owner instructed: "After each chat session, you should push to main."
+This is standing commit/push authorization for reviewed project changes at the
+end of manual follow-ups and automation runs; no repeat approval is needed.
+Inspect the complete branch/tree scope, finish appropriate checks/review, preserve
+unrelated work and push `main`. With no new changes, verify synchronization
+without an empty commit. Do not force-push or bypass a material verification/
+conflict/concurrent-edit failure; report the concrete blocker if integration
+cannot finish. Branch creation and pull requests still require separate scope.

@@ -335,14 +335,24 @@ without effective parameter readback or complete startup bounds. No Send/start
 was selected. A later return to Device showed Camera not on; no viewer stop was
 selected and cleanup is unverified. Reuse the receipt/file; do not repeat transfer
 or use option setters/start as probes. A supported passive effective-parameter/
-startup diagnostic remains the concrete hardware prerequisite.
+startup diagnostic remains a prerequisite for broader bridge file acceptance.
+
+On October 28, the owner explicitly directed starting this small diagnostic and
+freshly confirmed an installed, clear plate. After current state/material/nozzle/
+mapping checks and exact remote/local byte verification, one normal native Send
+produced the expected filename, printing state and active virtual SD. Layer 1/3,
+layer 3/3 and printer-reported complete/inactive-SD were subsequently observed,
+with zero final heater targets and no exceptions. Cooled-part quality remains
+for human inspection; see the [native print report](docs/research/2026-10-28-native-diagnostic-print.md).
+This is ordinary vendor start/completion evidence; bridge validation/uploads
+and full readiness remain unchanged.
 
 Future controls must retain per-plate authorization and fresh human confirmation
 of an installed, clear bed. The owner now delegates selection of very small
 diagnostic prints and permits normal desktop UI use, including observation;
 see D026 in [DECISIONS.md](DECISIONS.md) and the workflow in [AGENTS.md](AGENTS.md).
-This does not establish new hardware or MCP acceptance. Bed-clear statements are
-time-specific; later plates need fresh clearance. Slicing stays in the separate
+Delegation alone does not establish hardware or MCP acceptance. Bed-clear
+statements are time-specific; later plates need fresh clearance. Slicing stays in the separate
 OrcaSlicer integration.
 This bridge introduces no firmware/calibration/configuration changes, cloud
 dependence, or automatic product-order dispatch.

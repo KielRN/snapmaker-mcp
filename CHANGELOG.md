@@ -21,6 +21,12 @@ Implemented changes only. No published release exists.
 
 ### Added — 2026-10-28 UTC
 
+- Owner-directed native start evidence for the existing small coupon, following
+  fresh installed/clear-bed, state/material/nozzle/mapping and exact remote-byte
+  checks. One ordinary Send yielded expected filename/printing/active-SD reports,
+  layer progress and complete/inactive-SD with no exceptions and zero final heater
+  targets. Physical part quality remains for inspection. No MCP tool/policy/file
+  acceptance or upload change.
 - Ordinary saved-diagnostic preprint observations: tool 1, PLA/0.12 g and
   flow/time-lapse/leveling controls, inspected without Send/setters/start. These
   do not resolve effective parameters or full startup demand. The later viewer

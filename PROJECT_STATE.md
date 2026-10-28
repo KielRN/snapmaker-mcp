@@ -23,12 +23,21 @@ with matching SHA256 by 20:31:29 UTC; surrounding state stayed idle/inactive-SD.
 This is vendor transfer evidence, not MCP upload or print acceptance. Stock setup
 effects remain unbounded and the file remains rejected. The owner subsequently
 confirmed an installed, clear bed at 20:41:38 UTC for that diagnostic; this is
-historical clearance, not standing clearance for future starts. No physical start
-exists. See the
+historical clearance, not standing clearance for future starts. A subsequent
+October 28 owner-directed native start is now observed below. See the
 [diagnostic report](docs/research/2026-10-27-diagnostic-preprint-evidence.md).
 
 ## Verified evidence
 
+- Owner-directed native diagnostic, **2026-10-28 12:02:30–12:07:24 UTC**: fresh
+  installed/clear-bed confirmation, ready/idle/material/nozzle/mapping checks and
+  exact remote/local bytes preceded one ordinary File information Send. Expected
+  filename, printing and active virtual SD were observed, with no exceptions.
+  Layer 1/3 then 3/3 and complete/inactive-SD were observed; final targets zero,
+  no exceptions, printer duration 49.20 s. Cooled-part quality/fit inspection is
+  outstanding. This is native hardware start/completion evidence; policy 12,
+  bridge rejection and disabled uploads remain. See the
+  [print report](docs/research/2026-10-28-native-diagnostic-print.md).
 - Policy **12** rejects duplicate JSON members before interpreting read evidence
   or upload acknowledgments. A reproduced true/false active-SD pair previously
   normalized to `ok`/idle; duplicate start/queue/path/root flags could also be
@@ -409,8 +418,12 @@ records pinned public source and installed-contract limits.
    inspected without submission. They expose selections, not a passive effective
    parameter/startup receipt. The concrete hardware blocker is a vendor-supported
    passive diagnostic binding effective parameters and full setup demand to this
-   file; none is established. Do not repeat UI/source/transfer work as a substitute
-   or submit a start/setter as a probe. Do not repeat pairing while the
+   file; none is established for broad bridge acceptance. The subsequent
+   [owner-directed native diagnostic](docs/research/2026-10-28-native-diagnostic-print.md)
+   has an observed start after fresh physical/file/material/state checks; retain
+   its outcome separately from bridge certification. Do not repeat UI/source/
+   transfer work as a substitute or start another job to discover hidden settings.
+   Do not repeat pairing while the
    existing connection works or bypass normal authorization.
    Unverified camera API mutations and diagnostic raw G-code remain outside this
    scope. Callback bodies remain unbound. Saved K and hidden

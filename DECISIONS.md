@@ -601,3 +601,25 @@ Configured credential/host matches and bounded label length always apply.
 Independent review reproduced both defects using synthetic HTTP responses; no
 printer fault or hardware compatibility is inferred. See the
 [correction ledger](docs/superpowers/plans/2026-10-28-json-evidence.md).
+
+## D033 — Separate an owner-directed native diagnostic from bridge certification
+
+Date: 2026-10-28 UTC · Status: Confirmed by direct owner instruction and native observation
+
+The owner explicitly directed starting a small print now and supplied fresh
+clearance plus installed-plate confirmation. Reuse the exact existing small
+coupon through the normal vendor UI after current state/material/nozzle/mapping
+and remote-byte verification. Record one durable start intent and reconcile actual
+filename/printing/active-SD state without replay. Native File information Send
+produced those observations. Separate reads then observed layer 1/3, layer 3/3 and
+complete/inactive-SD with no exceptions and zero final targets. Physical part
+quality remains for human inspection.
+
+Missing passive effective-parameter and full-startup contracts still prevent
+broader stock-file acceptance by the bridge. They must not be treated as a demand
+for repeat task authorization or as a substitute for carrying out this explicitly
+owner-directed native diagnostic. Keep bridge rejection, disabled uploads,
+physical clearance, native observations and general MCP acceptance distinct.
+No firmware/persistent configuration/calibration/safety change or another plate
+is authorized by this result. See the
+[native print report](docs/research/2026-10-28-native-diagnostic-print.md).

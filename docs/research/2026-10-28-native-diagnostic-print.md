@@ -83,9 +83,13 @@ profile digest stayed equal. These are observed runtime changes; cause,
 persistence and calibration provenance are not established by the reports.
 
 Camera showed setup/model movement and the subsequent parked-head/lowered-bed
-view. It did not provide a close, reliable view of the finished coupon. **Human
-inspection of the cooled part, adhesion, surface quality and dimensions remains
-outstanding.** No pause/resume/cancel was requested or tested. Do not start a
+view. It did not provide a close, reliable view of the finished coupon. At
+**12:17:45 UTC**, the owner's subsequent statement **"Coupon inspected. Approved"**
+and supplied photograph were recorded. This closes the requested human inspection
+and approval for this coupon. The photograph shows a small square coupon on the
+textured plate; no measured dimensions or separate fit result were supplied.
+Original photo bytes and an approval receipt remain ignored local evidence.
+No pause/resume/cancel was requested or tested. Do not start a
 second plate: remove finished parts and obtain new installed/clear-bed confirmation
 and task authorization as applicable first.
 

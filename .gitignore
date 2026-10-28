@@ -32,6 +32,7 @@ graphify-out/
 *.rep/
 
 # Runtime data, receipts, logs, and raw captures
+.codex-remote-attachments/
 artifacts/
 captures/
 receipts/

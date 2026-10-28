@@ -612,8 +612,9 @@ coupon through the normal vendor UI after current state/material/nozzle/mapping
 and remote-byte verification. Record one durable start intent and reconcile actual
 filename/printing/active-SD state without replay. Native File information Send
 produced those observations. Separate reads then observed layer 1/3, layer 3/3 and
-complete/inactive-SD with no exceptions and zero final targets. Physical part
-quality remains for human inspection.
+complete/inactive-SD with no exceptions and zero final targets. The owner later
+inspected and approved this coupon with a photograph; measured dimensions and a
+separate fit result were not supplied.
 
 Missing passive effective-parameter and full-startup contracts still prevent
 broader stock-file acceptance by the bridge. They must not be treated as a demand

@@ -34,8 +34,10 @@ October 28 owner-directed native start is now observed below. See the
   exact remote/local bytes preceded one ordinary File information Send. Expected
   filename, printing and active virtual SD were observed, with no exceptions.
   Layer 1/3 then 3/3 and complete/inactive-SD were observed; final targets zero,
-  no exceptions, printer duration 49.20 s. Cooled-part quality/fit inspection is
-  outstanding. This is native hardware start/completion evidence; policy 12,
+  no exceptions, printer duration 49.20 s. The owner subsequently inspected and
+  approved this coupon with a photograph (recorded 12:17:45 UTC); no measured
+  dimensions or separate fit result were supplied. This is native hardware
+  start/completion and owner inspection evidence; policy 12,
   bridge rejection and disabled uploads remain. See the
   [print report](docs/research/2026-10-28-native-diagnostic-print.md).
 - Policy **12** rejects duplicate JSON members before interpreting read evidence

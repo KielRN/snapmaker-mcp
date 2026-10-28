@@ -342,8 +342,9 @@ freshly confirmed an installed, clear plate. After current state/material/nozzle
 mapping checks and exact remote/local byte verification, one normal native Send
 produced the expected filename, printing state and active virtual SD. Layer 1/3,
 layer 3/3 and printer-reported complete/inactive-SD were subsequently observed,
-with zero final heater targets and no exceptions. Cooled-part quality remains
-for human inspection; see the [native print report](docs/research/2026-10-28-native-diagnostic-print.md).
+with zero final heater targets and no exceptions. The owner subsequently inspected
+and approved the coupon with a photograph; see the
+[native print report](docs/research/2026-10-28-native-diagnostic-print.md).
 This is ordinary vendor start/completion evidence; bridge validation/uploads
 and full readiness remain unchanged.
 

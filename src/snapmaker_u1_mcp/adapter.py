@@ -1,7 +1,6 @@
 """Conservative normalization of the observed U1 HTTP object contract."""
 
 import math
-import re
 from datetime import UTC, datetime
 from typing import Any
 
@@ -358,11 +357,8 @@ class U1Reader:
         if not isinstance(webcams, list):
             errors.append(incomplete("invalid_webcam_list"))
         info = results.get("/printer/info", {})
-        firmware = self.client.text(info.get("software_version"))
-        # Versions contain dots but are not addresses: validate independently of display labels.
-        version = info.get("software_version")
-        if isinstance(version, str) and re.fullmatch(r"\d+\.\d+\.\d+\.\d+_\d{14}", version):
-            firmware = version
+        # Version syntax exempts only generic address detection, never configured secrets/host.
+        firmware = self.client.text(info.get("software_version"), firmware_version=True)
         if firmware is None:
             errors.append(incomplete("unknown_firmware"))
         data = Capabilities(

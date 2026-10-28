@@ -230,7 +230,7 @@ SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serializati
 cancellation and restart reconciliation. Tests need no printer or credentials.
 No MCP hardware upload/control acceptance tests have run.
 
-Receipt policy 11 invalidates policy-1–10 preparations for new uploads. Old inflight
+Receipt policy 12 invalidates policy-1–11 preparations for new uploads. Old inflight
 receipts with a policy mismatch remain unknown and never resend a POST; retain
 the journal and investigate with read-only checks in the supported app.
 Runtime evidence is rechecked before dispatch and around remote byte verification;
@@ -257,7 +257,13 @@ macros. Nested reprint/second job parameters and action completion remain unknow
 
 Reads use fixed routes/objects, disable environment proxies/redirects, request
 uncompressed data, reject other encodings, and cap raw bytes and total request
-duration. Defaults are 256 KiB and five seconds per request. On failure, check
+duration. JSON evidence and upload acknowledgments reject duplicate object keys
+at every depth, including equal values and escaped spellings. Ambiguous reads
+return `invalid_response`; ambiguous upload acknowledgments stay terminal
+`unknown` with `upload_contract`, without confirming flags or replaying POST.
+Firmware-shaped labels retain configured credential/host and length filters.
+See the [response-boundary correction](docs/superpowers/plans/2026-10-28-json-evidence.md).
+Defaults are 256 KiB and five seconds per request. On failure, check
 local config, normal authentication, printer availability and firmware, then
 repeat the read. Reads have no automatic retries; file transactions follow the
 durable recovery rules above and uploads require explicit local enablement.

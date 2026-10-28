@@ -29,6 +29,19 @@ exists. See the
 
 ## Verified evidence
 
+- Policy **12** rejects duplicate JSON members before interpreting read evidence
+  or upload acknowledgments. A reproduced true/false active-SD pair previously
+  normalized to `ok`/idle; duplicate start/queue/path/root flags could also be
+  silently collapsed. Reads now fail closed and ambiguous acknowledgments remain
+  terminal unknown without replay. Policies 1–11 cannot dispatch/promote uncertain
+  receipts. Firmware syntax no longer bypasses configured secret/host or label
+  length filters. These are synthetic software corrections; no live request or
+  hardware acceptance. See the
+  [response-boundary ledger](docs/superpowers/plans/2026-10-28-json-evidence.md).
+- Fresh full suites passed **785 tests each on Python 3.11.14/3.13.12**,
+  including ambiguous JSON over real MCP and policy-11 fencing. Ruff check/format,
+  wheel/source builds and original export byte/refusal checks passed. Final
+  review/package receipts are recorded in the response-boundary ledger.
 - Policy **11** retains valid source times immediately after each completed
   status, material and closing runtime read during uncertain-upload verification,
   even when later validation/read/cancellation fails. This closes a reproduced

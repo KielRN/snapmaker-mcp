@@ -581,3 +581,23 @@ The ordinary saved diagnostic page exposes file metadata and preprint controls,
 not an effective-table/full-startup attestation. Do not start or change options
 to discover their effects. Vendor transfer/UI observations, human physical
 clearance and bridge acceptance remain separate evidence.
+
+## D032 — Reject ambiguous response objects before accepting evidence
+
+Date: 2026-10-28 UTC · Status: Implemented software correction
+
+Default JSON parsing silently kept the last repeated member. A synthetic response
+with active-SD true then false produced positive idle, and duplicate upload flags
+could conceal contradictory acknowledgments. Reject repeated member names at
+every object depth, including equal values and JSON-escaped equivalents. A read
+returns sanitized `invalid_response`; an ambiguous upload acknowledgment is
+terminal `unknown`/`upload_contract`, without confirmed flags or automatic replay.
+Raw downloaded G-code remains size/hash checked; a JSON-looking body's successful
+parse is never byte-transfer acceptance. Policy 12 refuses policies 1–11 for new
+dispatch and uncertain promotion; historical terminal results remain historical.
+
+Firmware version syntax exempts only generic address-like display filtering.
+Configured credential/host matches and bounded label length always apply.
+Independent review reproduced both defects using synthetic HTTP responses; no
+printer fault or hardware compatibility is inferred. See the
+[correction ledger](docs/superpowers/plans/2026-10-28-json-evidence.md).

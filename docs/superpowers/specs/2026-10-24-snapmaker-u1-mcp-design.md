@@ -140,7 +140,7 @@ strings alone.
 
 The normal path is prepare -> upload and verify -> start -> observe.
 
-The current receipt policy is 11. The restricted inspector retains policy-3
+The current receipt policy is 12. The restricted inspector retains policy-3
 command semantics. Every T invalidates XYZ, full
 G28 invalidates active-tool/E knowledge, positive nozzle targets participate in
 requirements and requested physical mappings must be injective. Reestablishing
@@ -163,7 +163,7 @@ state) to the same repeated binding. The
 reported nozzle diameter/volume, pressure advance/smoothing and queue-name
 evidence. Used reported diameters must agree with file and operator attestation;
 missing fields prevent preparation and all-head changes block dispatch/promotion.
-Policies 1–10 cannot bypass current checks. A null queue name does not prove
+Policies 1–11 cannot bypass current checks. A null queue name does not prove
 detachment: the constructor can attach trapq without updating the name. Actual
 attachment, saved K and hidden feed/thermal demand remain unestablished.
 Empty exclusions do not prove transform removal, and region flags can lag markers;
@@ -215,6 +215,16 @@ Policies 1–9 cannot dispatch or promote uncertain uploads; historical terminal
 results remain historical and no upload is replayed. This changes no evidence
 fields, supported G-code, tools or hardware acceptance, and gives no atomic
 snapshot or guarantee about observations that did not complete.
+
+The [response-boundary correction](../plans/2026-10-28-json-evidence.md) rejects
+duplicate JSON object members in reads/acknowledgments before acceptance. Equal
+values and escaped-equivalent keys remain ambiguous. Affected responses contribute
+no normalized evidence and report `invalid_response`; capabilities can retain
+partial data from other valid endpoints. Ambiguous acknowledgments are terminal unknown with
+`upload_contract` and never confirm response flags or replay POST. Policy 12
+fences policy-1–11 dispatch/uncertain promotion. Raw remote bytes still require
+size/SHA256 verification. Firmware formatting cannot bypass configured secret,
+host or label-length filters. No new file/control/camera acceptance is implied.
 
 - A preparation receipt binds the file hash, selected plate, mapping, material
   requirements, process values, printer identity, and an expiry. Default expiry

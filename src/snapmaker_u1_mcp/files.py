@@ -8,7 +8,7 @@ import re
 import httpx
 
 from .gcode import ValidationError
-from .transport import Moonraker
+from .transport import Moonraker, unique_object
 
 NAME = re.compile(r"u1-[0-9a-f]{32}-[0-9a-f]{64}\.gcode")
 
@@ -45,7 +45,7 @@ class FileTransport:
                     # Error objects on HTTP 200 must not masquerade as file data.
                     if body.lstrip().startswith(b"{"):
                         try:
-                            value = json.loads(body)
+                            value = json.loads(body, object_pairs_hook=unique_object)
                         except (ValueError, UnicodeError, RecursionError):
                             value = None
                         if isinstance(value, dict) and "error" in value:
@@ -80,7 +80,7 @@ class FileTransport:
             files={"file": (name, data, "application/octet-stream")},
         )
         try:
-            result = json.loads(body)
+            result = json.loads(body, object_pairs_hook=unique_object)
         except (ValueError, UnicodeError, RecursionError):
             raise ValidationError("upload_contract") from None
         if (

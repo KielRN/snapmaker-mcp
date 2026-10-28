@@ -90,6 +90,16 @@ class ReadError(Exception):
         super().__init__(MESSAGES[code])
 
 
+def unique_object(pairs: list[tuple[str, object]]) -> dict:
+    """Reject ambiguous JSON objects, including escaped or equal duplicate keys."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("Duplicate JSON member")
+        result[key] = value
+    return result
+
+
 class Moonraker:
     def __init__(self, settings: Settings, *, transport: httpx.AsyncBaseTransport | None = None):
         self.settings = settings
@@ -111,7 +121,7 @@ class Moonraker:
     async def __aexit__(self, *args):
         await self.client.aclose()
 
-    def text(self, value: object) -> str | None:
+    def text(self, value: object, *, firmware_version: bool = False) -> str | None:
         """Project only short display labels; never raw paths, messages, or IDs."""
         if not isinstance(value, str) or not re.fullmatch(
             r"[A-Za-z0-9][A-Za-z0-9 ._+-]{0,63}", value
@@ -121,7 +131,8 @@ class Moonraker:
             r"password|passwd|token|secret|credential|clientid|session|api.?key", value, re.I
         ):
             return None
-        if re.search(r"\d{1,3}(?:\.\d{1,3}){3}", value):
+        version = firmware_version and re.fullmatch(r"\d+\.\d+\.\d+\.\d+_\d{14}", value)
+        if not version and re.search(r"\d{1,3}(?:\.\d{1,3}){3}", value):
             return None
         host = urlsplit(self.settings.printer_url).hostname
         if (host and host.lower() in value.lower()) or (
@@ -164,7 +175,7 @@ class Moonraker:
                             raise ReadError("response_too_large")
                         body.extend(chunk)
                     try:
-                        data = json.loads(body)
+                        data = json.loads(body, object_pairs_hook=unique_object)
                     except (ValueError, UnicodeError, RecursionError):
                         raise ReadError("invalid_response") from None
                     if not isinstance(data, dict):

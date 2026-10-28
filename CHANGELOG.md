@@ -6,6 +6,13 @@ Implemented changes only. No published release exists.
 
 ### Fixed — 2026-10-28 UTC
 
+- Reject duplicate JSON object members in printer read evidence and upload
+  acknowledgments, including escaped/equal duplicates. Conflicting reports cannot
+  silently prove idle or safe response flags. Ambiguous acknowledgments remain
+  terminal unknown without upload replay. Policy 12 refuses policy-1–11 dispatch
+  and uncertain promotion. Firmware-format exceptions now preserve configured
+  credential/host and length filtering. No new tools, file acceptance or hardware
+  compatibility claim.
 - Reconciliation retains valid source timestamps from each completed status,
   material and closing runtime read before later failure/cancellation. Restart
   cannot verify older evidence after those observations. Policy 11 refuses

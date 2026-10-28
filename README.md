@@ -228,18 +228,20 @@ and oversized/compressed responses. File tests cover canonical paths/junctions,
 all-tool consumption, actual heater/move commands, mapping/material changes,
 SHA mismatch, HTTP-200 errors, races, expiry, duplicate IDs, process serialization,
 cancellation and restart reconciliation. Tests need no printer or credentials.
-No hardware upload/control tests have run.
+No MCP hardware upload/control acceptance tests have run.
 
-Receipt policy 10 invalidates policy-1–9 preparations for new uploads. Old inflight
+Receipt policy 11 invalidates policy-1–10 preparations for new uploads. Old inflight
 receipts with a policy mismatch remain unknown and never resend a POST; retain
 the journal and investigate with read-only checks in the supported app.
 Runtime evidence is rechecked before dispatch and around remote byte verification;
 changes or backwards source times block dispatch/promotion. Repeated equal HTTP
 reads cannot exclude intervening changes, stale peer data or other-client races.
-Each completed opening reconciliation observation is journaled before awaiting
-the remote download. Cancellation during that wait therefore retains its source
-time across restart; older evidence stays unknown and the POST is never replayed.
-See the [watermark fix ledger](docs/superpowers/plans/2026-10-27-reconciliation-watermark.md).
+Each completed status/material/closing-runtime read with a valid source timestamp
+advances the reconciliation journal before later validation or asynchronous reads.
+Failures and cancellation therefore retain observed history across restart;
+older evidence stays unknown and the POST is never replayed. Invalid timestamps
+cannot advance it; recording a time does not make failed evidence acceptable.
+See the [observation fix ledger](docs/superpowers/plans/2026-10-28-reconciliation-observations.md).
 Exclusion reports participate in the binding; known reports do not establish
 the running transform chain. Reported nozzle/advance/smoothing/queue values also
 participate; missing fields prevent preparation, used nozzle conflicts return
@@ -319,8 +321,15 @@ matched all 49,972 native-export bytes and SHA256 while the printer stayed idle
 with inactive virtual SD. This establishes vendor transfer evidence only. The
 file is still rejected by the bridge; setup macros leave its complete physical
 demand unresolved. No print started and no fresh installed/clear-bed confirmation
-was supplied. Reuse the existing receipt/file for the next ordinary preprint
-inspection rather than repeating the transfer.
+was supplied during that transfer round. Later human installed/clear-bed
+confirmation was recorded for the diagnostic; it is historical, time-specific
+clearance. The saved file's ordinary preprint page has now been inspected without
+submission. It displays tool 1, PLA/0.12 g and flow/time-lapse/leveling controls,
+without effective parameter readback or complete startup bounds. No Send/start
+was selected. A later return to Device showed Camera not on; no viewer stop was
+selected and cleanup is unverified. Reuse the receipt/file; do not repeat transfer
+or use option setters/start as probes. A supported passive effective-parameter/
+startup diagnostic remains the concrete hardware prerequisite.
 
 Future controls must retain per-plate authorization and fresh human confirmation
 of an installed, clear bed. The owner now delegates selection of very small
@@ -376,3 +385,4 @@ dependence, or automatic product-order dispatch.
 | [Desktop/metadata ledger](docs/superpowers/plans/2026-10-27-desktop-metadata-evidence.md) | Focused UI/source continuation, review, verification and acceptance limits. |
 | [Diagnostic preprint report](docs/research/2026-10-27-diagnostic-preprint-evidence.md) | External coupon, native/portable export differences and operator-assisted vendor transfer with exact remote bytes. |
 | [Diagnostic preprint ledger](docs/superpowers/plans/2026-10-27-diagnostic-preprint-evidence.md) | Review, fresh checks, one-use UI receipt and remaining acceptance. |
+| [Observation retention ledger](docs/superpowers/plans/2026-10-28-reconciliation-observations.md) | Policy-11 failure/cancellation/restart correction and verification record. |

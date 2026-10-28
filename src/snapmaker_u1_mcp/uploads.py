@@ -4,6 +4,7 @@ import asyncio
 import hashlib
 import json
 import time
+from collections.abc import Callable
 from datetime import UTC, datetime
 from typing import Literal
 from uuid import UUID
@@ -154,12 +155,17 @@ class Coordinator:
                 "roots": [str(p) for p in self.settings.allowed_roots],
                 "nozzles": self.settings.nozzle_diameters,
                 "maximum": self.settings.max_gcode_bytes,
-                "validator": 10,
+                "validator": 11,
             }
         )
 
     async def _evidence(
-        self, inspection: Inspection, mapping: list[int], *, not_before: float | None = None
+        self,
+        inspection: Inspection,
+        mapping: list[int],
+        *,
+        not_before: float | None = None,
+        on_observation: Callable[[float], None] | None = None,
     ) -> tuple[str, RuntimeBinding]:
         # Inspection tracks heaters/E by logical index. Aliasing those indices
         # could hide cooling or incompatible requirements on one physical head.
@@ -168,6 +174,8 @@ class Coordinator:
             raise ValidationError("mapping_ambiguous")
         info = await self.client.get("/printer/info")
         status = await self.reader.status()
+        if status.source_eventtime is not None and on_observation is not None:
+            on_observation(status.source_eventtime)
         if status.data is None and status.errors:
             raise ValidationError(status.errors[0].code)
         if status.data is None or status.data.idle is not True:
@@ -180,6 +188,8 @@ class Coordinator:
         if not_before is not None and status.source_eventtime < not_before:
             raise ValidationError("runtime_evidence_changed")
         materials = await self.reader.materials()
+        if materials.source_eventtime is not None and on_observation is not None:
+            on_observation(materials.source_eventtime)
         data = materials.data
         if data is None and materials.errors:
             raise ValidationError(materials.errors[0].code)
@@ -216,6 +226,9 @@ class Coordinator:
             object_query((*RUNTIME_OBJECTS, "print_stats", "virtual_sdcard")),
         )
         snapshot = obj(raw.get("status"))
+        eventtime = number(raw.get("eventtime"))
+        if eventtime is not None and on_observation is not None:
+            on_observation(eventtime)
         job = obj(snapshot.get("print_stats"))
         sd = obj(snapshot.get("virtual_sdcard"))
         if (
@@ -225,7 +238,6 @@ class Coordinator:
         ):
             raise ValidationError("printer_not_idle")
         closing_runtime = normalize_runtime(snapshot)
-        eventtime = number(raw.get("eventtime"))
         if closing_runtime.missing_fields or eventtime is None:
             raise ValidationError("runtime_evidence_missing")
         if closing_runtime.inconsistencies:
@@ -456,15 +468,21 @@ class Coordinator:
             prep = Preparation.model_validate(preparation["result"]["data"])
             if prep.runtime_evidence is None:
                 raise ValidationError("runtime_evidence_missing")
+
+            def retain_observation(eventtime: float) -> None:
+                # A later validation failure/cancellation must not erase a
+                # completed read. Invalid times never reach this sink; older
+                # times cannot lower the durable high-water mark.
+                if eventtime > payload["runtime_eventtime"]:
+                    payload["runtime_eventtime"] = eventtime
+                    self.store.save(request.operation_id, "upload", fingerprint, payload)
+
             fresh, runtime = await self._evidence(
                 prep.inspection,
                 prep.logical_to_physical,
                 not_before=payload["runtime_eventtime"],
+                on_observation=retain_observation,
             )
-            # Commit before the next await: cancellation/process death during the
-            # download must not let restart accept an older cached observation.
-            payload["runtime_eventtime"] = runtime.source_eventtime_end
-            self.store.save(request.operation_id, "upload", fingerprint, payload)
             if fresh != preparation["evidence"]:
                 raise ValidationError("evidence_changed")
             remote = await self.files.download(data.remote_path, prep.size_bytes)
@@ -477,8 +495,8 @@ class Coordinator:
                 prep.inspection,
                 prep.logical_to_physical,
                 not_before=runtime.source_eventtime_end,
+                on_observation=retain_observation,
             )
-            payload["runtime_eventtime"] = runtime.source_eventtime_end
             if closing != fresh:
                 raise ValidationError("evidence_changed")
             data.remote_sha256 = sha

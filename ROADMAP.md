@@ -1,6 +1,6 @@
 # Roadmap
 
-Last updated: 2026-10-27 UTC
+Last updated: 2026-10-28 UTC
 
 **Legend:** 🟢 Complete with evidence · 🟡 Partial/in progress · 🔴 Not implemented.
 The full intended scope remains status, materials, verified file handoff, print
@@ -15,10 +15,10 @@ hardware acceptance and broad U1 profile compatibility remain pending.
 | Targeted REA investigation | 🟡 Partial | Isolated CLI/MCP, GUI/native client and focused firmware server instructions inspected through Rizin. Shared worker renewal/expiry/destruction now traced; external ownership/completion and loaded compatibility unresolved. No whole-app reconstruction. |
 | MCP runtime/local configuration | 🟢 Read milestone complete | Real stdio tests pass; registered command called all three tools on hardware. A discovered capability tool subsequently succeeded in this chat. |
 | Status/progress/errors/material tools | 🟢 Read milestone complete | Typed four-tool/mapping/feed/temperature/progress reads, simulated failures, live three-tool calls. Active hardware fault semantics need observation. |
-| G-code validation/verified uploads | 🟡 Software implemented, stock profiles blocked | Policy-10 receipts durably retain completed opening reconciliation observations before download awaits, including cancellation/restart; policies 1–9 cannot dispatch/promote uncertain results. All prior job/runtime/material/hash guards remain. All eight exports rejected; effective file-bound parameters, full stock-file demand, transitions/hooks/transforms/provenance remain unresolved. Uploads disabled; hardware acceptance pending. |
+| G-code validation/verified uploads | 🟡 Software implemented, stock profiles blocked | Policy-11 receipts retain each completed read's valid source time before later failure/cancellation; policies 1–10 cannot dispatch/promote uncertain results. All prior job/runtime/material/hash guards remain. All eight exports rejected; effective file-bound parameters, full stock-file demand, transitions/hooks/transforms/provenance remain unresolved. Uploads disabled; hardware acceptance pending. |
 | Print start/controls | 🔴 Not implemented | Saved-pause and machine/action reads plus source transition/SD/control ordering exist. No job-parameter/start/control tools; transition/hook completion, saved restore state, callback effects, control acceptance and physical authorization checks remain. |
 | Camera snapshots/live sessions | 🟡 Investigation and vendor-UI observation | Connected ordinary viewer displayed a clear chamber image after lighting was enabled. No bridge camera tool, frame timestamp/ownership or completed cleanup acceptance; shared server lifecycle limits remain unresolved. |
-| Automated/hardware verification | 🟡 Software verified, hardware partial | Fresh 706-test suites on each Python 3.11/3.13. Connected/idle vendor UI and ordinary camera image observed; one operator-assisted Upload-only diagnostic matched all 49,972 remote bytes/SHA256 with inactive SD. No captured response flags or MCP upload/physical print acceptance; stock startup/control/camera lifecycle remain unresolved. |
+| Automated/hardware verification | 🟡 Software verified, hardware partial | Fresh 764-test suites on each Python 3.11/3.13, including both evidence-window failure/cancellation and actual MCP restart. Ordinary saved diagnostic preprint options observed without submission; prior operator-assisted transfer matched 49,972 remote bytes/SHA256. No captured response flags or MCP upload/physical print acceptance; stock startup/control/camera lifecycle remain unresolved. |
 | Full release/operator handoff | 🔴 Not released | `0.1.0.dev0` is development software with optional simulated-only uploads; full scope remains. |
 
 See [state](PROJECT_STATE.md) for blockers, [decisions](DECISIONS.md) for durable

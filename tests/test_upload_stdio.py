@@ -3,6 +3,7 @@ import json
 import sys
 import threading
 from contextlib import asynccontextmanager, contextmanager
+from copy import deepcopy
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from uuid import uuid4
@@ -129,6 +130,78 @@ async def test_actual_stdio_preparation_upload_hash_and_restart_reconciliation(
                 "u1_upload_print", {**request, "preparation_id": str(uuid4())}
             )
             assert conflict.structuredContent["errors"][0]["code"] == "operation_conflict"
+            assert printer.posts == 1
+
+
+async def test_failed_evidence_keeps_newer_history_over_mcp_restart(setup_upload, tmp_path):
+    settings, printer, file = setup_upload
+    original_serve = printer.serve
+    fail_closing = False
+    runtime_reads = 0
+
+    async def serve(request):
+        nonlocal runtime_reads
+        if fail_closing and request.url.path == "/printer/objects/query":
+            if "gcode_move" in request.url.params:
+                runtime_reads += 1
+            reply = deepcopy(printer.replies["/printer/objects/query"])
+            reply["result"]["eventtime"] = 1800
+            if runtime_reads == 2:
+                reply["result"]["eventtime"] = 2000
+                reply["result"]["status"]["extruder"]["extruder_offset"][0] += 0.01
+            return httpx.Response(200, stream=httpx.ByteStream(json.dumps(reply).encode()))
+        return await original_serve(request)
+
+    printer.serve = serve
+    with file_printer(printer) as url:
+        config = tmp_path / "config.json"
+        config.write_text(
+            json.dumps(
+                {
+                    "printer_url": url,
+                    "allowed_roots": [str(tmp_path)],
+                    "receipt_db": str(settings.receipt_db),
+                    "enable_uploads": True,
+                    "nozzle_diameters": [0.4] * 4,
+                }
+            )
+        )
+        async with connected(config, tmp_path / "stderr-first.txt") as session:
+            prep = await session.call_tool(
+                "u1_prepare_print",
+                {
+                    "operation_id": str(uuid4()),
+                    "local_path": str(file),
+                    "plate": 1,
+                    "logical_to_physical": [2, 1, 4, 3],
+                },
+            )
+            request = {
+                "operation_id": str(uuid4()),
+                "preparation_id": prep.structuredContent["data"]["preparation_id"],
+            }
+            printer.failure = "lost_without_write"
+            printer.replies["/printer/objects/query"]["result"]["eventtime"] = 1000
+            response = await session.call_tool("u1_upload_print", request)
+            assert response.structuredContent["outcome"] == "unknown"
+            remote = response.structuredContent["data"]["remote_path"]
+            printer.files[remote] = file.read_bytes()
+            printer.failure = None
+            fail_closing = True
+            response = await session.call_tool("u1_upload_print", request)
+            assert response.structuredContent["errors"][0]["code"] == "runtime_evidence_changed"
+
+        fail_closing = False
+        printer.replies["/printer/objects/query"]["result"]["eventtime"] = 1500
+        async with connected(config, tmp_path / "stderr-restarted.txt") as session:
+            response = await session.call_tool("u1_upload_print", request)
+            assert response.isError
+            assert response.structuredContent["outcome"] == "unknown"
+            assert response.structuredContent["errors"][0]["code"] == "runtime_evidence_changed"
+            printer.replies["/printer/objects/query"]["result"]["eventtime"] = 2000
+            response = await session.call_tool("u1_upload_print", request)
+            assert not response.isError
+            assert response.structuredContent["data"]["reconciled"] is True
             assert printer.posts == 1
 
 
@@ -336,7 +409,7 @@ async def test_orca_forms_over_real_mcp_preserve_bytes_and_rejections(
 
 
 @pytest.mark.parametrize("dispatched", [False, True])
-@pytest.mark.parametrize("validator", [2, 3, 4, 5, 6, 7, 8, 9])
+@pytest.mark.parametrize("validator", [2, 3, 4, 5, 6, 7, 8, 9, 10])
 async def test_old_policy_receipts_cannot_promote_over_real_mcp(
     setup_upload, tmp_path, monkeypatch, dispatched, validator
 ):

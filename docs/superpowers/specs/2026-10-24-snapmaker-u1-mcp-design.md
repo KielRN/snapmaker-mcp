@@ -140,7 +140,7 @@ strings alone.
 
 The normal path is prepare -> upload and verify -> start -> observe.
 
-The current receipt policy is 7. The restricted inspector retains policy-3
+The current receipt policy is 11. The restricted inspector retains policy-3
 command semantics. Every T invalidates XYZ, full
 G28 invalidates active-tool/E knowledge, positive nozzle targets participate in
 requirements and requested physical mappings must be injective. Reestablishing
@@ -163,7 +163,7 @@ state) to the same repeated binding. The
 reported nozzle diameter/volume, pressure advance/smoothing and queue-name
 evidence. Used reported diameters must agree with file and operator attestation;
 missing fields prevent preparation and all-head changes block dispatch/promotion.
-Policies 1–6 cannot bypass current checks. A null queue name does not prove
+Policies 1–10 cannot bypass current checks. A null queue name does not prove
 detachment: the constructor can attach trapq without updating the name. Actual
 attachment, saved K and hidden feed/thermal demand remain unestablished.
 Empty exclusions do not prove transform removal, and region flags can lag markers;
@@ -188,6 +188,14 @@ Both exact integer IDLE codes are required alongside all prior checks; recognize
 nonzero activity independently blocks idle and missing/unfamiliar codes remain
 unknown. Mutable labels do not attest transition/hook or physical completion,
 queue draining or loaded code. No additional G-code/control is accepted.
+
+The [observation-retention correction](../plans/2026-10-28-reconciliation-observations.md)
+records valid bounded source times from each completed verification read before
+later checks/awaits can fail or be cancelled. The durable watermark only advances;
+invalid timestamps cannot advance it and failed evidence stays unacceptable.
+Both verification windows retain history, including across process restart.
+Policy-1–10 uncertain receipts cannot promote or replay; terminal results remain
+historical. This does not make HTTP snapshots atomic or attest uncollected reads.
 
 The [job preference follow-up](../../research/2026-10-26-job-flag-evidence.md)
 adds a fixed provider projection and policy-9 binding of eight exact boolean

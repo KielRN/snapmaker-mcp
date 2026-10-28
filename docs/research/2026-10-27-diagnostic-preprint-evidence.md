@@ -1,8 +1,10 @@
 # Small diagnostic preparation and ordinary upload workflow
 
 Date: 2026-10-27 UTC. Baseline: `bf94ac54a2437b56b94e15f03411c7f2698df23e`.
-Documentation and ignored local workflow only; no runtime, test, dependency,
-receipt-policy or MCP-tool change. Uploads remain disabled in bridge defaults
+The original transfer round changed documentation and ignored local workflow
+only; no runtime, test, dependency, receipt-policy or MCP-tool change. The later
+[independent software correction](../superpowers/plans/2026-10-28-reconciliation-observations.md)
+uses policy 11. Uploads remain disabled in bridge defaults
 and local configuration. This report does not establish print readiness.
 
 ## Current read evidence and scope
@@ -21,7 +23,8 @@ selected in this round. Subsequent local Prepare/Preview navigation is not
 evidence of camera cleanup, ownership or frame freshness.
 
 D026 authorizes selecting and preparing a very small diagnostic, including its
-ordinary upload workflow. No fresh human installed/clear-bed confirmation exists.
+ordinary upload workflow. No fresh human installed/clear-bed confirmation had
+been supplied during that transfer round.
 No start, heater/motion, calibration or persistent printer configuration action
 was selected. Changing local slicer nozzle/process/filament selections does not
 attest or change the installed hardware.
@@ -121,8 +124,8 @@ wire envelope or exclude later actions by another client.
 ## Remaining acceptance and next action
 
 Transfer is complete for this exact file; do not upload it again to repeat the
-same evidence. Inspect the saved file's ordinary preprint options next, without
-submitting a start or setter as a probe. Keep the exact receipt and repeat fresh
+same evidence. Its ordinary preprint options were subsequently inspected below,
+without submitting a start or setter as a probe. Keep the exact receipt and repeat fresh
 bounded remote-hash/state checks only when required for a subsequent authorized
 step. For a future uncertain outcome, reconcile only through reads of the same
 destination; a missing file cannot exclude a late write. Keep stock files intact
@@ -137,3 +140,42 @@ question. Full control, camera lifecycle and hardware print acceptance remain ga
 
 Software/review/integration checks are recorded in the
 [execution ledger](../superpowers/plans/2026-10-27-diagnostic-preprint-evidence.md).
+
+## Subsequent physical clearance and saved-file inspection
+
+At **20:41:38 UTC on October 27**, the owner explicitly confirmed both installed
+plate and clear bed for this existing diagnostic. Exact wording and scope are
+retained in the ignored handoff. That is human clearance at that time; it does
+not resolve the remaining file/setup checks or establish uninterrupted physical
+state in later runs. No start followed it. Require fresh clearance before a
+future start after uncertain intervening activity.
+
+At **23:57–23:59 UTC**, ordinary desktop inspection found the same connected
+Device view with a usable chamber image. No pairing, viewer Play or light action
+was selected. The visible Print Preferences dialog showed spaghetti/foreign-object
+detection and low sensitivity selections; it was closed without changing them.
+
+Scrolling below Control exposed **Printing Task → folder → Local Files**. The
+existing diagnostic card opened **File information**. Its complete generated
+filename matched the earlier transfer receipt; thumbnail matched the coupon.
+Displayed metadata was under one minute, PLA **0.12 g**, mapped to physical
+tool **1**. The dialog also showed controls labeled **Extrusion Flow Calibration**,
+**Time-lapse Camera**, and **Auto Leveling**, plus 0% and **Send**. The circular
+controls appeared empty in the captured view; no active/final effective setting
+or enabled/disabled state is claimed from their styling. No mapping, option or
+Send control was selected. The dialog was closed, with no transfer/start issued.
+
+Returning to the top Device panel showed **Camera not on** with a Play control.
+No viewer stop or light action had been selected. Navigation, visibility, timeout
+or other causes were not distinguished. This does not establish owned-session
+cleanup, resource release, ownership, frame freshness or print interference.
+The viewer was left in that observed off state; no restart was needed for this
+inspection. There was no direct live printer API probe in this continuation.
+
+The saved-file workflow is now located and observed. These displays still do not
+read back a file-bound effective hidden table or bound full startup demand. The
+concrete missing evidence is a vendor-supported passive diagnostic for those
+contracts, alongside the existing transform/provenance/control/camera gaps.
+Do not repeat this UI inspection, transfer or closed source traces as a substitute,
+and do not submit Send/setters to discover effects. The file remains rejected;
+physical and bridge readiness remain incomplete.

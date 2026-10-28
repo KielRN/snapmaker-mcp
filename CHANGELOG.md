@@ -4,6 +4,21 @@ Implemented changes only. No published release exists.
 
 ## Unreleased — 0.1.0.dev0
 
+### Fixed — 2026-10-28 UTC
+
+- Reconciliation retains valid source timestamps from each completed status,
+  material and closing runtime read before later failure/cancellation. Restart
+  cannot verify older evidence after those observations. Policy 11 refuses
+  policy-1–10 dispatch/uncertain promotion; uploads are never replayed. Five tools,
+  disabled uploads and restricted file acceptance remain unchanged.
+
+### Added — 2026-10-28 UTC
+
+- Ordinary saved-diagnostic preprint observations: tool 1, PLA/0.12 g and
+  flow/time-lapse/leveling controls, inspected without Send/setters/start. These
+  do not resolve effective parameters or full startup demand. The later viewer
+  showed Camera not on without a selected stop; cleanup remains unverified.
+
 ### Fixed — 2026-10-27 UTC
 
 - Reconciliation now durably records a completed opening runtime observation

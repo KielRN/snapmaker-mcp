@@ -1,6 +1,6 @@
 # Decisions
 
-Last updated: 2026-10-27 UTC
+Last updated: 2026-10-28 UTC
 
 Record durable choices with their date, status, and reason. **Confirmed** means
 directly established by owner direction or carried-forward printer operating
@@ -557,3 +557,27 @@ inspection, without repeating transfer or probing effective options by mutation.
 Fresh installed/clear-bed confirmation and every file/material/runtime safeguard
 remain required before any authorized start. See the
 [diagnostic evidence](docs/research/2026-10-27-diagnostic-preprint-evidence.md).
+
+## D031 — Retain source history before later evidence checks can fail
+
+Date: 2026-10-28 UTC · Status: Implemented software correction
+
+Policy 10 saved only a successfully returned evidence bundle. A completed status
+at 2000 followed by a material timeout, or a closing runtime at 2000 followed by
+drift rejection, could leave the journal at 1000. Restart then incorrectly
+verified matching bytes at 1500. This is invalid promotion without POST replay.
+
+During verification/reconciliation, synchronously persist the maximum valid
+bounded source timestamp after each completed opening status, material and
+closing runtime read, before subsequent checks/awaits. A timestamp remains
+observed history even if other fields fail validation. Missing/invalid times
+cannot advance history; older times cannot lower it. Existing acceptance checks
+still apply. Policy 11 fences policy-1–10 dispatch/uncertain promotion because
+missing past history cannot be recovered. Historical terminal results remain
+historical. See the
+[correction ledger](docs/superpowers/plans/2026-10-28-reconciliation-observations.md).
+
+The ordinary saved diagnostic page exposes file metadata and preprint controls,
+not an effective-table/full-startup attestation. Do not start or change options
+to discover their effects. Vendor transfer/UI observations, human physical
+clearance and bridge acceptance remain separate evidence.

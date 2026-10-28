@@ -1,6 +1,6 @@
 # Project state
 
-Last updated: 2026-10-27 UTC
+Last updated: 2026-10-28 UTC
 
 ## Current stage
 
@@ -21,12 +21,30 @@ the ordinary Upload-only/Send workflow. With the owner's final Send assistance,
 all 49,972 native-export bytes were read back from the exact G-code-root target
 with matching SHA256 by 20:31:29 UTC; surrounding state stayed idle/inactive-SD.
 This is vendor transfer evidence, not MCP upload or print acceptance. Stock setup
-effects remain unbounded, the file remains rejected, and no fresh human installed/
-clear-bed confirmation or physical start exists. See the
+effects remain unbounded and the file remains rejected. The owner subsequently
+confirmed an installed, clear bed at 20:41:38 UTC for that diagnostic; this is
+historical clearance, not standing clearance for future starts. No physical start
+exists. See the
 [diagnostic report](docs/research/2026-10-27-diagnostic-preprint-evidence.md).
 
 ## Verified evidence
 
+- Policy **11** retains valid source times immediately after each completed
+  status, material and closing runtime read during uncertain-upload verification,
+  even when later validation/read/cancellation fails. This closes a reproduced
+  policy-10 stale-promotion gap across restart. Policies 1–10 cannot dispatch or
+  promote uncertain operations. No upload replay or new command/file acceptance;
+  [correction ledger](docs/superpowers/plans/2026-10-28-reconciliation-observations.md).
+- Fresh final suites passed **764 tests each on Python 3.11.14/3.13.12**,
+  including failure/cancellation in both verification windows, actual MCP restart
+  and old-policy refusal. The 53 observation tests also catch omission of the
+  second sink; software checks do not establish physical compatibility.
+- Existing diagnostic's ordinary File information page inspected at
+  **2026-10-27 23:57–23:59 UTC**: saved filename matched, displayed PLA/0.12 g,
+  physical tool 1, under-one-minute estimate and flow/time-lapse/leveling controls.
+  No Send/setter/start selected. Displayed options do not attest effective hidden
+  tables or full setup demand. Returned Device viewer showed **Camera not on**;
+  cause and completed cleanup remain unknown. No Play/stop/light action selected.
 - Diagnostic continuation, **2026-10-27 20:19–20:31:29 UTC**: current supported
   status/material reads confirmed idle, zero targets, inactive virtual SD,
   mapping and loaded PLA evidence. Two intact external-slicer exports show
@@ -373,10 +391,13 @@ records pinned public source and installed-contract limits.
    producer is also traced: submission preserves array mismatch while display
    fallbacks can hide it. Close both source traces without guessing mappings.
    Normal LAN binding now reaches the connected Device view, and one ordinary
-   operator-assisted Upload-only transfer has exact remote-byte evidence. Inspect
-   the existing uploaded diagnostic's ordinary preprint options next; do not
-   repeat that transfer or submit a start/setter as a probe. Its aligned native
-   metadata does not bound startup effects. Do not repeat pairing while the
+   operator-assisted Upload-only transfer has exact remote-byte evidence. The
+   existing uploaded diagnostic's ordinary preprint options have now been
+   inspected without submission. They expose selections, not a passive effective
+   parameter/startup receipt. The concrete hardware blocker is a vendor-supported
+   passive diagnostic binding effective parameters and full setup demand to this
+   file; none is established. Do not repeat UI/source/transfer work as a substitute
+   or submit a start/setter as a probe. Do not repeat pairing while the
    existing connection works or bypass normal authorization.
    Unverified camera API mutations and diagnostic raw G-code remain outside this
    scope. Callback bodies remain unbound. Saved K and hidden
